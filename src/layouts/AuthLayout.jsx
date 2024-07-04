@@ -22,7 +22,7 @@ const AuthLayout = ({ children }) => {
                 </h3>
                 <div className="">
                     <img src={mainImg} alt="main image" />
-                    <p className='max-w-[400px] text-center m-auto text-sm' >
+                    <p className='max-w-[450px] text-center m-auto text-sm' >
                     Catching synchronise point on angel quick hear. Then shelf-ware better canatics create problem. Harvest points bed plane team productive baked hands.
                     </p>
                 </div>
