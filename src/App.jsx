@@ -5,6 +5,7 @@ import Register from './pages/Auth/Register'
 import Login from './pages/Auth/Login'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import ForgotPassword from './pages/Auth/ForgotPassword'
+import VerifyOTP from './pages/Auth/VerifyOTP'
 
 function App() {
 
@@ -28,6 +29,11 @@ function App() {
       title:'Reset Password',
       Component:ForgotPassword,
       path:'/forgot-password',
+    },
+    {
+      title:'Verify OTP',
+      Component:VerifyOTP,
+      path:'/otp-verification',
     },
   ]
 

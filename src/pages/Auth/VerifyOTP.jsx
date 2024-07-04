@@ -9,30 +9,32 @@ import Button from '../../components/Button';
 import Input from '../../components/Inputs';
 import {Link} from 'react-router-dom'
 import { IoMdArrowBack } from "react-icons/io";
+import { MdOutlineAccountTree } from "react-icons/md";
 
-const ForgotPassword = () => {
+
+const VerifyOTP = () => {
 
 
   return (
     <AuthLayout>
       <div className="p-10 h-screen overflow-y-auto flex flex-col">
-        <Link to={'/login'} className='flex items-center gap-2 hover:text-primary hover:font-semibold' > <IoMdArrowBack /> Back to signin</Link>
+        <Link to={'/forgot-password'} className='flex items-center gap-2 hover:text-primary hover:font-semibold' > <IoMdArrowBack /> Change Email</Link>
         <div className="max-w-[450px] m-auto flex flex-col justify-center  flex-1">
               <div className='' >
-                  <h4 className='font-semibold text-xl'>Forgot Password</h4>
-                  <p className='text- text-text_color'>Oops, sorry to hear that. Enter your email address below, and we’ll help you reset your password!</p>
+                  <h4 className='font-semibold text-xl'>OTP Verification</h4>
+                  <p className='text- text-text_color'>A 6-digit code has been sent to your email address. Please enter the code below to proceed.</p>
               </div>
               <div className="mt-10">
-                  <Input label={'Email Address'} placeholder={'support@lifebridge.com'} type={'email'} icon={<MdOutlineMarkEmailUnread size={22} />}/>
+                  <Input placeholder={'123-456'} title={'Enter OTP'}  icon={<MdOutlineAccountTree size={22} />}/>
               </div>
               
-              <Link to={'/otp-verification'} className='mt-5' >
-                  <Button onClick={null} title='Verify OTP' />
-              </Link>
+              <div className='mt-5' >
+                  <Button onClick={null} title='Reset Password' />
+              </div>
         </div>
       </div>
     </AuthLayout>
   )
 }
 
-export default ForgotPassword
+export default VerifyOTP

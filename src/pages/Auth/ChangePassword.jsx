@@ -10,7 +10,7 @@ import Input from '../../components/Inputs';
 import {Link} from 'react-router-dom'
 import { IoMdArrowBack } from "react-icons/io";
 
-const ForgotPassword = () => {
+const ChangePassword = () => {
 
 
   return (
@@ -35,4 +35,4 @@ const ForgotPassword = () => {
   )
 }
 
-export default ForgotPassword
+export default ChangePassword
