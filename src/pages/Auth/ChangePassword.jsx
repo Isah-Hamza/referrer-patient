@@ -19,16 +19,19 @@ const ChangePassword = () => {
         <Link to={'/login'} className='flex items-center gap-2 hover:text-primary hover:font-semibold' > <IoMdArrowBack /> Back to signin</Link>
         <div className="max-w-[450px] m-auto flex flex-col justify-center  flex-1">
               <div className='' >
-                  <h4 className='font-semibold text-xl'>Forgot Password</h4>
-                  <p className='text- text-text_color'>Oops, sorry to hear that. Enter your email address below, and we’ll help you reset your password!</p>
+                  <h4 className='font-semibold text-xl'>Change Password</h4>
+                  <p className='text- text-text_color'>Enter your new password below to update your credentials.</p>
               </div>
-              <div className="mt-10">
-                  <Input label={'Email Address'} placeholder={'support@lifebridge.com'} type={'email'} icon={<MdOutlineMarkEmailUnread size={22} />}/>
-              </div>
-              
-              <Link to={'/otp-verification'} className='mt-5' >
-                  <Button onClick={null} title='Verify OTP' />
-              </Link>
+              <div className="mt-5">
+                <Input label={'Create Password'} type={'password'} placeholder={'************'} icon={<MdOutlineLockPerson size={22} />}/>
+                <p className='text-xs text-text_color' >Password must contain at least one lowercase letters, uppercase letters, numbers and special symbols</p>
+            </div>
+            <div className="mt-5">
+                <Input label={'Confirm Password'} type={'password'} placeholder={'************'} icon={<MdOutlineLockPerson size={22} />}/>
+            </div>
+            <Link to={'/otp-verification'} className='mt-5' >
+                <Button onClick={null} title='Change Password' />
+            </Link>
         </div>
       </div>
     </AuthLayout>

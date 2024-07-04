@@ -27,7 +27,7 @@ const ForgotPassword = () => {
               </div>
               
               <Link to={'/otp-verification'} className='mt-5' >
-                  <Button onClick={null} title='Verify OTP' />
+                  <Button onClick={null} title='Request New Password' />
               </Link>
         </div>
       </div>

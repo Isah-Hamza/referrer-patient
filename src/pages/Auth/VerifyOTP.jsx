@@ -28,9 +28,9 @@ const VerifyOTP = () => {
                   <Input placeholder={'123-456'} title={'Enter OTP'}  icon={<MdOutlineAccountTree size={22} />}/>
               </div>
               
-              <div className='mt-5' >
-                  <Button onClick={null} title='Reset Password' />
-              </div>
+              <Link to={'/change-password'} className='mt-5' >
+                  <Button onClick={null} title='Vefify OTP' />
+              </Link>
         </div>
       </div>
     </AuthLayout>
