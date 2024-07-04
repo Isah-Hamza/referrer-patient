@@ -6,7 +6,7 @@ import { FiPhoneCall } from "react-icons/fi";
 import { MdOutlineLockPerson } from "react-icons/md";
 import { FcGoogle } from "react-icons/fc";
 import Button from '../../components/Button';
-
+import {Link} from 'react-router-dom'
 const StepOne = ({ next }) => {
   return (
     <div className="">
@@ -43,7 +43,7 @@ const StepOne = ({ next }) => {
             </div>
             <div className="mt-14">
                 <p className='text-center text-sm' >
-                    Already have an account? <button className='text-primary font-semibold' >Log in</button>
+                    Already have an account? <Link to={'/login'} className='text-primary font-semibold' >Log in</Link>
                 </p>
             </div>
     </div>
