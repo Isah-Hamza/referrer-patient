@@ -10,10 +10,6 @@ const Register = () => {
     const tabs = ['Basic Info','Hospital & Payout Info','Access Dashboard'];
     const [activeTab, setActiveTab] = useState(0);
 
-    const next = () =>{
-         setActiveTab(prev => prev+1);
-        };
-
   return (
     <AuthLayout>
       <div className="p-10 h-screen overflow-y-auto">

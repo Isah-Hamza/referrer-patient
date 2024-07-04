@@ -12,7 +12,7 @@ const AuthLayout = ({ children }) => {
         <div className="w-[55%]">
             {children}
         </div>
-        <div className="w-[45%] p-10 py-5 right-section h-screen flex flex-col">
+        <div className="w-[45%] p-10 py-3 right-section h-screen flex flex-col">
             <div className="logo flex justify-end">
                 <img className='max-w-[150px]' src={logo} alt="logo" />
             </div>
