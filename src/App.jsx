@@ -4,6 +4,7 @@ import AuthLayout from './layouts/AuthLayout'
 import Register from './pages/Auth/Register'
 import Login from './pages/Auth/Login'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
+import ForgotPassword from './pages/Auth/ForgotPassword'
 
 function App() {
 
@@ -22,7 +23,12 @@ function App() {
       title:'Register',
       Component:Register,
       path:'/register',
-    }
+    },
+    {
+      title:'Reset Password',
+      Component:ForgotPassword,
+      path:'/forgot-password',
+    },
   ]
 
   return (

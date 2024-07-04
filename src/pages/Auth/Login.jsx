@@ -24,7 +24,7 @@ const Login = () => {
             </div>
             <div className="mt-5">
                 <Input label={'Create Password'} type={'password'} placeholder={'************'} icon={<MdOutlineLockPerson size={22} />}/>
-                <button className='text-sm text-primary font-semibold' >forgot password</button>
+                <Link to={'/forgot-password'} className='text-sm text-primary font-semibold' >forgot password</Link>
             </div>
             <div className='mt-10' >
                 <Button onClick={null} title='Sign In' />
