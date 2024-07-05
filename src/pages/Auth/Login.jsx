@@ -7,10 +7,11 @@ import { MdOutlineLockPerson } from "react-icons/md";
 import { FcGoogle } from "react-icons/fc";
 import Button from '../../components/Button'; 
 import Input from '../../components/Inputs';
-import {Link} from 'react-router-dom'
+import {Link, useNavigate} from 'react-router-dom'
+
 const Login = () => {
 
-
+const navigate = useNavigate();
   return (
     <AuthLayout>
       <div className="p-10 h-screen overflow-y-auto">
@@ -27,7 +28,7 @@ const Login = () => {
                 <Link to={'/forgot-password'} className='text-sm text-primary font-semibold' >forgot password</Link>
             </div>
             <div className='mt-10' >
-                <Button onClick={null} title='Sign In' />
+                <Button onClick={() => navigate('/dashboard')} title='Sign In' />
                 <div className="flex items-center gap-2 my-7">
                     <hr className='flex-1' />
                     <span className='font-semibold text-sm' >OR</span>

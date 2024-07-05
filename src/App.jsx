@@ -7,6 +7,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import ForgotPassword from './pages/Auth/ForgotPassword'
 import VerifyOTP from './pages/Auth/VerifyOTP'
 import ChangePassword from './pages/Auth/ChangePassword'
+import Dashboard from './pages/Main/Dashboard'
 
 function App() {
 
@@ -40,6 +41,11 @@ function App() {
       title:'Change Password',
       Component:ChangePassword,
       path:'/change-password',
+    },
+    {
+      title:'Dashboard',
+      Component:Dashboard,
+      path:'/dashboard',
     },
   ]
 
