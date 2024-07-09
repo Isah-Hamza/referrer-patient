@@ -63,11 +63,17 @@ export default class BarChart extends PureComponent {
           }}
         >
           <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="name" />
-          <YAxis />
+          <XAxis fontWeight={700} fontSize={12} dataKey="name" />
+          <YAxis fontWeight={700} fontSize={12} />
           <Tooltip />
-          <Legend />
-          <Bar dataKey="pv" fill="#8884d8" activeBar={<Rectangle fill="pink" stroke="blue" />} />
+          {/* <Legend /> */}
+          <Bar 
+            dataKey="pv"  
+            width={2} 
+            fill="#8884d8" 
+            activeBar={<Rectangle fill="pink" stroke="blue" />} 
+            radius={[10,10,0,0]}
+            />
         </RechartBarChart>
       </ResponsiveContainer>
     );
