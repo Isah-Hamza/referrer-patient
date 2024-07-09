@@ -9,6 +9,7 @@ export default {
       colors:{
         'primary':'#043867',
         'text_color':'#323232',
+        'custom_gray':'#ededed',
       }
     },
   },
