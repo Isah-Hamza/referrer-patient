@@ -8,6 +8,15 @@ import { BsArrowRight } from 'react-icons/bs';
 import { PiEyeClosedBold } from "react-icons/pi";
 import note from '../../assets/images/note.svg';
 import BarChart from '../../components/Chart/BarChart';
+import stat1 from '../../assets/images/stat1.svg';
+import stat2 from '../../assets/images/stat2.svg';
+import stat3 from '../../assets/images/stat3.svg';
+
+import bank from '../../assets/images/Bank.svg';
+import test from '../../assets/images/Test.svg';
+import earn from '../../assets/images/Earn.svg';
+
+import refer from '../../assets/images/refer_and_earn.svg'
 
 const Dashboard = () => {
     const [activeTab, setActiveTab] = useState(0);
@@ -31,9 +40,60 @@ const Dashboard = () => {
         },
     ]
 
+    const analysis = [
+        {
+            title:'Total Referrals',
+            icon:stat1,
+            value:321,
+        },
+        {
+            title:'Pending Referrals',
+            icon:stat2,
+            value:53,
+        },
+        {
+            title:'Completed Referrals',
+            icon:stat3,
+            value:268,
+        },
+    ]
+
+    const activities = [
+        {
+            title:'You have referred Benjamin Wales ',
+            desc:'You assigned 2 tests. Waiting for your rebate.',
+            time:'5m ago',
+            img:test,
+        },
+        {
+            title:'You have referred Samuel Sandra ',
+            desc:'You assigned 2 tests. Waiting for your rebate.',
+            time:'1m ago',
+            img:test,
+        },
+        {
+            title:'You have earned your rebate from Benjamin Wales ',
+            desc:'Hurray, ₦23,000 has been added to your wallet.',
+            time:'2d ago',
+            img:earn,
+        },
+        {
+            title:'You have initiated a withdrawal request.',
+            desc:'₦350,000 will be credited into your bank account soon.',
+            time:'2d ago',
+            img:bank,
+        },
+        {
+            title:'You have earned your rebate from Temites Flyn ',
+            desc:'Hurray, ₦23,000 has been added to your wallet.',
+            time:'12d ago',
+            img:earn,
+        },
+    ]
+
   return (
     <div className='px-5 h-screen flex flex-col gap-5 w-full bg-[#f8f8f8]'>
-      <header className='flex items-center justify-between gap-5 py-4' >
+      <header className='flex items-center justify-between gap-5 py-5' >
         <img className='w-40' src={logo} alt="logo" />
         <div className="flex gap-5 bg-[#ededed] rounded-3xl">
             {
@@ -55,8 +115,8 @@ const Dashboard = () => {
             </button>
         </div>
       </header>
-      <main className='flex-1 flex gap-10 w-full' >
-        <div className="w-2/6 h-full">
+      <main className='flex-1 flex gap-5 w-full' >
+        <div className="w-2/6 max-h-[calc(100vh-115px)] overflow-y-auto">
             <div className="p-4 rounded-lg border border-custom_gray bg-white">
                 <p className='text-text_color'>Good Afternoon ☀️</p>
                 <p className='text-xl font-semibold mt-2' >Emmanuella</p>
@@ -79,14 +139,66 @@ const Dashboard = () => {
                 </div>
                 <div className="p-5">
                     <p className='' >Earning history displayed per week</p>
-                    <div className="-ml-10 min-w-[400px] h-[300px]">
+                    <div className="mt-5 -ml-10 min-w-[400px] h-[300px]">
                         <BarChart />
                     </div>
                 </div>
             </div>
         </div>
-        <div className="w-4/6 h-full border border-[green]"></div>
+        <div className="w-4/6 max-h-[calc(100vh-115px)] overflow-y-auto">
+            <div className="top flex gap-3">
+                <div className="w-2/5 flex flex-col gap-3">
+                    {
+                        analysis.map((item, idx) =>(
+                            <div key={idx} className='border border-custom_gray rounded-lg bg-white p-3' >
+                                <img className='ml-auto'  src={note} alt="" />
+                                <div className="p-3 py-2">
+                                    <img src={item.icon} />
+                                    <div className='flex justify-between mt-4' >
+                                        <div className="">
+                                            <p className='' >{item.title}</p>
+                                            <p className='text-2xl font-semibold' >{item.value}</p>
+                                        </div>
+                                        <div className=""></div>
+                                    </div>
+                                </div>
 
+                            </div>
+                        ))
+                    }
+                </div>
+                <div className="right w-3/5 flex-1 border border-custom_gray rounded-lg bg-white">
+                <div className="flex items-center justify-between p-3 border-b">
+                    <p className='font-semibold' >Your Activities</p>
+                   <img src={note} alt="note" />
+                </div>
+                <div className="p-5">
+                    <div className="grid gap-7">
+                    {
+                        activities.map((item,idx) => (
+                            <div key={idx} className='flex items-center gap-4' >
+                                <img src={item.img} alt="image" />
+                                <div className="text-sm">
+                                    <p className='font-medium' >{item.title}</p>
+                                    <p className='my-1' >{item.desc}</p>
+                                    <p className='text-text_color text-xs' >{item.time}</p>
+                                </div>
+                            </div>
+                        ))
+                    }
+                    </div>
+                </div>
+            </div>
+            </div>
+            <div className="bottom rounded-2xl border bg-white items-center border-custom_gray grid grid-cols-2 gap-9 mt-5 ">
+                <img src={refer} alt="refer" />
+                <div className="p-5">
+                    <p className='font-semibold text-xl  ' >Earn Rebates by Referring <br /> Patients!</p>
+                    <p className='text-text_color mt-2'>Unlock additional income with our referral program! When your patients make a payment, 
+                        you'll receive a rebate in your wallet within 24 hours. Start referring your patients today and watch your earnings grow.</p>
+                </div>
+            </div>
+        </div>
       </main>
     </div>
   )
