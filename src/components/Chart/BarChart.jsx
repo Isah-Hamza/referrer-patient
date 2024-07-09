@@ -5,43 +5,43 @@ const data = [
   {
     name: 'Mon',
     uv: 4000,
-    pv: 2400,
+    pv: 24,
     amt: 2400,
   },
   {
     name: 'Tue',
     uv: 3000,
-    pv: 1398,
+    pv: 13,
     amt: 2210,
   },
   {
     name: 'Wed',
     uv: 2000,
-    pv: 9800,
+    pv: 98,
     amt: 2290,
   },
   {
     name: 'Thu',
     uv: 2780,
-    pv: 3908,
+    pv: 39,
     amt: 2000,
   },
   {
     name: 'Fri',
     uv: 1890,
-    pv: 4800,
+    pv: 48,
     amt: 2181,
   },
   {
     name: 'Sat',
     uv: 2390,
-    pv: 3800,
+    pv: 38,
     amt: 2500,
   },
   {
     name: 'sun',
     uv: 3490,
-    pv: 4300,
+    pv: 43,
     amt: 2100,
   },
 ];
@@ -62,16 +62,16 @@ export default class BarChart extends PureComponent {
             bottom: 5,
           }}
         >
-          <CartesianGrid strokeDasharray="3 3" />
+          <CartesianGrid vertical={false} strokeDasharray="1" />
           <XAxis fontWeight={700} fontSize={12} dataKey="name" />
-          <YAxis fontWeight={700} fontSize={12} />
+          <YAxis unit={'k'} fontWeight={700} fontSize={12} />
           <Tooltip />
           {/* <Legend /> */}
           <Bar 
             dataKey="pv"  
-            width={2} 
-            fill="#8884d8" 
-            activeBar={<Rectangle fill="pink" stroke="blue" />} 
+            barSize={22}
+            fill="#043664" 
+            activeBar={<Rectangle  stroke="blue" />} 
             radius={[10,10,0,0]}
             />
         </RechartBarChart>

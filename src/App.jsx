@@ -8,10 +8,11 @@ import ForgotPassword from './pages/Auth/ForgotPassword'
 import VerifyOTP from './pages/Auth/VerifyOTP'
 import ChangePassword from './pages/Auth/ChangePassword'
 import Dashboard from './pages/Main/Dashboard'
+import MainLayout from './layouts/MainLayout'
 
 function App() {
 
-  const routes = [
+  const auth_routes = [
     {
       title:'Login',
       Component:Login,
@@ -42,6 +43,9 @@ function App() {
       Component:ChangePassword,
       path:'/change-password',
     },
+  ]
+
+  const main_routes = [
     {
       title:'Dashboard',
       Component:Dashboard,
@@ -54,8 +58,13 @@ function App() {
     <Router>
       <Routes>
         {
-          routes.map(route => <Route key={route.title} path={route.path} Component={route.Component} /> )
+          auth_routes.map(route => <Route key={route.title} path={route.path} Component={route.Component} /> )
         }
+        <Route path='/dashboard' Component={MainLayout}>
+          {
+            main_routes.map(route => <Route key={route.title} path={route.path} Component={route.Component} /> )
+          }
+        </Route>
       </Routes>
     </Router>
   )

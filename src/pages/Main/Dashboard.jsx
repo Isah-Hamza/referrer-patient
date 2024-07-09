@@ -92,30 +92,7 @@ const Dashboard = () => {
     ]
 
   return (
-    <div className='px-5 h-screen flex flex-col gap-5 w-full bg-[#f8f8f8]'>
-      <header className='flex items-center justify-between gap-5 py-5' >
-        <img className='w-40' src={logo} alt="logo" />
-        <div className="flex gap-5 bg-[#ededed] rounded-3xl">
-            {
-                tabs.map((item,idx) => (
-                    <button key={idx} className={`flex items-center gap-2 px-3
-                    ${activeTab == idx && 'text-white bg-primary !px-10 py-3 rounded-3xl'}`} >
-                        { activeTab == idx ? <item.icon /> : null}
-                        <p>{item.title}</p>
-                    </button>
-                ))
-            }
-        </div>
-        <div className="flex items-center gap-3 ">
-            <button className="w-10 h-10 bg-[#ededed] grid place-content-center rounded-full">
-                <IoLogOut size={20} color='red' />
-            </button>
-            <button>
-                <img className='w-10' src={avatar} alt="" />
-            </button>
-        </div>
-      </header>
-      <main className='flex-1 flex gap-5 w-full' >
+    <>
         <div className="w-2/6 max-h-[calc(100vh-115px)] overflow-y-auto">
             <div className="p-4 rounded-lg border border-custom_gray bg-white">
                 <p className='text-text_color'>Good Afternoon ☀️</p>
@@ -199,8 +176,7 @@ const Dashboard = () => {
                 </div>
             </div>
         </div>
-      </main>
-    </div>
+    </>
   )
 }
 
