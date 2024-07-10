@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Input from '../../components/Inputs'
 import { BiCopy, BiCopyAlt, BiPhoneIncoming, BiSearch, BiUser } from 'react-icons/bi'
 import Select from '../../components/Inputs/Select'
@@ -9,6 +9,10 @@ import { MdOutlineEmail } from 'react-icons/md'
 import completed from '../../assets/images/completed.svg'
 
 const Referrals = () => {
+
+    const [viewDetails, setViewDetails] = useState(false);
+
+    const toggleViewDetails = () => setViewDetails(!viewDetails);
 
     const dummy = [
         {
@@ -114,18 +118,18 @@ const Referrals = () => {
                     <p className='' >{item.gender}</p>
                     <p className='' >{item.test}</p>
                     <p className='' >{item.rebate}</p>
-                    <p className='font-semibold text-light_blue cursor-pointer' >View Details</p>
+                    <p onClick={toggleViewDetails} className='font-semibold text-light_blue cursor-pointer' >View Details</p>
                     </div>
                     )) 
                 }
 
             </div>
         </div>
-        <div className="fixed inset-0 bg-black/70 flex justify-end">
+       {viewDetails ? <div className="fixed inset-0 bg-black/70 flex justify-end">
             <div className="bg-white w-[450px] max-h-screen overflow-y-auto">
                 <div className="flex items-center justify-between p-3 border-b">
                     <p className='font-semibold' >Referral Details</p>
-                    <button className="font-medium flex items-center gap-2">
+                    <button onClick={toggleViewDetails} className="font-medium flex items-center gap-2">
                         <span>Close</span>
                         <CgClose />
                     </button>
@@ -170,7 +174,7 @@ const Referrals = () => {
                         }
                     </div>
                 </div>
-                <div className="p-1 text-sm border rounded-3xl mx-2">
+                <div className="p-1 text-sm border rounded-3xl mx-5">
                     <div className="flex justify-between items-center p-2 px-4 rounded-3xl bg-[#dfdfdf]">
                         <p className='font-semibold' >4 tests assigned</p>
                         <button className='font-medium text-primary' >Show Details</button>
@@ -197,7 +201,7 @@ const Referrals = () => {
                         </div>
                     </div>
                 </div>
-                <div className="mt-5 p-1 text-sm border rounded-3xl mx-2">
+                <div className="mt-5 p-1 text-sm border rounded-3xl mx-5">
                     <div className="flex justify-between items-center p-2 px-4 rounded-3xl bg-[#dfdfdf]">
                         <p className='font-semibold' >2 tests assigned</p>
                         <button className='font-medium text-primary' >Show Details</button>
@@ -218,11 +222,11 @@ const Referrals = () => {
                         <img src={completed} alt="completed" />
                     </div>
                 </div>
-                <div className="border-t mt-5 pt-10">
-
+                <div className="border-t my-5 p-5">
+                    <Button title={'Refer'} className={'w-full !px-10 !py-2.5 !text-sm  !bg-light_blue'} />
                 </div>
             </div>
-        </div>
+        </div> : null}
     </div>
   )
 }
