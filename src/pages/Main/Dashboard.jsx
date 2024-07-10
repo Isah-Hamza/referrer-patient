@@ -19,26 +19,6 @@ import earn from '../../assets/images/Earn.svg';
 import refer from '../../assets/images/refer_and_earn.svg'
 
 const Dashboard = () => {
-    const [activeTab, setActiveTab] = useState(0);
-
-    const tabs = [
-        {
-            title:'Dashboard',
-            icon:AiOutlineHome
-        },
-        {
-            title:'Referrals',
-            icon:AiOutlineHome
-        },
-        {
-            title:'Payment',
-            icon:AiOutlineHome
-        },
-        {
-            title:'Profile',
-            icon:AiOutlineHome
-        },
-    ]
 
     const analysis = [
         {

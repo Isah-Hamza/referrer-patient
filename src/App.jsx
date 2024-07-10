@@ -9,6 +9,7 @@ import VerifyOTP from './pages/Auth/VerifyOTP'
 import ChangePassword from './pages/Auth/ChangePassword'
 import Dashboard from './pages/Main/Dashboard'
 import MainLayout from './layouts/MainLayout'
+import Referrals from './pages/Main/Referrals'
 
 function App() {
 
@@ -50,6 +51,11 @@ function App() {
       title:'Dashboard',
       Component:Dashboard,
       path:'/dashboard',
+    },
+    {
+      title:'Referrals',
+      Component:Referrals,
+      path:'referrals',
     },
   ]
 
