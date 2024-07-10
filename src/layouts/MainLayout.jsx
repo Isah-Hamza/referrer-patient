@@ -1,29 +1,33 @@
 import React, { useState } from 'react'
 import { IoLogOut } from 'react-icons/io5';
-import { Outlet } from 'react-router-dom'
+import { Outlet, useNavigate } from 'react-router-dom'
 import logo from '../assets/images/logo.svg';
 import { AiOutlineHome } from "react-icons/ai";
 import avatar from '../assets/images/avatar.svg';
 
 const MainLayout = () => {
-
+    const navigate = useNavigate();
     const [activeTab, setActiveTab] = useState(0);
 
     const tabs = [
         {
             title:'Dashboard',
+            link:'/dashboard',
             icon:AiOutlineHome
         },
         {
             title:'Referrals',
+            link:'referrals',
             icon:AiOutlineHome
         },
         {
             title:'Payment',
+            link:'#',
             icon:AiOutlineHome
         },
         {
             title:'Profile',
+            link:'#',
             icon:AiOutlineHome
         },
     ]
@@ -36,6 +40,7 @@ const MainLayout = () => {
             {
                 tabs.map((item,idx) => (
                     <button onClick={() => {
+                        navigate(item.link);
                         setActiveTab(idx);
                     }} key={idx} className={`flex items-center gap-2 px-3
                     ${activeTab == idx && 'text-white bg-primary !px-10 py-3 rounded-3xl'}`} >
