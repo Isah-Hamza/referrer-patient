@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
-import { BiCopy, BiPhoneIncoming, BiSolidUserDetail, BiTrashAlt } from "react-icons/bi";
+import { BiCopy, BiPhoneIncoming, BiSolidUserDetail, BiTrashAlt, BiUser } from "react-icons/bi";
 import { CgClose } from 'react-icons/cg';
-import { CiUser } from 'react-icons/ci';
-import { MdOutlineMarkEmailUnread } from 'react-icons/md';
+import { CiLocationOn, CiUser } from 'react-icons/ci';
+import { MdOutlineLockPerson, MdOutlineMarkEmailUnread, MdTitle } from 'react-icons/md';
 import { PiTestTubeFill } from "react-icons/pi";
 import Select from '../../components/Inputs/Select';
 import { BsCaretRight, BsFillTrashFill } from 'react-icons/bs';
@@ -10,63 +10,44 @@ import Button from '../../components/Button'
 import success from '../../assets/images/success.svg';
 import { IoIosArrowForward } from "react-icons/io";
 import Input from '../../components/Inputs';
+import { RiBankCardLine } from 'react-icons/ri';
+import { GrSettingsOption } from 'react-icons/gr';
+import avatar from '../../assets/images/avatar.svg'
+import { FaLocationPin } from 'react-icons/fa6';
+import { RiBankCard2Line } from "react-icons/ri";
+import { MdOutlineAccountTree } from "react-icons/md";
+import deleteIcon from '../../assets/images/delete.svg';
 
 const Profile = ({  }) => {
   const [activeTab, setActiveTab] = useState(0);
   const [successful, setSuccessful] = useState(false);
+  const [deleteAccount, setDeleteAccount] = useState(false);
 
   const toggleSuccessful = () => setSuccessful(!successful);
+  const toggleDeleteAccount = () => setDeleteAccount(!deleteAccount);
 
   const tabs = [
     {
-      title:'Referrer Information',
+      title:'Profile Details',
       icon:<BiSolidUserDetail size={20} />,
       onClick:() => { document.querySelector('#patient').scrollIntoView() },
     },
     {
-      title:'Test Information',
-      icon:<PiTestTubeFill size={20} />,
+      title:'Payout Settings',
+      icon:<RiBankCardLine size={20} />,
+      onClick:() => {
+        console.log('clicked')
+        document.querySelector('#test').scrollIntoView()},
+    },
+    {
+      title:'Account & Security',
+      icon:<GrSettingsOption size={20} />,
       onClick:() => {
         console.log('clicked')
         document.querySelector('#test').scrollIntoView()},
     },
   ]
 
-  const selectedTests = [
-    {
-      type:'C.T. Scan - Pelvimetry',
-      category:'C.T Test',
-      amount:'₦28,000',
-    },
-    {
-      type:'Menstrual Irregularities',
-      category:'Endocrinology',
-      amount:'₦8,000',
-    },
-    {
-      type:'Fibronology',
-      category:'HAEMATOLOGY',
-      amount:'₦5,500',
-    },
-  ]
-
-  const genderOptions = [
-    {
-      label:'Male',
-      value:1
-    },
-    {
-      label:'Female',
-      value:2
-    },
-  ]
-
-  const emptyOption = [
-    {
-      label:'Select an option',
-      value:0
-    }, 
-  ]
 
   const close = () => {
     toggleSuccessful();
@@ -75,10 +56,11 @@ const Profile = ({  }) => {
 
   return (
      <div className='w-full bg-white rounded-xl flex' >
-      { !successful ? <>
+      { !successful ? 
+      <>
         <div className="w-[350px] border-r h-[calc(100vh-120px)] p-5 pt-7">
-        <p className='font-semibold' >Referral Form Creation</p>
-        <div className="mt-7 grid gap-3 max-w-[250px]">
+        <p className='font-semibold pl-7' >Settings</p> 
+        <div className="mt-7 grid gap-7 max-w-[250px]">
           {
             tabs.map((item,idx) => (
               <div onClick={() =>{ setActiveTab(idx); item.onClick()}} key={idx} 
@@ -90,67 +72,101 @@ const Profile = ({  }) => {
           }
         </div>
         </div>
+        { activeTab == 0 ? 
         <div className="flex-1 p-10 pt-7  h-[calc(100vh-120px)] overflow-y-auto">
           <div className="flex justify-between">
               <div id='patient' className="">
-                <p className='font-semibold mb-1' >Patient Details</p>
-                <p className='text-sm' >Please kindly enter your patient information below.</p>
-              </div>
-              <button onClick={null} className="font-medium flex items-center gap-2">
-                  <span>Close</span>
-                  <CgClose />
-              </button>
-          </div>
-          <div className=" max-w-[650px]">
-              <div className="mt-6">
-                  <Input label={'Email Address'} placeholder={'support@lifebridge.com'} type={'email'} icon={<MdOutlineMarkEmailUnread size={22} />}/>
-              </div>
-              <div className="mt-4">
-                  <Input label={'Full Name'} placeholder={'John Doe'} icon={<CiUser size={24} />}/>
-              </div>
-              <div className="mt-4">
-                  <Input label={'Phone Number'} placeholder={'Phone Number'} icon={<BiPhoneIncoming size={24} />}/>
-              </div>
-              <div className="mt-4">
-                <Select label={'Gender'} options={genderOptions}  icon={<CiUser size={22} />}/>
-            </div>
-          </div>
-          <div className="mt-10 flex justify-between">
-              <div id='test' className="">
-                <p className='font-semibold mb-1' >Test Details</p>
-                <p className='text-sm' >Choose the test below to diagnose the patient with.</p>
+                <p className='font-semibold mb-1' >Profile Details</p>
+                <p className='text-sm' >Manage your profile.</p>
               </div>
           </div>
-          <div className=" max-w-[650px]">
-            <div className="mt-6">
-                <Select label={'Test Category'} options={emptyOption}  icon={<PiTestTubeFill size={22} />}/>
+          <div className="mt-10 flex gap-5 items-center">
+            <img className='w-24' src={avatar} alt="user" />
+            <div className="grid gap-1">
+              <p className='font-medium' >Profile Picture</p>
+              <p className='text-text_color text-sm' >PNG, JPG, GIF max size of 5MB</p>
             </div>
-            <div className="mt-4">
-                <Select label={'Test Type'} options={emptyOption}  icon={<PiTestTubeFill size={22} />}/>
+          </div>
+          <div className="mt-10 grid grid-cols-2 gap-5 max-w-[600px]">
+            <div className="">
+                <Input label={'First Name'} placeholder={'John Doe'} icon={<CiUser size={24} />}/>
             </div>
-            <div className="mt-7 flex items-center gap-2">
-                <p className='font-semibold mb-1' >Selected Tests</p>
-                <hr className='flex-1 bg-[gainsboro] text-[gainsboro]' />
+            <div className="">
+                <Input label={'Last Name'} placeholder={'Doe'} icon={<CiUser size={24} />}/>
             </div>
-            <div className="mt-7 grid grid-cols-4 gap-5">
-              {
-                selectedTests.map((item,idx) => (
-                  <div key={idx} className='relative grid  text-sm bg-[#f9f9f9] border p-3 rounded-lg ' >
-                  <p className='font-medium mb-1' >{ item.type }</p>  
-                  <p className='uppercase mb-10' >{ item.category }</p>  
-                  <p className='mt-auto text-light_blue text-lg font-semibold' >{ item.amount }</p>
-                  <button className="absolute -top-3 -right-3 w-9 h-9 rounded-full bg-white border grid place-content-center">
-                    <BsFillTrashFill size={15} color='red' />
-                    </button>  
-                  </div>
-                ))
-              }
+            <div className=" col-span-2">
+                <Input label={'Email Address'} placeholder={'support@lifebridge.com'} type={'email'} icon={<MdOutlineMarkEmailUnread size={22} />}/>
             </div>
-            <div className="w-fit flex items-start my-5 mt-12">
-                    <Button onClick={toggleSuccessful} title={'Submit'} className={'w-fit !px-16 !py-2.5  !bg-light_blue'} />
-                </div>
+            <div className=" col-span-2">
+                <Input label={'Phone Number'} placeholder={'Phone Number'} icon={<BiPhoneIncoming size={24} />}/>
+            </div>
+            <div className=" col-span-2">
+                <Input label={'Hospital Name'} placeholder={'Lifebridge Medical Diagnostic'} icon={<CiUser size={24} />}/>
+            </div>
+            <div className="">
+                <Input label={'Location'} placeholder={'Wuye, Abuja'} icon={<CiLocationOn size={24} />}/>
+            </div>
+            <div className="">
+                <Select label={'Professional Title'} options={[{label:'Gyneacology',value:0,}]} icon={<MdTitle size={24} />}/>
+            </div>
+          </div>
+          <div className='w-fit mt-10' >
+            <Button className={'px-14'} title={'Update Profile'} />
           </div>
         </div>
+        : activeTab == 1 ? 
+        <div className="flex-1 p-10 pt-7  h-[calc(100vh-120px)] overflow-y-auto">
+        <div className="flex justify-between">
+            <div id='patient' className="">
+              <p className='font-semibold mb-1' >Payout Settings</p>
+              <p className='text-sm' >Manage your bank information.</p>
+            </div>
+        </div>
+
+        <div className="mt-5 grid gap-5 max-w-[600px]">
+        <div className="mt-5">
+                <Select label={'Bank Name'} options={[]} icon={<RiBankCard2Line size={22} />}/>
+            </div>
+            <div className="">
+                <Input label={'Account Number'}  placeholder={'0232322951'} icon={<MdOutlineAccountTree size={22} />}/>
+            </div>
+            <div className="">
+                <Input label={'Account Name'}  placeholder={'Isah Hamza Onipe'} icon={<BiUser size={22} />}/>
+            </div>
+        </div>
+        <div className='w-fit mt-10' >
+          <Button className={'px-14'} title={'Update Profile'} />
+        </div>
+      </div>
+        : activeTab == 2 ?
+        <div className="flex-1 p-10 pt-7  h-[calc(100vh-120px)] overflow-y-auto">
+        <div className="flex justify-between">
+            <div id='patient' className="">
+              <p className='font-semibold mb-1' >Account & Security</p>
+              <p className='text-sm' >Update your old password.</p>
+            </div>
+        </div>
+
+        <div className="mt-10 grid gap-5 max-w-[600px]">
+            <div className="">
+                <Input label={'Old Password'} type={'password'} placeholder={'************'} icon={<MdOutlineLockPerson size={22} />}/>
+            </div>
+            <div className="">
+                <Input label={'New Password'} type={'password'} placeholder={'************'} icon={<MdOutlineLockPerson size={22} />}/>
+                <p className='text-xs text-text_color' >Password must contain at least one lowercase letters, uppercase letters, numbers and special symbols</p>
+            </div>
+            <div className="">
+                <Input label={'Confirm New Password'} type={'password'} placeholder={'************'} icon={<MdOutlineLockPerson size={22} />}/>
+            </div>
+          </div>
+        <div className='w-fit mt-10' >
+          <Button className={'px-14'} title={'Update Password'} />
+        </div>
+        <hr className='w-full my-3 mt-14' />
+        <button onClick={toggleDeleteAccount} className={'text-red-700 font-semibold'}>Delete Account</button>
+        </div>
+        : null
+      }
       </>:
        <div className='p-10 h-[calc(100vh-130px)] flex flex-col justify-center items-center w-full' >
             <img className='-mt-5 w-[120px]' src={success} alt="success" />
@@ -178,8 +194,22 @@ const Profile = ({  }) => {
                     <button onClick={close} className='font-semibold' >Cancel</button>
                   </div>
             </div>
-          </div>  
+        </div>  
         }
+      {
+        deleteAccount ? 
+        <div className='bg-black/50 fixed inset-0 grid place-content-center' >
+          <div className="bg-white w-[350px] p-5 rounded-2xl flex flex-col justify-center text-center gap-3 text-sm">
+            <img className='w-12 m-auto' src={deleteIcon} alt="delete" />
+            <p className='text-base font-semibold' >Delete Your Account</p>
+            <p className='text-sm' >Are you sure you want to delete your account? This action is irreversible.</p>
+            <div className="mt-10 flex items-center gap-5 ">
+            <Button onClick={toggleDeleteAccount} className={'!px-5 !bg-white !text-text_color border border-text_color '} title={'Cancel'} />
+            <Button onClick={toggleDeleteAccount} className={'!px-5 bg-red-600'} title={'Yes Proceed'} />
+            </div>
+          </div>
+        </div> : null
+      }
     </div>
   )
 }

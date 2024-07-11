@@ -6,12 +6,12 @@ const Input = ({ disabled, label, id, type, placeholder, className, labelClass, 
 
     return (
         <div className='text-sm flex flex-col w-full'>
-            <label className={`font-normal mb-0.5 ${labelClass}`} htmlFor="first_name">{label}</label>
+            <label className={`font-medium mb-0.5 ${labelClass}`} htmlFor="first_name">{label}</label>
             <div className="relative w-full">
                 <input
                     type={type}
                     placeholder={placeholder}
-                    className={`${icon && '!pl-10'} w-full disabled:text-primary-gray focus-within:border-primary-green rounded-md text-sm p-3 py-3.5 border outline-none 
+                    className={`${icon && '!pl-10'} w-full disabled:text-primary-gray focus-within:border-primary-green rounded-3xl text-sm p-3 py-3.5 border outline-none 
                         ${className}`}
                     value={value}
                     onChange={onChange}

@@ -22,10 +22,10 @@ const ChangePassword = () => {
                   <h4 className='font-semibold text-xl'>Change Password</h4>
                   <p className='text- text-text_color'>Enter your new password below to update your credentials.</p>
               </div>
-              <div className="mt-5">
-                <Input label={'Create Password'} type={'password'} placeholder={'************'} icon={<MdOutlineLockPerson size={22} />}/>
-                <p className='text-xs text-text_color' >Password must contain at least one lowercase letters, uppercase letters, numbers and special symbols</p>
-            </div>
+            <div className="mt-5">
+              <Input label={'Create Password'} type={'password'} placeholder={'************'} icon={<MdOutlineLockPerson size={22} />}/>
+              <p className='text-xs text-text_color' >Password must contain at least one lowercase letters, uppercase letters, numbers and special symbols</p>
+          </div>
             <div className="mt-5">
                 <Input label={'Confirm Password'} type={'password'} placeholder={'************'} icon={<MdOutlineLockPerson size={22} />}/>
             </div>
