@@ -7,12 +7,15 @@ import { CgClose } from 'react-icons/cg'
 import stacey from '../../assets/images/stacey.svg'
 import { MdOutlineEmail } from 'react-icons/md'
 import completed from '../../assets/images/completed.svg'
+import New from '../../components/Referral/New'
 
 const Referrals = () => {
 
     const [viewDetails, setViewDetails] = useState(false);
+    const [newReferral, setNewReferral] = useState(false);
 
     const toggleViewDetails = () => setViewDetails(!viewDetails);
+    const toggleNewReferral = () => setNewReferral(!newReferral);
 
     const dummy = [
         {
@@ -89,13 +92,15 @@ const Referrals = () => {
     ]
 
   return (
-    <div className='w-full border border-custom_gray rounded-xl bg-white mb-7'>
+  <>
+   {!newReferral ? 
+   <div className='w-full border border-custom_gray rounded-xl bg-white mb-7'>
         <div className="border-b p-3 flex justify-between items-center">
             <p className='font-semibold' >My Referrals</p>
             <div className="flex items-center gap-4">
                 <Input className={'!rounded-3xl !py-2.5 !min-w-[300px]'} placeholder={'Type user name here...'} icon={<BiSearch size={20} className='text-custom_gray' />} />
                 <Select className={'!rounded-3xl !py-2.5 !min-w-[120px]'} options={[ { label:'All Status',value:null }]} />
-                <Button title={'Refer'} className={'!px-10 !py-2.5 !text-sm  !bg-light_blue'} />
+                <Button onClick={toggleNewReferral} title={'Refer'} className={'!px-10 !py-2.5 !text-sm  !bg-light_blue'} />
             </div>
         </div>
         <div className="mt-5 text-sm">
@@ -227,7 +232,12 @@ const Referrals = () => {
                 </div>
             </div>
         </div> : null}
+    </div> :
+    <div className='w-full'>
+        <New toggleNewReferral={toggleNewReferral} /> 
     </div>
+    }
+  </>
   )
 }
 
