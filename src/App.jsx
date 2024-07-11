@@ -10,6 +10,7 @@ import ChangePassword from './pages/Auth/ChangePassword'
 import Dashboard from './pages/Main/Dashboard'
 import MainLayout from './layouts/MainLayout'
 import Referrals from './pages/Main/Referrals'
+import Profile from './pages/Main/Profile'
 
 function App() {
 
@@ -56,6 +57,11 @@ function App() {
       title:'Referrals',
       Component:Referrals,
       path:'referrals',
+    },
+    {
+      title:'Profile',
+      Component:Profile,
+      path:'profile',
     },
   ]
 

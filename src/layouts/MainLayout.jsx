@@ -27,7 +27,7 @@ const MainLayout = () => {
         },
         {
             title:'Profile',
-            link:'#',
+            link:'profile',
             icon:AiOutlineHome
         },
     ]

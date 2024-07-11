@@ -4,14 +4,14 @@ import { CgClose } from 'react-icons/cg';
 import { CiUser } from 'react-icons/ci';
 import { MdOutlineMarkEmailUnread } from 'react-icons/md';
 import { PiTestTubeFill } from "react-icons/pi";
-import Input from '../Inputs';
-import Select from '../Inputs/Select';
+import Select from '../../components/Inputs/Select';
 import { BsCaretRight, BsFillTrashFill } from 'react-icons/bs';
-import Button from '../Button'
+import Button from '../../components/Button'
 import success from '../../assets/images/success.svg';
 import { IoIosArrowForward } from "react-icons/io";
+import Input from '../../components/Inputs';
 
-const New = ({ toggleNewReferral }) => {
+const Profile = ({  }) => {
   const [activeTab, setActiveTab] = useState(0);
   const [successful, setSuccessful] = useState(false);
 
@@ -70,7 +70,6 @@ const New = ({ toggleNewReferral }) => {
 
   const close = () => {
     toggleSuccessful();
-    toggleNewReferral();
   }
 
 
@@ -97,7 +96,7 @@ const New = ({ toggleNewReferral }) => {
                 <p className='font-semibold mb-1' >Patient Details</p>
                 <p className='text-sm' >Please kindly enter your patient information below.</p>
               </div>
-              <button onClick={toggleNewReferral} className="font-medium flex items-center gap-2">
+              <button onClick={null} className="font-medium flex items-center gap-2">
                   <span>Close</span>
                   <CgClose />
               </button>
@@ -185,4 +184,4 @@ const New = ({ toggleNewReferral }) => {
   )
 }
 
-export default New
+export default Profile
