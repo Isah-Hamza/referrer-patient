@@ -22,7 +22,7 @@ const MainLayout = () => {
         },
         {
             title:'Payment',
-            link:'#',
+            link:'payments',
             icon:AiOutlineHome
         },
         {

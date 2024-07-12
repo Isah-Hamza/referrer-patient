@@ -11,6 +11,7 @@ import Dashboard from './pages/Main/Dashboard'
 import MainLayout from './layouts/MainLayout'
 import Referrals from './pages/Main/Referrals'
 import Profile from './pages/Main/Profile'
+import Payment from './pages/Main/Payment'
 
 function App() {
 
@@ -62,6 +63,11 @@ function App() {
       title:'Profile',
       Component:Profile,
       path:'profile',
+    },
+    {
+      title:'Payments',
+      Component:Payment,
+      path:'payments',
     },
   ]
 
