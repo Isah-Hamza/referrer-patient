@@ -9,6 +9,10 @@ import { CiUser } from 'react-icons/ci';
 import { MdOutlineMarkEmailUnread } from 'react-icons/md';
 import { BiPhoneIncoming } from 'react-icons/bi';
 import avatar from '../../../assets/images/stacey.svg';
+import tick from  '../../../assets/images/Tick.svg';
+import { PiTestTubeFill } from 'react-icons/pi';
+import Select from '../../../components/Inputs/Select';
+import { BsFillTrashFill } from 'react-icons/bs';
 
 const Patient = () => {
     const navigate = useNavigate();
@@ -51,16 +55,28 @@ const Patient = () => {
           amount:'₦28,000',
         },
         {
-          type:'Menstrual Irregularities',
-          category:'Endocrinology',
-          amount:'₦8,000',
+            type:'Menstrual Irregularities',
+            category:'Endocrinology',
+            amount:'₦8,000',
         },
         {
-          type:'Fibronology',
-          category:'HAEMATOLOGY',
+          type:'C.T. Scan - Pelvimetry',
+          category:'C.T Test',
+          amount:'₦28,000',
+        },
+        {
+            type:'Fibronology',
+            category:'HAEMATOLOGY',
           amount:'₦5,500',
         },
     ]
+
+    const emptyOption = [
+        {
+          label:'Select an option',
+          value:0
+        }, 
+      ]
 
   return (
     <div className='flex p-3 h-screen' >
@@ -70,12 +86,17 @@ const Patient = () => {
             <div className="mt-14 grid gap-8">
                 {
                     tabs.map((tab,idx) => (
-                        <div className='flex gap-5 max-w-[400px]' >
-                            <div className={`rounded-full out border-2  grid place-content-center w-10 h-10 ${activeTab == idx ? 'border-light_blue' : ''} `}>
-                                <div className={`rounded-full mid border-2 border-white grid place-content-center w-9 h-9 bg-primary ${activeTab == idx ? 'border-light_blue' : 'bg-white border-gray-400'}`}>
-                                    <div className={`rounded-full in grid place-content-center w-3 h-3 ${activeTab == idx ? ' bg-[#c9e6ff]' : 'bg-gray-400'}`}>
+                        <div key={idx} className='flex gap-5 max-w-[400px]' >
+                            <div className={`rounded-full out border-2  grid place-content-center !min-w-10 !h-10 
+                                ${activeTab == idx ? 'border-light_blue' : ''} 
+                                ${idx >= activeTab ? '' : '!border-primary'}
+                                `}>
+                                { idx >= activeTab ? <div className={`rounded-full mid border-2 border-white grid place-content-center w-9 h-9 bg-primary ${activeTab == idx ? 'border-light_blue' : 'bg-white border-gray-400'}`}>
+                                   <div className={`rounded-full in grid place-content-center w-3 h-3 ${activeTab == idx ? ' bg-[#c9e6ff]' : 'bg-gray-400'}`}>
                                     </div>
-                                </div>
+                                </div> : 
+                                <img className='w-[18px]' src={tick} alt='tick' />
+                                }
                             </div>
                             <div className="text-text_color text-sm">
                                 <p className='text-base font-medium' >{tab.title}</p>
@@ -107,7 +128,7 @@ const Patient = () => {
                         />
                     </div>
                 <div className='mt-20 ' >
-                        <Button className={'!py-2.5'} onClick={nextStep} title='Verify Referral' />
+                        <Button className={'!py-2.5'} onClick={() => {nextStep(); setProcess('ref')}} title='Verify Referral' />
                         <div className="flex items-center gap-2 my-7">
                             <hr className='flex-1' />
                             <span className='font-semibold text-sm' >OR</span>
@@ -121,85 +142,179 @@ const Patient = () => {
                 </div>
             </div>
         </div> : activeTab == 1 ?
-        <div className='max-w-[550px] ml-20 py-14' >
-           { !confirmed ? <>
-                <div id='' className="">
-                    <p className='font-semibold mb-1' >Patient Details</p>
-                    <p className='text-sm' >Please kindly edit and confirm your information below.</p>
-                </div>
-                <div className="grid gap-5 mt-7">
-                    <div className="">
-                        <Input label={'Email Address'} placeholder={'support@lifebridge.com'} type={'email'} icon={<MdOutlineMarkEmailUnread size={22} />}/>
+        <>
+        {process == 'manual' ?
+            <div className='max-w-[600px] ml-20 py-14' >
+            { !confirmed ? <>
+                    <div id='' className="">
+                        <p className='font-semibold mb-1' >Patient Details(m)</p>
+                        <p className='text-sm' >Please kindly edit and confirm your information below.</p>
                     </div>
-                    <div className="">
-                        <Input label={'First Name'} placeholder={'John Doe'} icon={<CiUser size={24} />}/>
+                    <div className="grid gap-5 mt-7">
+                        <div className="">
+                            <Input label={'Email Address'} placeholder={'support@lifebridge.com'} type={'email'} icon={<MdOutlineMarkEmailUnread size={22} />}/>
+                        </div>
+                        <div className="">
+                            <Input label={'Full Name'} placeholder={'Emmanuella John'} icon={<CiUser size={24} />}/>
+                        </div>
+                        <div className="">
+                            <Input label={'Phone Number'} placeholder={'Phone Number'} icon={<BiPhoneIncoming size={24} />}/>
+                        </div>
+                        <div className="">
+                            <Input label={'Who is Referring You?'} placeholder={'Emmanuella Bami'} icon={<CiUser size={24} />}/>
+                        </div>
+                       
+                        <div className="mt-20 flex items-center justify-between">
+                            <button onClick={() => {previousStep(); setConfirmed(false)}} className='underline' >back</button>
+                            <Button onClick={toggleConfirmed} className={'!w-fit !px-12 !py-2.5 !text-sm'} title={'Confirm Details'} />
+                        </div>
                     </div>
-                    <div className="">
-                        <Input label={'Last Name'} placeholder={'Emmanuella'} icon={<CiUser size={24} />}/>
-                    </div>
-                    <div className="">
-                        <Input label={'Phone Number'} placeholder={'Phone Number'} icon={<BiPhoneIncoming size={24} />}/>
-                    </div>
-                    <div className="">
-                        <p className='font-medium mb-1 text-sm' >Invited By</p>
-                        <div className='rounded-full p-1.5 text-sm w-fit bg-custom_gray flex gap-2 px-2 pr-5' >
-                            <img className='w-10' src={avatar} alt="avatar" />
-                            <div>
-                                <p className='font-semibold' >Emmanuel Igwe</p>
-                                <p>Code Invite: <span className='font-semibold' >JUPQR</span> </p>
+                </>
+                :
+                <>
+                    <div id='' className="">
+                        <div className="mb-7 flex items-center justify-between">
+                            <p className='font-semibold mb-1' >Patient Details</p>
+                            <button onClick={toggleConfirmed} className='underline text-sm' >Edit Details</button>
+                        </div>
+                        <div className="grid gap-3 text-sm pb-10 border-b">
+                            <p className='text-sm' >Emmanuella Bami</p>
+                            <p className='text-sm' >emma.nuella2024@gmail.com</p>
+                            <p>(234) 123-4567-890</p>
+                            <p>Refered by: Emmanuella Igwe</p>
+                        </div>
+                        <div className="mt-6">
+                            <div id='' className="">
+                                <p className='font-semibold mb-1' >Assigned Tests Details</p>
+                                <p className='text-sm' >Review and proceed to book appointment.</p>
                             </div>
-                        </div>
-                    </div>
-                    <div className="mt-20 flex items-center justify-between">
-                        <button onClick={previousStep} className='underline' >back</button>
-                        <Button onClick={toggleConfirmed} className={'!w-fit !px-12 !py-2.5 !text-sm'} title={'Confirm Details'} />
-                    </div>
-                </div>
-            </>
-            :
-            <>
-                <div id='' className="">
-                    <div className="mb-7 flex items-center justify-between">
-                        <p className='font-semibold mb-1' >Patient Details</p>
-                        <button onClick={toggleConfirmed} className='underline text-sm' >Edit Details</button>
-                    </div>
-                    <div className="grid gap-3 text-sm pb-16 border-b">
-                        <p className='text-sm' >Emmanuella Bami</p>
-                        <p className='text-sm' >emma.nuella2024@gmail.com</p>
-                        <p>(234) 123-4567-890</p>
-                        <p>Refered by: Emmanuella Igwe</p>
-                    </div>
-                    <div className="mt-10">
-                        <div id='' className="">
-                            <p className='font-semibold mb-1' >Assigned Tests Details</p>
-                            <p className='text-sm' >Review and proceed to book appointment.</p>
-                        </div>
-                        <div className="mt-7 grid grid-cols-2 gap-3">
-                            {
+                            <div className="mt-6">
+                                <Select label={'Test Category'} options={emptyOption}  icon={<PiTestTubeFill size={22} />}/>
+                            </div>
+                            <div className="mt-4">
+                                <Select label={'Test Type'} options={emptyOption}  icon={<PiTestTubeFill size={22} />}/>
+                            </div>
+                            <div className="mt-7 flex items-center gap-2">
+                                <p className='font-semibold mb-1' >Selected Tests</p>
+                                <hr className='flex-1 bg-[gainsboro] text-[gainsboro]' />
+                            </div>
+                            <div className="mt-7 grid grid-cols-3 gap-5">
+                                {
                                 selectedTests.map((item,idx) => (
-                                <div key={idx} className='relative grid  text-sm bg-[#f9f9f9] border p-3 rounded-lg ' >
-                                <p className='font-medium mb-1' >{ item.type }</p>  
-                                <p className='uppercase mb-7' >{ item.category }</p>  
-                                <p className='mt-auto text-light_blue text-lg font-semibold' >{ item.amount }</p>
-                                {/* <button className="absolute -top-3 -right-3 w-9 h-9 rounded-full bg-white border grid place-content-center">
+                                    <div key={idx} className='relative grid  text-sm bg-[#f9f9f9] border p-3 rounded-lg ' >
+                                    <p className='font-medium mb-1' >{ item.type }</p>  
+                                    <p className='uppercase mb-10' >{ item.category }</p>  
+                                    <p className='mt-auto text-light_blue text-lg font-semibold' >{ item.amount }</p>
+                                    <button className="absolute -top-3 -right-3 w-9 h-9 rounded-full bg-white border grid place-content-center">
                                     <BsFillTrashFill size={15} color='red' />
-                                    </button>   */}
-                                </div>
+                                    </button>  
+                                    </div>
                                 ))
-                            }
-                        </div>
-                        <div className="mt-4">
-                            <p className='text-sm'>Total Test Amount: <span className='font-semibold'>₦54,500</span></p>
-                            <div className="mt-16 flex items-center justify-between">
-                                <button onClick={previousStep} className='underline' >back</button>
-                                <Button onClick={nextStep} className={'!w-fit !px-12 !py-2.5 !text-sm'} title={'Proceed To Appointment'} />
+                                }
+                            </div>
+                            <div className="mt-4">
+                                <p className='text-sm'>Total Test Amount: <span className='font-semibold'>₦54,500</span></p>
+                                <div className="mt-16 flex items-center justify-between">
+                                    <button onClick={() => {previousStep(); setConfirmed(false)}} className='underline' >back</button>
+                                    <Button onClick={nextStep} className={'!w-fit !px-12 !py-2.5 !text-sm'} title={'Proceed To Appointment'} />
+                                </div>
                             </div>
                         </div>
                     </div>
+                </>
+                }
+            </div>
+            :     
+            <div className='max-w-[550px] ml-20 py-14' >
+            { !confirmed ? <>
+                    <div id='' className="">
+                        <p className='font-semibold mb-1' >Patient Details</p>
+                        <p className='text-sm' >Please kindly edit and confirm your information below.</p>
+                    </div>
+                    <div className="grid gap-5 mt-7">
+                        <div className="">
+                            <Input label={'Email Address'} placeholder={'support@lifebridge.com'} type={'email'} icon={<MdOutlineMarkEmailUnread size={22} />}/>
+                        </div>
+                        <div className="">
+                            <Input label={'Full Name'} placeholder={'John Doe'} icon={<CiUser size={24} />}/>
+                        </div>
+                        <div className="">
+                            <Input label={'Phone Number'} placeholder={'Phone Number'} icon={<BiPhoneIncoming size={24} />}/>
+                        </div>
+                        <div className="">
+                            <p className='font-medium mb-1 text-sm' >Invited By</p>
+                            <div className='rounded-full p-1.5 text-sm w-fit bg-custom_gray flex gap-2 px-2 pr-5' >
+                                <img className='w-10' src={avatar} alt="avatar" />
+                                <div>
+                                    <p className='font-semibold' >Emmanuel Igwe</p>
+                                    <p>Code Invite: <span className='font-semibold' >JUPQR</span> </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="mt-20 flex items-center justify-between">
+                            <button onClick={() => {previousStep(); setConfirmed(false)}} className='underline' >back</button>
+                            <Button onClick={toggleConfirmed} className={'!w-fit !px-12 !py-2.5 !text-sm'} title={'Confirm Details'} />
+                        </div>
+                    </div>
+                </>
+                :
+                <>
+                    <div id='' className="">
+                        <div className="mb-7 flex items-center justify-between">
+                            <p className='font-semibold mb-1' >Patient Details</p>
+                            <button onClick={toggleConfirmed} className='underline text-sm' >Edit Details</button>
+                        </div>
+                        <div className="grid gap-3 text-sm pb-16 border-b">
+                            <p className='text-sm' >Emmanuella Bami</p>
+                            <p className='text-sm' >emma.nuella2024@gmail.com</p>
+                            <p>(234) 123-4567-890</p>
+                            <p>Refered by: Emmanuella Igwe</p>
+                        </div>
+                        <div className="mt-10">
+                            <div id='' className="">
+                                <p className='font-semibold mb-1' >Assigned Tests Details</p>
+                                <p className='text-sm' >Review and proceed to book appointment.</p>
+                            </div>
+                            <div className="mt-7 grid grid-cols-2 gap-3">
+                                {
+                                    selectedTests.map((item,idx) => (
+                                    <div key={idx} className='relative grid  text-sm bg-[#f9f9f9] border p-3 rounded-lg ' >
+                                    <p className='font-medium mb-1' >{ item.type }</p>  
+                                    <p className='uppercase mb-7' >{ item.category }</p>  
+                                    <p className='mt-auto text-light_blue text-lg font-semibold' >{ item.amount }</p>
+                                    {/* <button className="absolute -top-3 -right-3 w-9 h-9 rounded-full bg-white border grid place-content-center">
+                                        <BsFillTrashFill size={15} color='red' />
+                                        </button>   */}
+                                    </div>
+                                    ))
+                                }
+                            </div>
+                            <div className="mt-4">
+                                <p className='text-sm'>Total Test Amount: <span className='font-semibold'>₦54,500</span></p>
+                                <div className="mt-16 flex items-center justify-between">
+                                    <button onClick={() => {previousStep(); setConfirmed(false)}} className='underline' >back</button>
+                                    <Button onClick={nextStep} className={'!w-fit !px-12 !py-2.5 !text-sm'} title={'Proceed To Appointment'} />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </>
+                }
+            </div>
+        }
+        </>
+         : activeTab == 2 ? 
+        <div>
+            <div className='max-w-[650px] ml-20 py-10' >
+                <div id='' className="">
+                    <p className='font-semibold mb-1' >Book Appointment</p>
+                    <p className='text-sm' >When do you want to come?</p>
                 </div>
-            </>
-            }
-        </div> : null
+            </div>
+        </div> 
+        : activeTab == 3 ? 
+        <div>preview </div> 
+        : null
         }
 
       </div>
