@@ -12,6 +12,7 @@ import MainLayout from './layouts/MainLayout'
 import Referrals from './pages/Main/Referrals'
 import Profile from './pages/Main/Profile'
 import Payment from './pages/Main/Payment'
+import Patient from './pages/Main/Patient'
 
 function App() {
 
@@ -69,6 +70,19 @@ function App() {
       Component:Payment,
       path:'payments',
     },
+    {
+      title:'Patient',
+      Component:Patient,
+      path:'patient',
+    },
+  ]
+
+  const patient = [
+    {
+      title:'Patient',
+      Component:Patient,
+      path:'',
+    },
   ]
 
   return (
@@ -81,6 +95,11 @@ function App() {
         <Route path='/dashboard' Component={MainLayout}>
           {
             main_routes.map(route => <Route key={route.title} path={route.path} Component={route.Component} /> )
+          }
+        </Route>
+        <Route path='/patient' Component={null}>
+          {
+            patient.map(route => <Route key={route.title} path={route.path} Component={route.Component} /> )
           }
         </Route>
       </Routes>
