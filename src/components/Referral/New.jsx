@@ -133,20 +133,20 @@ const New = ({ toggleNewReferral }) => {
                 <p className='font-semibold mb-1' >Selected Tests</p>
                 <hr className='flex-1 bg-[gainsboro] text-[gainsboro]' />
             </div>
-            <div className="mt-7 grid grid-cols-4 gap-5">
-              {
-                selectedTests.map((item,idx) => (
-                  <div key={idx} className='relative grid  text-sm bg-[#f9f9f9] border p-3 rounded-lg ' >
-                  <p className='font-medium mb-1' >{ item.type }</p>  
-                  <p className='uppercase mb-10' >{ item.category }</p>  
-                  <p className='mt-auto text-light_blue text-lg font-semibold' >{ item.amount }</p>
-                  <button className="absolute -top-3 -right-3 w-9 h-9 rounded-full bg-white border grid place-content-center">
-                    <BsFillTrashFill size={15} color='red' />
-                    </button>  
-                  </div>
-                ))
-              }
-            </div>
+          <div className="mt-7 grid grid-cols-4 gap-5">
+            {
+              selectedTests.map((item,idx) => (
+                <div key={idx} className='relative grid  text-sm bg-[#f9f9f9] border p-3 rounded-lg ' >
+                <p className='font-medium mb-1' >{ item.type }</p>  
+                <p className='uppercase mb-10' >{ item.category }</p>  
+                <p className='mt-auto text-light_blue text-lg font-semibold' >{ item.amount }</p>
+                <button className="absolute -top-3 -right-3 w-9 h-9 rounded-full bg-white border grid place-content-center">
+                  <BsFillTrashFill size={15} color='red' />
+                  </button>  
+                </div>
+              ))
+            }
+          </div>
             <div className="w-fit flex items-start my-5 mt-12">
                     <Button onClick={toggleSuccessful} title={'Submit'} className={'w-fit !px-16 !py-2.5  !bg-light_blue'} />
                 </div>
