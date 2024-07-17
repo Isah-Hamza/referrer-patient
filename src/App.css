@@ -6,3 +6,23 @@
     background-color:#c9ecff ;
     background-image: url('./assets/images/auth-layout-pattern.svg');
 }
+
+.react-calendar{
+    width: 600px !important;
+    line-height: 3em !important;
+    font-family:  "Quicksand", sans-serif !important;
+    border-radius: 10px;
+    @apply shadow-md !border-0 !border-t !border-[gainsboro]
+}
+
+.react-calendar__tile--active {
+    @apply !bg-primary !text-white 
+}
+
+.react-calendar__tile--now{
+    @apply !bg-[#c9e6ff]
+}
+
+.react-calendar__tile:enabled:hover, .react-calendar__tile:enabled:focus{
+    /* border-radiusn: ; */
+}

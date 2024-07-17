@@ -13,14 +13,22 @@ import tick from  '../../../assets/images/Tick.svg';
 import { PiTestTubeFill } from 'react-icons/pi';
 import Select from '../../../components/Inputs/Select';
 import { BsFillTrashFill } from 'react-icons/bs';
+import Calendar from 'react-calendar';
+import 'react-calendar/dist/Calendar.css';
+
 
 const Patient = () => {
     const navigate = useNavigate();
     const [otp, setOtp] = useState('');
-    const [activeTab, setActiveTab] = useState(0);
+    const [activeTab, setActiveTab] = useState(2);
     const [process, setProcess] = useState('');
     const [confirmed, setConfirmed] = useState(false);
-
+    const [date, setDate] = useState();
+    const [selectedTime,setSelectedTime] = useState(null);
+    const [availableTimes, setAvailableTimes] = useState([
+        '08:30 AM','09:00 AM','10:00 AM','10:45 AM','11:30 AM',
+        '12:00 PM','12:30 PM','01:00 PM','01:15 PM','02:30 PM',
+    ])
     const toggleConfirmed = () => setConfirmed(!confirmed);
 
     const nextStep = () => setActiveTab(activeTab + 1);
@@ -309,6 +317,28 @@ const Patient = () => {
                 <div id='' className="">
                     <p className='font-semibold mb-1' >Book Appointment</p>
                     <p className='text-sm' >When do you want to come?</p>
+                </div>
+                <div className="mt-10 ">
+                    <Calendar className={'min-w-[1000px'} onChange={setDate}  />
+                </div>
+                <div className="mt-10 max-w-[600px]">
+                    {
+                      date ?  <>
+                            <p className='font-semibold' >Available Times</p>
+                            <div className="mt-5 grid grid-cols-4 gap-5">
+                                {
+                                    availableTimes.map((time,idx) => (
+                                        <button onClick={() => setSelectedTime(time)} key={idx} 
+                                        className={`border rounded-2xl px-7 py-2 text-sm ${time == selectedTime && 'text-white font-medium bg-light_blue'}`} >{time}</button>
+                                    ))
+                                }
+                            </div>
+                        </> : null
+                    }
+                    <div className="mt-16 flex items-center justify-between">
+                            <button onClick={previousStep} className='underline' >back</button>
+                            <Button disabled={!selectedTime} onClick={nextStep} className={'!w-fit !px-12 !py-2.5 !text-sm'} title={'Book Appointment'} />
+                    </div>
                 </div>
             </div>
         </div> 
