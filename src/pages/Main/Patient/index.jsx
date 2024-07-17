@@ -15,12 +15,13 @@ import Select from '../../../components/Inputs/Select';
 import { BsFillTrashFill } from 'react-icons/bs';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
+import success from '../../../assets/images/success.svg';
 
 
 const Patient = () => {
     const navigate = useNavigate();
     const [otp, setOtp] = useState('');
-    const [activeTab, setActiveTab] = useState(2);
+    const [activeTab, setActiveTab] = useState(3);
     const [process, setProcess] = useState('');
     const [confirmed, setConfirmed] = useState(false);
     const [date, setDate] = useState();
@@ -75,7 +76,7 @@ const Patient = () => {
         {
             type:'Fibronology',
             category:'HAEMATOLOGY',
-          amount:'₦5,500',
+            amount:'₦5,500',
         },
     ]
 
@@ -85,6 +86,41 @@ const Patient = () => {
           value:0
         }, 
       ]
+
+    const personal = [
+        {
+            title:'Name',
+            value:'Emmanuella Bami',
+        },
+        {
+            title:'Email Address',
+            value:'emma.nuella2024@gmail.com',
+        },
+        {
+            title:'Phone Number',
+            value:'(234) 123-4567-890',
+        },
+        {
+            title:'Referred By',
+            value:'Emmanuella Igwe',
+        },
+    ]
+
+    const booking = [
+        {
+            title:'Date',
+            value:'27th July, 2024',
+        },
+        {
+            title:'Time',
+            value:'12:00 AM',
+        },
+        {
+            title:'Booking Number',
+            value:'093',
+            span:2,
+        }, 
+    ]
 
   return (
     <div className='flex p-3 h-screen' >
@@ -343,7 +379,53 @@ const Patient = () => {
             </div>
         </div> 
         : activeTab == 3 ? 
-        <div>preview </div> 
+        <div className='max-w-[600px] ml-20 py-10 grid place-content-center' >
+            <div className="grid text-center">
+                <img className='w-32 mx-auto' src={success} alt="success" />
+                <p className='font-semibold mb-1' >Your Appointment has been booked successfully</p>
+                <p className='text-sm' >Dear Emmanuella Bami, you'll soon receive your booking confirmation via email within 5 minutes. Kindly review your booking details below:</p>
+                <div className="font-medium border-b mt-14 pb-2 text-sm">PERSONAL DETAILS</div>
+                <div className="grid grid-cols-2 gap-10 mt-10">
+                    {
+                        personal.map((item,idx) => (
+                            <div key={idx} className="text-sm">
+                                <p className=' mb-2' >{item.title}</p>
+                                <p className=' font-semibold' >{item.value}</p>
+                            </div>
+                        ))
+                    }
+                </div>
+                <div className="font-medium border-b mt-14 pb-2 text-sm">TEST DETAILS</div>
+                <div className="grid grid-cols-2 gap-10 mt-10 text-center">
+                    {
+                        selectedTests.map((item,idx) => (
+                            <div key={idx} className="text-sm text-center">
+                                <div className="mb-2 font-semibold flex gap-2 justify-center items-center">
+                                    <p className='' >{idx + 1}.</p>
+                                    <p className='' >{item.type}</p>
+                                </div>
+                                <div className="flex items-center justify-center gap-2">
+                                    <p className='' >{item.category}</p>
+                                    &bull;
+                                    <p className='' >{item.amount}</p>
+                                </div>
+                            </div>
+                        ))
+                    }
+                </div>
+                <div className="font-medium border-b mt-14 pb-2 text-sm">BOOKING DETAILS</div>
+                <div className="grid grid-cols-2 gap-10 mt-10 text-center place-content-center">
+                        {
+                            booking.map((item,idx) => (
+                                <div key={idx} className={`text-sm ${item.span && 'col-span-2 mt-2'}`}>
+                                    <p className=' mb-2' >{item.title}</p>
+                                    <p className=' font-semibold' >{item.value}</p>
+                                </div>
+                            ))
+                        }
+                </div>
+            </div>
+        </div> 
         : null
         }
 
