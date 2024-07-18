@@ -130,7 +130,9 @@ const Patient = () => {
             <div className="mt-14 grid gap-8">
                 {
                     tabs.map((tab,idx) => (
-                        <div key={idx} className='flex gap-5 max-w-[400px]' >
+                        <div onClick={() => {
+                            if(idx < activeTab ) setActiveTab(idx);
+                        }} key={idx} className='cursor-pointer flex gap-5 max-w-[400px]' >
                             <div className={`rounded-full out border-2  grid place-content-center !min-w-10 !h-10 
                                 ${activeTab == idx ? 'border-light_blue' : ''} 
                                 ${idx >= activeTab ? '' : '!border-primary'}
