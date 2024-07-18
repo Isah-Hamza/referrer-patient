@@ -26,3 +26,7 @@
 .react-calendar__tile:enabled:hover, .react-calendar__tile:enabled:focus{
     /* border-radiusn: ; */
 }
+
+.otp input::placeholder{
+    color: #dcdcdc;
+}

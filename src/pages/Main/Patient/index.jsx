@@ -21,7 +21,7 @@ import success from '../../../assets/images/success.svg';
 const Patient = () => {
     const navigate = useNavigate();
     const [otp, setOtp] = useState('');
-    const [activeTab, setActiveTab] = useState(3);
+    const [activeTab, setActiveTab] = useState(0);
     const [process, setProcess] = useState('');
     const [confirmed, setConfirmed] = useState(false);
     const [date, setDate] = useState();
@@ -158,7 +158,7 @@ const Patient = () => {
                 <p className='font-bold text-base mb-2'>Redeem Referral Code</p>
                 <p>Enter your referral code below to schedule your test and book an appointment.</p>
                 <div className="">
-                    <div className="mt-14 grid place-content-center">
+                    <div className="otp mt-14 grid place-content-center">
                     <OTPInput
                         value={otp}
                         onChange={setOtp}
@@ -166,7 +166,7 @@ const Patient = () => {
                         numInputs={6}
                         placeholder={'J4UT9P'}
                         containerStyle={{ display:'flex', gap:'10px' }}
-                        inputStyle={{ borderBottom:'2px solid #dcdcdc', fontSize:30, width:'1.3em', height:'2em', outline:'none', color:'#dcdcdc', fontWeight:700 }}
+                        inputStyle={{ borderBottom:'2px solid #dcdcdc', fontSize:30, width:'1.3em', height:'2em', outline:'none', color:'#9ca3af', fontWeight:700 }}
                         renderSeparator={<span> </span>}
                         renderInput={(props) => <input {...props} />}
                         />
@@ -277,13 +277,13 @@ const Patient = () => {
                     </div>
                     <div className="grid gap-5 mt-7">
                         <div className="">
-                            <Input label={'Email Address'} placeholder={'support@lifebridge.com'} type={'email'} icon={<MdOutlineMarkEmailUnread size={22} />}/>
+                            <Input disabled={true} defaultValue={'emma.nuella2024@gmail.com'} label={'Email Address'} placeholder={'support@lifebridge.com'} type={'email'} icon={<MdOutlineMarkEmailUnread size={22} />}/>
                         </div>
                         <div className="">
-                            <Input label={'Full Name'} placeholder={'John Doe'} icon={<CiUser size={24} />}/>
+                            <Input defaultValue={'Emmanuella Bami'} label={'Full Name'} placeholder={'John Doe'} icon={<CiUser size={24} />}/>
                         </div>
                         <div className="">
-                            <Input label={'Phone Number'} placeholder={'Phone Number'} icon={<BiPhoneIncoming size={24} />}/>
+                            <Input defaultValue={'(234) 123-4567-890'} label={'Phone Number'} placeholder={'Phone Number'} icon={<BiPhoneIncoming size={24} />}/>
                         </div>
                         <div className="">
                             <p className='font-medium mb-1 text-sm' >Invited By</p>
@@ -372,7 +372,7 @@ const Patient = () => {
                         </> : null
                     }
                     <div className="mt-16 flex items-center justify-between">
-                            <button onClick={previousStep} className='underline' >back</button>
+                            <button onClick={() => {previousStep();selectedTime('')}} className='underline' >back</button>
                             <Button disabled={!selectedTime} onClick={nextStep} className={'!w-fit !px-12 !py-2.5 !text-sm'} title={'Book Appointment'} />
                     </div>
                 </div>
