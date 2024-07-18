@@ -21,7 +21,7 @@ import success from '../../../assets/images/success.svg';
 const Patient = () => {
     const navigate = useNavigate();
     const [otp, setOtp] = useState('');
-    const [activeTab, setActiveTab] = useState(0);
+    const [activeTab, setActiveTab] = useState(3);
     const [process, setProcess] = useState('');
     const [confirmed, setConfirmed] = useState(false);
     const [date, setDate] = useState();
@@ -193,7 +193,7 @@ const Patient = () => {
             <div className='max-w-[600px] ml-20 py-14' >
             { !confirmed ? <>
                     <div id='' className="">
-                        <p className='font-semibold mb-1' >Patient Details(m)</p>
+                        <p className='font-semibold mb-1' >Patient Details</p>
                         <p className='text-sm' >Please kindly edit and confirm your information below.</p>
                     </div>
                     <div className="grid gap-5 mt-7">
@@ -425,6 +425,12 @@ const Patient = () => {
                                 </div>
                             ))
                         }
+                </div>
+                <div className="mt-10">
+                    <Button title={'Pay Now'} />
+                    <p className='mt-4 text-center text-sm'>
+                    Note that,  While payment is optional, we suggest making payment in advance<br />  to ensure prompt service upon your arrival.
+                    </p>
                 </div>
             </div>
         </div> 
