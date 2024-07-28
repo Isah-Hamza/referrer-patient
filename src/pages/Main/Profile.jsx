@@ -111,7 +111,7 @@ const Profile = ({  }) => {
             </div>
           </div>
           <div className='w-fit mt-10' >
-            <Button className={'px-14'} title={'Update Profile'} />
+            <Button className={'px-14'} title={'Update'} />
           </div>
         </div>
         : activeTab == 1 ? 
@@ -135,7 +135,7 @@ const Profile = ({  }) => {
             </div>
         </div>
         <div className='w-fit mt-10' >
-          <Button className={'px-14'} title={'Update Profile'} />
+          <Button className={'px-14'} title={'Update'} />
         </div>
       </div>
         : activeTab == 2 ?

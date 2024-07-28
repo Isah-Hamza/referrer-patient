@@ -7,11 +7,11 @@ import { MdOutlineLockPerson } from "react-icons/md";
 import { FcGoogle } from "react-icons/fc";
 import Button from '../../components/Button'; 
 import Input from '../../components/Inputs';
-import {Link} from 'react-router-dom'
+import {Link, useNavigate} from 'react-router-dom'
 import { IoMdArrowBack } from "react-icons/io";
 
 const ChangePassword = () => {
-
+const navigate = useNavigate();
 
   return (
     <AuthLayout>
@@ -29,9 +29,9 @@ const ChangePassword = () => {
             <div className="mt-5">
                 <Input label={'Confirm Password'} type={'password'} placeholder={'************'} icon={<MdOutlineLockPerson size={22} />}/>
             </div>
-            <Link to={'/otp-verification'} className='mt-5' >
-                <Button onClick={null} title='Change Password' />
-            </Link>
+            <div to={'/otp-verification'} className='mt-5' >
+                <Button onClick={() => navigate('/login')} title='Change Password' />
+            </div>
         </div>
       </div>
     </AuthLayout>

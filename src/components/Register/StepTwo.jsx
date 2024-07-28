@@ -10,8 +10,10 @@ import { PiHospitalLight } from "react-icons/pi";
 import Select from '../Inputs/Select';
 import { RiBankCard2Line } from "react-icons/ri";
 import { MdOutlineAccountTree } from "react-icons/md";
+import { useNavigate } from 'react-router-dom';
 
 const StepTwo = ({ next }) => {
+    const navigate = useNavigate()
   return (
     <div className="">
             <div className='mt-12' >
@@ -34,7 +36,7 @@ const StepTwo = ({ next }) => {
                 <Input label={'Account Name'}  placeholder={'Isah Hamza'} icon={<CiUser size={22} />}/>
             </div>
             <div className='mt-10' >
-                <Button onClick={next} title='setup Profile' />
+                <Button onClick={() => navigate('/dashboard')} title='setup Profile' />
                 {/* <div className="flex items-center gap-2 my-7">
                     <hr className='flex-1' />
                     <span className='font-semibold text-sm' >OR</span>

@@ -21,7 +21,7 @@ import success from '../../../assets/images/success.svg';
 const Patient = () => {
     const navigate = useNavigate();
     const [otp, setOtp] = useState('');
-    const [activeTab, setActiveTab] = useState(3);
+    const [activeTab, setActiveTab] = useState(0);
     const [process, setProcess] = useState('');
     const [confirmed, setConfirmed] = useState(false);
     const [date, setDate] = useState();
@@ -183,7 +183,7 @@ const Patient = () => {
                         <button 
                             onClick={() => {setProcess('manual'); nextStep()}} 
                             className='w-full font-medium justify-center flex items-center gap-2 py-2.5 border bg-white rounded-[30px]' > 
-                        Book Appointment Manually </button>
+                        Book Appointment </button>
                 </div>
                 </div>
             </div>
@@ -362,7 +362,7 @@ const Patient = () => {
                 <div className="mt-10 max-w-[600px]">
                     {
                       date ?  <>
-                            <p className='font-semibold' >Available Times</p>
+                            <p className='font-semibold' >Available Time Slots</p>
                             <div className="mt-5 grid grid-cols-4 gap-5">
                                 {
                                     availableTimes.map((time,idx) => (
