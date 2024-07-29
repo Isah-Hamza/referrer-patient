@@ -28,7 +28,8 @@ const navigate = useNavigate();
                 <Link to={'/forgot-password'} className='text-sm text-primary font-semibold' >forgot password</Link>
             </div>
             <div className='mt-10' >
-                <Button onClick={() => navigate('/dashboard')} title='Sign In' />
+                <Button className={'opacity-90'} onClick={() => navigate('/dashboard')} title='Sign In (Referral)' />
+                <Button className={'mt-5 opacity-90'} onClick={() => navigate('/patient')} title='Sign In (Patient)' />
                 <div className="flex items-center gap-2 my-7">
                     <hr className='flex-1' />
                     <span className='font-semibold text-sm' >OR</span>

@@ -126,7 +126,7 @@ const Patient = () => {
     <div className='flex p-3 h-screen' >
       <div className="w-[500px] bg-[#c9e6ff] rounded-2xl h-full p-8">
         <div className="">
-            <img className='w-40' src={logo} alt="logo" />
+            <img onClick={() => navigate('/')} className='w-40 cursor-pointer' src={logo} alt="logo" />
             <div className="mt-14 grid gap-8">
                 {
                     tabs.map((tab,idx) => (

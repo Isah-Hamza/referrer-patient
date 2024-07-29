@@ -51,7 +51,7 @@ const MainLayout = () => {
   return (
     <div className='px-5 h-screen flex flex-col gap-5 w-full bg-[#f8f8f8]'>
       <header className='flex items-center justify-between gap-5 py-5' >
-        <img className='w-40' src={logo} alt="logo" />
+        <img onClick={() => navigate('/')} className='cursor-pointer w-40' src={logo} alt="logo" />
         <div className="flex gap-5 bg-[#ededed] rounded-3xl">
             {
                 tabs.map((item,idx) => (
@@ -67,7 +67,7 @@ const MainLayout = () => {
             }
         </div>
         <div className="flex items-center gap-3 ">
-            <button className="w-10 h-10 bg-[#ededed] grid place-content-center rounded-full">
+            <button onClick={() => navigate('/')} className="w-10 h-10 bg-[#ededed] grid place-content-center rounded-full">
                 <IoLogOut size={20} color='red' />
             </button>
             <button>
