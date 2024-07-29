@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { IoLogOut } from 'react-icons/io5';
 import { Outlet, useNavigate } from 'react-router-dom'
 import logo from '../assets/images/logo.svg';
@@ -31,6 +31,22 @@ const MainLayout = () => {
             icon:AiOutlineHome
         },
     ]
+
+        
+  useEffect(() => {
+
+    const active_item = window.location.pathname.split("/")[2];
+    console.log('active',active_item)
+    
+    if(active_item == 'dashboard') setActiveTab(0);
+    if(active_item == 'referrals') setActiveTab(1);
+    if(active_item == 'payments') setActiveTab(2);
+    if(active_item == 'profile') setActiveTab(3);
+
+    // setActiveLink(active_item);
+    
+      
+},[window.location.pathname])
 
   return (
     <div className='px-5 h-screen flex flex-col gap-5 w-full bg-[#f8f8f8]'>

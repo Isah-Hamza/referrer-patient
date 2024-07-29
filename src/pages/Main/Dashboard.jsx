@@ -16,9 +16,12 @@ import bank from '../../assets/images/Bank.svg';
 import test from '../../assets/images/Test.svg';
 import earn from '../../assets/images/Earn.svg';
 
-import refer from '../../assets/images/refer_and_earn.svg'
+import refer from '../../assets/images/refer_and_earn.svg';
+import { useNavigate } from 'react-router-dom';
 
 const Dashboard = () => {
+
+    const navigate = useNavigate('');
 
     const analysis = [
         {
@@ -148,7 +151,7 @@ const Dashboard = () => {
             </div>
             </div>
             <div className="bottom rounded-2xl border bg-white items-center border-custom_gray grid grid-cols-2 gap-9 mt-5 ">
-                <img src={refer} alt="refer" />
+                <img className='cursor-pointer' onClick={() => navigate('referrals?open=true')} src={refer} alt="refer" />
                 <div className="p-5">
                     <p className='font-semibold text-xl  ' >Earn Rebates by Referring <br /> Patients!</p>
                     <p className='text-text_color mt-2'>Unlock additional income with our referral program! When your patients make a payment, 

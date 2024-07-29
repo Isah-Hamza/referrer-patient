@@ -8,11 +8,15 @@ import stacey from '../../assets/images/stacey.svg'
 import { MdOutlineEmail } from 'react-icons/md'
 import completed from '../../assets/images/completed.svg'
 import New from '../../components/Referral/New'
+import { useLocation } from 'react-router-dom'
 
 const Referrals = () => {
+    
+    const query = useLocation().search.split('=')[1];
+    console.log(query);
 
     const [viewDetails, setViewDetails] = useState(false);
-    const [newReferral, setNewReferral] = useState(false);
+    const [newReferral, setNewReferral] = useState(() => query == 'true' ? true : false);
 
     const toggleViewDetails = () => setViewDetails(!viewDetails);
     const toggleNewReferral = () => setNewReferral(!newReferral);
@@ -90,6 +94,8 @@ const Referrals = () => {
             value:'₦280,000',
         },
     ]
+
+
 
   return (
   <>
@@ -228,7 +234,7 @@ const Referrals = () => {
                     </div>
                 </div>
                 <div className="border-t my-5 p-5">
-                    <Button title={'Refer'} className={'w-full !px-10 !py-2.5 !text-sm  !bg-light_blue'} />
+                    <Button onClick={toggleNewReferral} title={'Refer'} className={'w-full !px-10 !py-2.5 !text-sm  !bg-light_blue'} />
                 </div>
             </div>
         </div> : null}
