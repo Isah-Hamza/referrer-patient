@@ -15,7 +15,7 @@ import { toast } from 'react-toastify';
 import LoadingModal from '../../Loader/LoadingModal';
 import { errorToast, successToast } from '../../utils/Helper';
 
-const CustomValidationError = ({ text='An error occured' }) => (
+export const CustomValidationError = ({ text='An error occured' }) => (
     <span className='text-xs text-red-700' >{text}</span>
 )
 

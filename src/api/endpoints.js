@@ -4,6 +4,10 @@ const endpoints = {
     REGISTER:'register',
     SETUP_PROFILE:'set-up-profile'
   },
+  bank:{
+    ALL_BANKS:'bank/all',
+    VERIFY_ACCOUNT:'bank/verify-account',
+  }
 };
 
 export default endpoints;
