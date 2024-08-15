@@ -39,7 +39,6 @@ const StepOne = ({ next }) => {
 
         }),
         onSubmit:values => {
-            console.log(values);
             mutate(values);
         }
     })

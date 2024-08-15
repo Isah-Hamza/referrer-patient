@@ -7,11 +7,30 @@ import { MdOutlineLockPerson } from "react-icons/md";
 import { FcGoogle } from "react-icons/fc";
 import Button from '../../components/Button'; 
 import Input from '../../components/Inputs';
-import {Link} from 'react-router-dom'
+import {Link, useNavigate} from 'react-router-dom'
 import { IoMdArrowBack } from "react-icons/io";
+import { useMutation } from 'react-query';
+import Auth from '../../services/Auth';
+import { errorToast, successToast } from '../../utils/Helper';
+import LoadingModal from '../../Loader/LoadingModal';
+import { axiosClient } from '../../api/axiosClient';
 
 const ForgotPassword = () => {
+  const navigate = useNavigate();
+  const [email, setEmail] = useState('');
 
+  const { mutate, isLoading  } = useMutation(Auth.ForgotPassword, {
+    onSuccess: res => {
+        successToast(res.data.message);        
+        axiosClient().defaults.headers["Authorization"] = "Bearer " + res.data.token;
+        window.localStorage.setItem('referrer-token',res.data.token);
+
+        navigate(`/otp-verification?email=${email}`);
+    },
+    onError: e => { 
+      errorToast(e[0]['email'][0]);
+    }
+})
 
   return (
     <AuthLayout>
@@ -23,14 +42,17 @@ const ForgotPassword = () => {
                   <p className='text- text-text_color'>Oops, sorry to hear that. Enter your email address below, and we’ll help you reset your password!</p>
               </div>
               <div className="mt-10">
-                  <Input label={'Email Address'} placeholder={'support@lifebridge.com'} type={'email'} icon={<MdOutlineMarkEmailUnread size={22} />}/>
+                  <Input value={email} onChange={e => setEmail(e.target.value)} label={'Email Address'} placeholder={'support@lifebridge.com'} type={'email'} icon={<MdOutlineMarkEmailUnread size={22} />}/>
               </div>
               
-              <Link to={'/otp-verification'} className='mt-5' >
-                  <Button onClick={null} title='Request New Password' />
-              </Link>
+              <div className='mt-5' >
+                  <Button disabled={!email} onClick={() => mutate({email})} title='Request New Password' />
+              </div>
         </div>
       </div>
+      {
+        (isLoading) ? <LoadingModal /> : null
+      }
     </AuthLayout>
   )
 }

@@ -26,7 +26,7 @@ const StepTwo = ({ next }) => {
 
     const { touched, values, errors, handleSubmit, getFieldProps, setFieldValue} = useFormik({
         initialValues:{
-            "user_id": user.user_id,
+            "user_id": user?.user_id,
             "hospital_name": "",
             "professional_title": "",
             "bank_name": "",

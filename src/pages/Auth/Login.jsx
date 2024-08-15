@@ -62,42 +62,42 @@ const { touched, errors, values, getFieldProps, handleSubmit } = useFormik({
     <AuthLayout>
       <div className="p-10 h-screen overflow-y-auto">
       <form onSubmit={handleSubmit} className="max-w-[500px] m-auto">
-            <div className='' >
-                <h4 className='font-semibold text-xl' >Sign In</h4>
-                <p className='text- text-text_color'>Welcome back. We missed you!</p>
+        <div className='' >
+            <h4 className='font-semibold text-xl' >Sign In</h4>
+            <p className='text- text-text_color'>Welcome back. We missed you!</p>
+        </div>
+        <div className="mt-10">
+            <Input label={'Email Address'} {...getFieldProps('email')} placeholder={'support@lifebridge.com'} type={'email'} icon={<MdOutlineMarkEmailUnread size={22} />}/>
+            {
+                touched.email && errors.email && <CustomValidationError text={errors.email} />
+            }
+        </div>
+        <div className="mt-5">
+            <Input label={'Enter Password'} type={'password'} placeholder={'************'} {...getFieldProps('password')} icon={<MdOutlineLockPerson size={22} />}/>
+            <div className="flex items-center justify-between">
+            {
+                touched.password && errors.password && <CustomValidationError text={errors.password} />
+            }
+            <Link to={'/forgot-password'} className='text-sm text-primary font-semibold' >forgot password</Link>
             </div>
-            <div className="mt-10">
-                <Input label={'Email Address'} {...getFieldProps('email')} placeholder={'support@lifebridge.com'} type={'email'} icon={<MdOutlineMarkEmailUnread size={22} />}/>
-                {
-                    touched.email && errors.email && <CustomValidationError text={errors.email} />
-                }
+        </div>
+        <div className='mt-10' >
+            <Button type='submit' className={'opacity-90'} title='Sign In' />
+            {/* <Button type='button' className={'mt-5 opacity-90'} onClick={() => navigate('/patient')} title='Sign In (Patient)' /> */}
+            <div className="flex items-center gap-2 my-7">
+                <hr className='flex-1' />
+                <span className='font-semibold text-sm' >OR</span>
+                <hr className='flex-1' />
             </div>
-            <div className="mt-5">
-                <Input label={'Enter Password'} type={'password'} placeholder={'************'} {...getFieldProps('password')} icon={<MdOutlineLockPerson size={22} />}/>
-                <div className="flex items-center justify-between">
-                {
-                    touched.password && errors.password && <CustomValidationError text={errors.password} />
-                }
-                <Link to={'/forgot-password'} className='text-sm text-primary font-semibold' >forgot password</Link>
-                </div>
-            </div>
-            <div className='mt-10' >
-                <Button type='submit' className={'opacity-90'} title='Sign In (Referral)' />
-                <Button type='button' className={'mt-5 opacity-90'} onClick={() => navigate('/patient')} title='Sign In (Patient)' />
-                <div className="flex items-center gap-2 my-7">
-                    <hr className='flex-1' />
-                    <span className='font-semibold text-sm' >OR</span>
-                    <hr className='flex-1' />
-                </div>
-                <button type='button' className='w-full font-medium justify-center flex items-center gap-2 py-3 border bg-white rounded-[30px]' > 
-                <span><FcGoogle size={26} /></span>
-                SignIn With Google </button>
-            </div>
-            <div className="mt-5">
-                <p className='text-center text-sm' >
-                    Don't have an account? <Link to={'/register'} className='text-primary font-semibold'>Sign up</Link>
-                </p>
-            </div>
+            <button type='button' className='w-full font-medium justify-center flex items-center gap-2 py-3 border bg-white rounded-[30px]' > 
+            <span><FcGoogle size={26} /></span>
+            SignIn With Google </button>
+        </div>
+        <div className="mt-5">
+            <p className='text-center text-sm' >
+                Don't have an account? <Link to={'/register'} className='text-primary font-semibold'>Sign up</Link>
+            </p>
+        </div>
     </form>
       </div>
       {

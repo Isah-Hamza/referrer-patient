@@ -7,12 +7,36 @@ import { MdOutlineLockPerson } from "react-icons/md";
 import { FcGoogle } from "react-icons/fc";
 import Button from '../../components/Button'; 
 import Input from '../../components/Inputs';
-import {Link} from 'react-router-dom'
+import {Link, useLocation, useNavigate} from 'react-router-dom'
 import { IoMdArrowBack } from "react-icons/io";
 import { MdOutlineAccountTree } from "react-icons/md";
+import { useMutation } from 'react-query';
+import Auth from '../../services/Auth';
+import { errorToast, successToast } from '../../utils/Helper';
+import LoadingModal from '../../Loader/LoadingModal';
 
 
 const VerifyOTP = () => {
+
+  const [otp, setOtp] = useState('');
+  const navigate = useNavigate();
+
+  const search = useLocation().search;
+  const email = new URLSearchParams(search).get('email');
+
+
+  
+  const { mutate, isLoading  } = useMutation(Auth.VerifyOTP, {
+    onSuccess: res => {
+        successToast(res.data.message);   
+        window.localStorage.setItem('referrer-user_id',res.data.user_id);
+
+        navigate(`/change-password`);
+    },
+    onError: e => { 
+      errorToast(e.error);
+    }
+})
 
 
   return (
@@ -25,14 +49,17 @@ const VerifyOTP = () => {
                   <p className='text- text-text_color'>A 6-digit code has been sent to your email address. Please enter the code below to proceed.</p>
               </div>
               <div className="mt-10">
-                  <Input placeholder={'123-456'} title={'Enter OTP'}  icon={<MdOutlineAccountTree size={22} />}/>
+                  <Input placeholder={'123-456'} value={otp} onChange={e => setOtp(e.target.value)} title={'Enter OTP'}  icon={<MdOutlineAccountTree size={22} />}/>
               </div>
               
-              <Link to={'/change-password'} className='mt-5' >
-                  <Button onClick={null} title='Vefify OTP' />
-              </Link>
+              <div className='mt-5' >
+                  <Button onClick={() => mutate({ email, otp:Number(otp) })} title='Vefify OTP' />
+              </div>
         </div>
       </div>
+      {
+        isLoading ? <LoadingModal /> : null
+      }
     </AuthLayout>
   )
 }
