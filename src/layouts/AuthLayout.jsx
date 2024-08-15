@@ -9,10 +9,10 @@ import efficiency from '../assets/images/effective-management.png';
 const AuthLayout = ({ children }) => {
   return (
     <div className='flex'>
-        <div className="w-[55%]">
+        <div className="w-full md:w-[55%]">
             {children}
         </div>
-        <div className="w-[45%] p-10 py-3 right-section h-screen flex flex-col">
+        <div className="w-[45%] p-10 py-3 right-section h-screen hidden md:flex flex-col">
             <div className="logo flex justify-end">
                 <img className='max-w-[150px]' src={logo} alt="logo" />
             </div>

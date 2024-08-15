@@ -10,7 +10,7 @@ export const CustomSuccessToast = ({ mssg, id }) => {
   };
 
   return (
-    <div className="flex gap-3 items-center relative bg-[#FCF4E8]">
+    <div style={{fontFamily:"'Quicksand', sans-serif"}}  className="flex gap-3 items-center relative">
       <div className="w-7">
         <img src={toast_mark} className="size-7" size={22} color={'rgb(21 128 61)'} />
       </div>
@@ -28,7 +28,7 @@ export const CustomErrorToast = ({ mssg, id }) => {
     toast.dismiss(id);
   };
   return (
-    <div className="flex gap-3 relative">
+    <div style={{fontFamily:"'Quicksand', sans-serif"}} className="font-[quicksand] flex gap-3 relative">
       <div className="!w-4">
         <BiError size={22} color={'coral'} />
       </div>

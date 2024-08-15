@@ -8,7 +8,8 @@ export const successToast = (msg) => {
 };
 
 export const errorToast = (msg) => {
-  toast.error(msg ?? "Operation failed. Try again!", {theme: "light"});
+  customToastComponent(msg ?? "An Error Occured!",true);
+  // toast.error(msg ?? "Operation failed. Try again!", {theme: "light"});
 };
 
 export const infoToast = (msg) => {
