@@ -15,7 +15,7 @@ export const axiosClient = () => {
       let token = JSON.parse(window.localStorage.getItem("referrer-user"))?.token;
       // let token = window.localStorage.getItem("referrer-token");
 
-      if (token !== null && typeof token !== 'string') {
+      if (token !== null && typeof token !== 'string' && token !== 'undefined' && token !== undefined) {
         token = JSON.parse(token);
       }
 

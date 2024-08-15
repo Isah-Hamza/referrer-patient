@@ -18,26 +18,30 @@ import earn from '../../assets/images/Earn.svg';
 
 import refer from '../../assets/images/refer_and_earn.svg';
 import { useNavigate } from 'react-router-dom';
+import { ConvertToNaira } from '../../utils/Helper';
 
 const Dashboard = () => {
 
     const navigate = useNavigate('');
 
+    const page_data =  JSON.parse(localStorage.getItem('referrer-data'));
+
     const analysis = [
         {
             title:'Total Referrals',
             icon:stat1,
-            value:321,
+            value:page_data?.total_referrals,
         },
         {
             title:'Pending Referrals',
             icon:stat2,
-            value:53,
+            value:page_data?.pending_referrals,
         },
         {
             title:'Completed Referrals',
             icon:stat3,
-            value:268,
+            value:page_data?.completed_referrals,
+
         },
     ]
 
@@ -79,13 +83,14 @@ const Dashboard = () => {
         <div className="w-2/6 max-h-[calc(100vh-115px)] overflow-y-auto">
             <div className="p-4 rounded-lg border border-custom_gray bg-white">
                 <p className='text-text_color'>Good Afternoon ☀️</p>
-                <p className='text-xl font-semibold mt-2' >Emmanuella</p>
+                <p className='text-xl font-semibold mt-2' >{page_data?.name}</p>
                 <div className="mt-32">
                     <div className="flex items-center gap-1">
                         <span className='text-xs text-text_color' >Your wallet balance</span>
                         <span className='text-primary' ><PiEyeClosedBold size={16} /></span>
                     </div>
-                    <p className='my-1' > <span className='font-bold text-2xl ' >₦</span> <span>****</span> </p>
+                    {/* <p className='my-1' > <span className='font-bold text-2xl ' >₦</span> <span>****</span> </p> */}
+                    <p className='my-1' > <span className='font-bold text-2xl ' >{ ConvertToNaira(page_data?.balance)}.00</span> </p>
                     <button className="font-semibold flex items-center gap-1 text-primary">
                         <span className='text-sm' >Visit Wallet</span>
                         <BsArrowRight />
