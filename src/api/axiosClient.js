@@ -12,7 +12,8 @@ export const axiosClient = () => {
   
   axiosInstance.interceptors.request.use(
     (config) => {
-      let token = window.localStorage.getItem("referrer-token");
+      let token = JSON.parse(window.localStorage.getItem("referrer-user"))?.token;
+      // let token = window.localStorage.getItem("referrer-token");
 
       if (token !== null && typeof token !== 'string') {
         token = JSON.parse(token);

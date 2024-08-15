@@ -18,6 +18,7 @@ import { useFormik } from 'formik';
 import LoadingModal from '../../Loader/LoadingModal';
 import * as Yup from 'yup';
 import { CustomValidationError } from './StepOne';
+import Auth from '../../services/Auth';
 
 const StepTwo = ({ next }) => {
     const navigate = useNavigate();
@@ -41,7 +42,7 @@ const StepTwo = ({ next }) => {
             "account_name": Yup.string().required('This field is required')
         }),
         onSubmit:values => {
-            console.log(values)
+            setupProfile(values);
         }
     })
 
@@ -74,12 +75,22 @@ const StepTwo = ({ next }) => {
 
     const { mutate:verifyBankAccount, isLoading:verifying } = useMutation(Bank.VerifyAccount, {
         onSuccess:res => {
-            console.log(res.data);
             setFieldValue('account_name',res.data.account_name);
             successToast(res.data.message);
         },
         onError:e => {
-            errorToast(e.message);
+            errorToast('Invalid or not matching bank details.');
+        }
+    })
+
+    const { mutate:setupProfile,isLoading:settingUp} = useMutation(Auth.SetupProfile, {
+        onSuccess:res => {
+            successToast(res.data.message);
+            navigate('/login');
+        },
+        onError: e => {
+            const firstError = Object.entries(e.errors)[0][1];
+            errorToast(firstError);
         }
     })
 
@@ -88,9 +99,7 @@ const StepTwo = ({ next }) => {
             account_number:values.account_number,
             bank_code: data?.data?.data?.find(item => item.BankName == values.bank_name)?.BankCode,
         }
-        console.log(payload);
-        console.log(banks);
-        console.log(values.bank_name)
+
         verifyBankAccount(payload);
     }
 
@@ -154,7 +163,7 @@ const StepTwo = ({ next }) => {
                 </div> */}
         </form>
         {
-            (verifying) ? <LoadingModal /> : null
+            (verifying || settingUp) ? <LoadingModal /> : null
         }
     </>
   )

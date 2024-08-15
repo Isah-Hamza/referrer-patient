@@ -14,6 +14,7 @@ import Auth from '../../services/Auth';
 import { toast } from 'react-toastify';
 import LoadingModal from '../../Loader/LoadingModal';
 import { errorToast, successToast } from '../../utils/Helper';
+import { axiosClient } from '../../api/axiosClient';
 
 export const CustomValidationError = ({ text='An error occured' }) => (
     <span className='text-xs text-red-700' >{text}</span>
@@ -47,10 +48,11 @@ const StepOne = ({ next }) => {
         onSuccess: res => {
             successToast(res.data.message);
             localStorage.setItem('referrer-user', JSON.stringify(res.data.user));
+            axiosClient().defaults.headers["Authorization"] = "Bearer " + res.data.user.token;
+
             next();
         },
         onError: e => {
-            // console.log()
             const firstError = Object.entries(e.errors)[0][1];
             errorToast(firstError);
         }
