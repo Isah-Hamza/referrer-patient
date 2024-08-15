@@ -11,10 +11,11 @@ import {Link, useNavigate} from 'react-router-dom'
 import { IoMdArrowBack } from "react-icons/io";
 import { useMutation } from 'react-query';
 import Auth from '../../services/Auth';
-import { errorToast } from '../../utils/Helper';
+import { errorToast, successToast } from '../../utils/Helper';
 import { useFormik } from 'formik';
 import { CustomValidationError } from '../../components/Register/StepOne';
 import * as Yup from 'yup';
+import LoadingModal from '../../Loader/LoadingModal';
 
 const ChangePassword = () => {
 const navigate = useNavigate();
@@ -31,8 +32,8 @@ const { errors, handleSubmit, touched, getFieldProps } = useFormik({
 
   }),
   onSubmit:values => {
-      console.log(values);
-      // mutate(values);
+      // console.log(values);
+      mutate(values);
   }
 })
 
@@ -75,6 +76,10 @@ const { mutate, isLoading  } = useMutation(Auth.ChangePassword, {
             </div>
         </form>
       </div>
+
+      {
+        isLoading ? <LoadingModal /> : null
+      }
     </AuthLayout>
   )
 }

@@ -14,6 +14,7 @@ import { useMutation } from 'react-query';
 import Auth from '../../services/Auth';
 import { errorToast, successToast } from '../../utils/Helper';
 import LoadingModal from '../../Loader/LoadingModal';
+import { axiosClient } from '../../api/axiosClient';
 
 
 const VerifyOTP = () => {
@@ -30,6 +31,8 @@ const VerifyOTP = () => {
     onSuccess: res => {
         successToast(res.data.message);   
         window.localStorage.setItem('referrer-user_id',res.data.user_id);
+        axiosClient().defaults.headers["Authorization"] = "Bearer " + res.data.token;
+        window.localStorage.setItem('referrer-token',res.data.token);
 
         navigate(`/change-password`);
     },
