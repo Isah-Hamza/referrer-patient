@@ -13,6 +13,11 @@ import Referrals from './pages/Main/Referrals'
 import Profile from './pages/Main/Profile'
 import Payment from './pages/Main/Payment'
 import Patient from './pages/Main/Patient'
+import { ToastContainer } from 'react-toastify'
+import { QueryClient, QueryClientProvider } from 'react-query'
+import "react-toastify/dist/ReactToastify.css";
+
+export const queryClient = new QueryClient();
 
 function App() {
 
@@ -87,23 +92,37 @@ function App() {
 
   return (
     // <Register />
-    <Router>
-      <Routes>
-        {
-          auth_routes.map(route => <Route key={route.title} path={route.path} Component={route.Component} /> )
-        }
-        <Route path='/dashboard' Component={MainLayout}>
+    <>
+    <ToastContainer
+    theme="colored"
+    hideProgressBar
+    pauseOnHover
+    draggable
+    autoClose={false}
+    closeOnClick={true}
+    stacked={false}
+    position="top-right"
+  />
+    <QueryClientProvider client={queryClient}>
+      <Router>
+        <Routes>
           {
-            main_routes.map(route => <Route key={route.title} path={route.path} Component={route.Component} /> )
+            auth_routes.map(route => <Route key={route.title} path={route.path} Component={route.Component} /> )
           }
-        </Route>
-        <Route path='/patient' Component={null}>
-          {
-            patient.map(route => <Route key={route.title} path={route.path} Component={route.Component} /> )
-          }
-        </Route>
-      </Routes>
-    </Router>
+          <Route path='/dashboard' Component={MainLayout}>
+            {
+              main_routes.map(route => <Route key={route.title} path={route.path} Component={route.Component} /> )
+            }
+          </Route>
+          <Route path='/patient' Component={null}>
+            {
+              patient.map(route => <Route key={route.title} path={route.path} Component={route.Component} /> )
+            }
+          </Route>
+        </Routes>
+      </Router>
+    </QueryClientProvider>
+    </>
   )
 }
 

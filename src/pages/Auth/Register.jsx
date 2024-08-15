@@ -20,7 +20,7 @@ const Register = () => {
         <div className="flex items-center gap-7">
             {
                 tabs.map((tab,idx) => (
-                    <div className='flex gap-5 items-center'>
+                    <div key={idx} className='flex gap-5 items-center'>
                         <div className="flex items-center gap-1">
                             <div className={`${activeTab == idx && 'text-primary font-semibold'} ${activeTab > idx && 'bg-green-500 font-semibold'} grid place-content-center w-6 h-6 rounded-full bg-[gainsboro] text-sm`}>
                               {
