@@ -8,7 +8,7 @@ import StepTwo from '../../components/Register/StepTwo';
 
 const Register = () => {
     const tabs = ['Basic Info','Hospital & Payout Info','Access Dashboard'];
-    const [activeTab, setActiveTab] = useState(1);
+    const [activeTab, setActiveTab] = useState(0);
 
     const next = () =>{
          setActiveTab(prev => prev+1);
