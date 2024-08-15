@@ -25,8 +25,6 @@ const VerifyOTP = () => {
   const search = useLocation().search;
   const email = new URLSearchParams(search).get('email');
 
-
-  
   const { mutate, isLoading  } = useMutation(Auth.VerifyOTP, {
     onSuccess: res => {
         successToast(res.data.message);   
@@ -40,6 +38,15 @@ const VerifyOTP = () => {
       errorToast(e.error);
     }
 })
+
+useEffect(() => {
+  
+  if(!email){
+    navigate('/forgot-password', { replace:true })
+  }
+  
+}, [email])
+
 
 
   return (
