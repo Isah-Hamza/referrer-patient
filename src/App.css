@@ -27,6 +27,10 @@
     /* border-radiusn: ; */
 }
 
+.react-calendar__navigation{
+    line-height: normal !important;
+}
+
 .otp input::placeholder{
     color: #dcdcdc;
 }
