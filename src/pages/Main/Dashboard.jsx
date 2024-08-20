@@ -19,28 +19,36 @@ import earn from '../../assets/images/Earn.svg';
 import refer from '../../assets/images/refer_and_earn.svg';
 import { useNavigate } from 'react-router-dom';
 import { ConvertToNaira } from '../../utils/Helper';
+import { useQuery } from 'react-query';
+import DashboardService from '../../services/Dashboard';
+import RebateBarChart from '../../components/Chart/RebateBarChart';
+import PageLaoding from '../../Loader/PageLoading'
+import PageLoading from '../../Loader/PageLoading';
 
 const Dashboard = () => {
 
     const navigate = useNavigate('');
+    const user_id =localStorage.getItem('referrer-user_id');
 
-    const page_data =  JSON.parse(localStorage.getItem('referrer-data'));
+    const { isLoading:loadingDetails, data:dashboardDetails  } = useQuery('user-data', ()=> DashboardService.GetDashboardDetails(user_id))
+    const { isLoading:loadingActivities, data:notifications  } = useQuery('activities', ()=> DashboardService.GetActivities(user_id))
+
 
     const analysis = [
         {
             title:'Total Referrals',
             icon:stat1,
-            value:page_data?.total_referrals,
+            value:dashboardDetails?.data?.total_referrals,
         },
         {
             title:'Pending Referrals',
             icon:stat2,
-            value:page_data?.pending_referrals,
+            value:dashboardDetails?.data?.pending_referrals,
         },
         {
             title:'Completed Referrals',
             icon:stat3,
-            value:page_data?.completed_referrals,
+            value:dashboardDetails?.data?.completed_referrals,
 
         },
     ]
@@ -78,19 +86,23 @@ const Dashboard = () => {
         },
     ]
 
+    if(loadingActivities || loadingDetails){
+        return <PageLoading />
+    }
+
   return (
     <>
         <div className="w-2/6 max-h-[calc(100vh-115px)] overflow-y-auto">
             <div className="p-4 rounded-lg border border-custom_gray bg-white">
                 <p className='text-text_color'>Good Afternoon ☀️</p>
-                <p className='text-xl font-semibold mt-2' >{page_data?.name}</p>
+                <p className='text-xl font-semibold mt-2' >{dashboardDetails?.data?.name}</p>
                 <div className="mt-32">
                     <div className="flex items-center gap-1">
                         <span className='text-xs text-text_color' >Your wallet balance</span>
                         <span className='text-primary' ><PiEyeClosedBold size={16} /></span>
                     </div>
                     {/* <p className='my-1' > <span className='font-bold text-2xl ' >₦</span> <span>****</span> </p> */}
-                    <p className='my-1' > <span className='font-bold text-2xl ' >{ ConvertToNaira(page_data?.balance)}.00</span> </p>
+                    <p className='my-1' > <span className='font-bold text-2xl ' >{ ConvertToNaira(dashboardDetails?.data?.balance)}.00</span> </p>
                     <button className="font-semibold flex items-center gap-1 text-primary">
                         <span className='text-sm' >Visit Wallet</span>
                         <BsArrowRight />
@@ -105,7 +117,7 @@ const Dashboard = () => {
                 <div className="p-5">
                     <p className='' >Earning history displayed per week</p>
                     <div className="mt-5 -ml-10 min-w-[400px] h-[300px]">
-                        <BarChart />
+                        <RebateBarChart />
                     </div>
                 </div>
             </div>
@@ -138,9 +150,11 @@ const Dashboard = () => {
                    <img src={note} alt="note" />
                 </div>
                 <div className="p-5">
-                    <div className="grid gap-7">
                     {
-                        activities.map((item,idx) => (
+                        notifications?.data?.length ?
+                        <div className="grid gap-7">
+                    {
+                        notifications?.data?.map((item,idx) => (
                             <div key={idx} className='flex items-center gap-4' >
                                 <img src={item.img} alt="image" />
                                 <div className="text-sm">
@@ -152,6 +166,12 @@ const Dashboard = () => {
                         ))
                     }
                     </div>
+                    : 
+                    <div className='text-sm grid place-content-center text-center h-full mt-20'>
+                        <p className='font-semibold'>NO DATA FOUND!</p>
+                        <p>Please check back later..</p>
+                    </div>    
+                }
                 </div>
             </div>
             </div>
