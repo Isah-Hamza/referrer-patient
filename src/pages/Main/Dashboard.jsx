@@ -5,7 +5,7 @@ import avatar from '../../assets/images/avatar.svg';
 import { IoLogOut } from "react-icons/io5";
 import { FaEye } from 'react-icons/fa6';
 import { BsArrowRight } from 'react-icons/bs';
-import { PiEyeClosedBold } from "react-icons/pi";
+import { PiEyeClosedBold, PiEyeSlashBold, PiEyeSlashLight } from "react-icons/pi";
 import note from '../../assets/images/note.svg';
 import BarChart from '../../components/Chart/BarChart';
 import stat1 from '../../assets/images/stat1.svg';
@@ -29,6 +29,9 @@ const Dashboard = () => {
 
     const navigate = useNavigate('');
     const user_id =localStorage.getItem('referrer-user_id');
+    const [showDetails, setShowDetails] = useState(false);
+
+    const toggleShowDetails = () => setShowDetails(!showDetails);
 
     const { isLoading:loadingDetails, data:dashboardDetails  } = useQuery('user-data', ()=> DashboardService.GetDashboardDetails(user_id))
     const { isLoading:loadingActivities, data:notifications  } = useQuery('activities', ()=> DashboardService.GetActivities(user_id))
@@ -99,10 +102,20 @@ const Dashboard = () => {
                 <div className="mt-32">
                     <div className="flex items-center gap-1">
                         <span className='text-xs text-text_color' >Your wallet balance</span>
-                        <span className='text-primary' ><PiEyeClosedBold size={16} /></span>
+                        <button onClick={toggleShowDetails} className='text-primary' >
+                            {
+                               showDetails ?  <PiEyeClosedBold size={16} /> :  <PiEyeSlashLight size={16} />
+                            }
+                            </button>
                     </div>
                     {/* <p className='my-1' > <span className='font-bold text-2xl ' >₦</span> <span>****</span> </p> */}
-                    <p className='my-1' > <span className='font-bold text-2xl ' >{ ConvertToNaira(dashboardDetails?.data?.balance)}.00</span> </p>
+                    <p className='my-1' > 
+                        {
+                           showDetails ? <span className='font-bold text-2xl ' >{ ConvertToNaira(dashboardDetails?.data?.balance)}.00</span> :
+                            <span className='font-bold text-2xl ' >****</span>
+
+                        }
+                    </p>
                     <button className="font-semibold flex items-center gap-1 text-primary">
                         <span className='text-sm' >Visit Wallet</span>
                         <BsArrowRight />

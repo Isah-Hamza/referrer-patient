@@ -9,12 +9,19 @@ import { MdOutlineEmail } from 'react-icons/md'
 import completed from '../../assets/images/completed.svg'
 import New from '../../components/Referral/New'
 import { useLocation } from 'react-router-dom'
+import { useQuery } from 'react-query'
+import ReferralService from '../../services/Referrals'
+import PageLoading from '../../Loader/PageLoading'
+import EmptyTable from '../../components/Table/EmptyTable'
 
 const Referrals = () => {
-    
-    const query = useLocation().search.split('=')[1];
-    console.log(query);
 
+    const user_id =localStorage.getItem('referrer-user_id');
+    const query = useLocation().search.split('=')[1];
+
+    const { isLoading:loadingReferrals, data:referrals  } = useQuery('referrals', ()=> ReferralService.GetRefferals(user_id))
+
+    
     const [viewDetails, setViewDetails] = useState(false);
     const [newReferral, setNewReferral] = useState(() => query == 'true' ? true : false);
 
@@ -95,7 +102,9 @@ const Referrals = () => {
         },
     ]
 
-
+    if(loadingReferrals){
+        return <PageLoading />
+    }
 
   return (
   <>
@@ -109,7 +118,9 @@ const Referrals = () => {
                 <Button onClick={toggleNewReferral} title={'Refer'} className={'!px-10 !py-2.5 !text-sm  !bg-light_blue'} />
             </div>
         </div>
-        <div className="mt-5 text-sm">
+        {
+           referrals.data?.referrals.length ?
+            <div className="mt-5 text-sm">
             <div className="header grid grid-cols-9 gap-3 px-5 font-medium">
                 <p className='col-span-2 line-clamp-1' >Full Name</p>
                 <p className='col-span-2 line-clamp-1' >Email Address</p>
@@ -135,7 +146,10 @@ const Referrals = () => {
                 }
 
             </div>
-        </div>
+            </div>
+            :
+            <EmptyTable />
+        }
        {viewDetails ? <div className="fixed inset-0 bg-black/70 flex justify-end">
             <div className="bg-white w-[450px] max-h-screen overflow-y-auto">
                 <div className="flex items-center justify-between p-3 border-b">
