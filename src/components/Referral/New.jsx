@@ -1,21 +1,93 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { BiCopy, BiPhoneIncoming, BiSolidUserDetail, BiTrashAlt } from "react-icons/bi";
-import { CgClose } from 'react-icons/cg';
+import { CgAdd, CgClose } from 'react-icons/cg';
 import { CiUser } from 'react-icons/ci';
 import { MdOutlineMarkEmailUnread } from 'react-icons/md';
 import { PiTestTubeFill } from "react-icons/pi";
 import Input from '../Inputs';
 import Select from '../Inputs/Select';
-import { BsCaretRight, BsFillTrashFill } from 'react-icons/bs';
+import { BsCaretRight, BsFillTrashFill, BsPlus } from 'react-icons/bs';
 import Button from '../Button'
 import success from '../../assets/images/success.svg';
 import { IoIosArrowForward } from "react-icons/io";
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
+import Referrals from '../../services/Referrals';
+import { useMutation, useQuery } from 'react-query';
+import { CustomValidationError } from '../Register/StepOne';
+import { ConvertToNaira, errorToast, successToast } from '../../utils/Helper';
+import LoadingModal from '../../Loader/LoadingModal';
 
-const New = ({ toggleNewReferral }) => {
+const New = ({ toggleNewReferral, refetch }) => {
+  const user_id =localStorage.getItem('referrer-user_id');
+
   const [activeTab, setActiveTab] = useState(0);
+  const [categories, setCategories] = useState([]);
+  const [tests, setTests] = useState([]);
   const [successful, setSuccessful] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState(null);
+  const [selectedCategoryName, setSelectedCategoryName] = useState(null);
+  const [selectedTest, setSelectedTest] = useState(null);
+  const [selectedTests, setSelectedTests] = useState([]);
 
   const toggleSuccessful = () => setSuccessful(!successful);
+
+  const { isLoading:creatingReferral, mutate:createReferrer } = useMutation(Referrals.CreateReferrer, {
+    onSuccess:res => {
+      refetch();
+      successToast(res.data.message);
+      close();
+    },
+    onError: e => {
+      errorToast(e.message);
+    }
+  })
+
+  
+  const { touched, errors, handleSubmit, getFieldProps, setFieldValue } = useFormik({
+    initialValues:{
+        "doctor_id": user_id,
+        "email": "",
+        "full_name": "",
+        "phone_number": "",
+        "gender": "",
+        "selected_tests": [''],
+    },
+    validationSchema: Yup.object().shape({
+        "doctor_id": Yup.string().required(),
+        "email": Yup.string().email().required(),
+        "full_name": Yup.string().required(),
+        "phone_number": Yup.string().required().min(11, 'Should be exactly 11 digits').max(11, 'Should be exactly 11 digits'),
+        "gender": Yup.string().required(),
+        "selected_tests": Yup.array().required(),
+    }),
+    onSubmit:values => {
+        if(!selectedTests.length){
+          errorToast('Please select at least one test to continue.')
+          return
+        }
+        const tests = selectedTests.map(item => item.test_id);
+        values.selected_tests = tests;
+        console.log(values);
+        createReferrer(values);
+        // toggleSuccessful();
+    }
+})
+
+  const { isLoading:loadingCategories } = useQuery('test-categories', Referrals.GetTestCategories, {
+    onSuccess: res => {
+      setCategories(res.data.categories.map(item => ({ label:item.name, value:item.cat_id })));
+    }
+  })
+
+  const { isLoading:loadingTests, mutate:getTests, data:rawTests } = useMutation(Referrals.GetTests, {
+    onSuccess: res => {
+      setTests(res.data.tests.map(item => ({ label:item.name+' ('+ ConvertToNaira(item.price)+')', value:item.test_id })));
+      setSelectedCategoryName(res.data.category);
+    },
+    enabled:false,
+  })
+
 
   const tabs = [
     {
@@ -32,32 +104,16 @@ const New = ({ toggleNewReferral }) => {
     },
   ]
 
-  const selectedTests = [
-    {
-      type:'C.T. Scan - Pelvimetry',
-      category:'C.T Test',
-      amount:'₦28,000',
-    },
-    {
-      type:'Menstrual Irregularities',
-      category:'Endocrinology',
-      amount:'₦8,000',
-    },
-    {
-      type:'Fibronology',
-      category:'HAEMATOLOGY',
-      amount:'₦5,500',
-    },
-  ]
+
 
   const genderOptions = [
     {
       label:'Male',
-      value:1
+      value:'Male'
     },
     {
       label:'Female',
-      value:2
+      value:'Female'
     },
   ]
 
@@ -73,25 +129,46 @@ const New = ({ toggleNewReferral }) => {
     toggleNewReferral();
   }
 
+  const addTest = () => {
+    const matchedTest = rawTests?.data?.tests.find(item => item.test_id == selectedTest);
+    console.log(matchedTest);
+
+    const test = {
+      price: matchedTest.price,
+      test: matchedTest.name,
+      category: selectedCategoryName,
+      test_id: matchedTest.test_id,
+    }
+
+    setSelectedTests(prev => [test,...prev])
+  }
+
+  const removeTest = (id) => {
+    setSelectedTests(prev => prev.filter(test => test.test_id !== id))
+  }
+
+  useEffect(() => {
+    if(selectedCategory) getTests(selectedCategory)
+  }, [selectedCategory])
+  
 
   return (
      <div className='w-full bg-white rounded-xl flex' >
       { !successful ? <>
         <div className="w-[350px] border-r h-[calc(100vh-120px)] p-5 pt-7">
-        <p className='font-semibold' >Referral Form Creation</p>
-        <div className="mt-7 grid gap-3 max-w-[250px]">
-          {
-            tabs.map((item,idx) => (
-              <div onClick={() =>{ setActiveTab(idx); item.onClick()}} key={idx} 
-                    className={`hover:font-medium hover:opacity-90 cursor-pointer text-sm flex items-center gap-2 rounded-3xl p-3 px-6 opacity-60 ${idx == activeTab && '!opacity-100 bg-[#f9f9f9] !font-medium'}`} >
-                <span>{item.icon}</span>
-                <span>{item.title}</span>
-              </div>
-            ))
-          }
+          <p className='font-semibold' >Referral Creation Form </p>
+          <div className="mt-7 grid gap-3 max-w-[250px]">
+            {
+              tabs.map((item,idx) => (
+                <div onClick={() =>{ setActiveTab(idx); item.onClick()}} key={idx} className={`hover:font-medium hover:opacity-90 cursor-pointer text-sm flex items-center gap-2 rounded-3xl p-3 px-6 opacity-60 ${idx == activeTab && '!opacity-100 bg-[#f9f9f9] !font-medium'}`} >
+                  <span>{item.icon}</span>
+                  <span>{item.title}</span>
+                </div>
+              ))
+            }
+          </div>
         </div>
-        </div>
-        <div className="flex-1 p-10 pt-7  h-[calc(100vh-120px)] overflow-y-auto">
+        <form onSubmit={handleSubmit} className="flex-1 p-10 pt-7  h-[calc(100vh-120px)] overflow-y-auto">
           <div className="flex justify-between">
               <div id='patient' className="">
                 <p className='font-semibold mb-1' >Patient Details</p>
@@ -102,18 +179,30 @@ const New = ({ toggleNewReferral }) => {
                   <CgClose />
               </button>
           </div>
-          <div className=" max-w-[650px]">
+          <div className="max-w-[650px]">
               <div className="mt-6">
-                  <Input label={'Email Address'} placeholder={'support@lifebridge.com'} type={'email'} icon={<MdOutlineMarkEmailUnread size={22} />}/>
+                  <Input {...getFieldProps('email')} label={'Email Address'} placeholder={'support@lifebridge.com'} type={'email'} icon={<MdOutlineMarkEmailUnread size={22} />}/>
+                  {
+                      touched.email && errors.email && <CustomValidationError text={errors.email} />
+                  }
               </div>
               <div className="mt-4">
-                  <Input label={'Full Name'} placeholder={'John Doe'} icon={<CiUser size={24} />}/>
+                  <Input  {...getFieldProps('full_name')} label={'Full Name'} placeholder={'John Doe'} icon={<CiUser size={24} />}/>
+                  {
+                      touched.full_name && errors.full_name && <CustomValidationError text={errors.full_name} />
+                  }
               </div>
               <div className="mt-4">
-                  <Input label={'Phone Number'} placeholder={'Phone Number'} icon={<BiPhoneIncoming size={24} />}/>
+                  <Input  {...getFieldProps('phone_number')} label={'Phone Number'} placeholder={'Phone Number'} icon={<BiPhoneIncoming size={24} />}/>
+                  {
+                      touched.phone_number && errors.phone_number && <CustomValidationError text={errors.phone_number} />
+                  }
               </div>
               <div className="mt-4">
-                <Select label={'Gender'} options={genderOptions}  icon={<CiUser size={22} />}/>
+                <Select  {...getFieldProps('gender')} label={'Gender'} options={genderOptions}  icon={<CiUser size={22} />}/>
+                {
+                    touched.gender && errors.gender && <CustomValidationError text={errors.gender} />
+                }
             </div>
           </div>
           <div className="mt-10 flex justify-between">
@@ -124,34 +213,43 @@ const New = ({ toggleNewReferral }) => {
           </div>
           <div className=" max-w-[650px]">
             <div className="mt-6">
-                <Select label={'Test Category'} options={emptyOption}  icon={<PiTestTubeFill size={22} />}/>
+                <Select
+                onChange={e => {setSelectedCategory(e.target.value)}}
+                label={'Test Category'} options={categories}  icon={<PiTestTubeFill size={22} />}/>
             </div>
             <div className="mt-4">
-                <Select label={'Test Type'} options={emptyOption}  icon={<PiTestTubeFill size={22} />}/>
+                <Select label={'Test Type'}  onChange={e => setSelectedTest(e.target.value)} options={tests}  icon={<PiTestTubeFill size={22} />}/>
             </div>
+            <button onClick={addTest} type='button' className=" mt-2 flex ml-auto items-center gap-1 text-sm font-semibold">
+              <BsPlus /> Add Test
+            </button>
             <div className="mt-7 flex items-center gap-2">
                 <p className='font-semibold mb-1' >Selected Tests</p>
                 <hr className='flex-1 bg-[gainsboro] text-[gainsboro]' />
             </div>
-          <div className="mt-7 grid grid-cols-4 gap-5">
+         {selectedTests.length ? <div className="mt-7 grid grid-cols-4 gap-5">
             {
-              selectedTests.map((item,idx) => (
+              selectedTests?.map((item,idx) => (
                 <div key={idx} className='relative grid  text-sm bg-[#f9f9f9] border p-3 rounded-lg ' >
-                <p className='font-medium mb-1' >{ item.type }</p>  
-                <p className='uppercase mb-10' >{ item.category }</p>  
-                <p className='mt-auto text-light_blue text-lg font-semibold' >{ item.amount }</p>
-                <button className="absolute -top-3 -right-3 w-9 h-9 rounded-full bg-white border grid place-content-center">
+                <p className='font-medium mb-1 line-clamp-1' >{ item.test }</p>  
+                <p className='uppercase mb-10 line-clamp-1' >{ item.category }</p>  
+                <p className='mt-auto text-light_blue text-lg font-semibold' >{ ConvertToNaira(item.price)}</p>
+                <button onClick={() => removeTest(item.test_id)} type='button' className="absolute -top-3 -right-3 w-9 h-9 rounded-full bg-white border grid place-content-center">
                   <BsFillTrashFill size={15} color='red' />
                   </button>  
                 </div>
               ))
             }
+          </div>:
+          <div className="mt-5 mb-32 text-center font-medium text-sm">
+            <p>No Test Selected Yet.</p>
           </div>
+          }
             <div className="w-fit flex items-start my-5 mt-12">
-                    <Button onClick={toggleSuccessful} title={'Submit'} className={'w-fit !px-16 !py-2.5  !bg-light_blue'} />
+                    <Button type='submit' title={'Submit'} className={'w-fit !px-16 !py-2.5  !bg-light_blue'} />
                 </div>
           </div>
-        </div>
+        </form>
       </>:
        <div className='p-10 h-[calc(100vh-130px)] flex flex-col justify-center items-center w-full' >
             <img className='-mt-5 w-[120px]' src={success} alt="success" />
@@ -179,8 +277,11 @@ const New = ({ toggleNewReferral }) => {
                     <button onClick={close} className='font-semibold' >Cancel</button>
                   </div>
             </div>
-          </div>  
-        }
+        </div>  
+      }
+      {
+        creatingReferral ? <LoadingModal /> : null
+      }
     </div>
   )
 }

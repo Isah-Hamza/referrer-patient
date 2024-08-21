@@ -33,6 +33,7 @@ export const REMOVE_FROM_LOCALSTORAGE = (key) => {
 };
 
 export const ConvertToNaira = (amount = 0) => {
+  typeof(amount) == 'string' ? amount = Number(amount) : null;
   return `₦${amount.toLocaleString()}`;
 };
 
