@@ -12,7 +12,7 @@ const GetRefferals = (doctor_id) => {
 
 const GetReferral = (ref_id) => {
   return axiosClient()
-    .get(`${endpoints.referrals.GET_REFERRAL}/${ref_id}`)
+    .get(`${endpoints.referrals.GET_REFERRAL}?ref_id=${ref_id}`)
     .then((res) => res)
     .catch((error) => Promise.reject(error));
 }

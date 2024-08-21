@@ -20,7 +20,7 @@ const endpoints = {
     GET_REFERRALS:'referrals',
     GET_REFERRAL:'view-referrals',
     CREATE_REFERRAL:'add-referral',
-    TEST_CATEGORIES:'categories/all',
+    TEST_CATEGORIES:'category/all',
     CATEGORY_TESTS:'medical-test/view'
   }
 };
