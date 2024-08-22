@@ -61,6 +61,7 @@ const Profile = ({  }) => {
   })
 
 const { touched, values, errors, handleSubmit:handleSubmitBank, getFieldProps:getfieldPropsBank, setFieldValue:setFieldValueBank} = useFormik({
+    enableReinitialize:true,
     initialValues:{
         "doctor_id": user_id, 
         "bank_name": profile?.data?.bank_name ,
@@ -157,6 +158,7 @@ const verifyAccount = () => {
 ]
 
 const { getFieldProps, handleSubmit} = useFormik({
+  enableReinitialize:true,
   initialValues:{
     "doctor_id":user_id,
     "full_name": profile?.data?.full_name ,
@@ -168,9 +170,7 @@ const { getFieldProps, handleSubmit} = useFormik({
     "account_number": profile?.data?.account_number ,
     "account_name": profile?.data?.account_name ,
   },
-  validationSchema: Yup.object().shape({
-
-  }),
+  validationSchema: Yup.object().shape({}),
   onSubmit:values => {
       console.log(values);
       updateProfile(values);
@@ -180,6 +180,7 @@ const { getFieldProps, handleSubmit} = useFormik({
 
 
 const { resetForm:resetFormPassword, errors:errorsPassword, handleSubmit:handleSubmitPassword, touched:touchedPassword, getFieldProps:getFieldPropsPassword } = useFormik({
+  enableReinitialize:true,
   initialValues:{
       doctor_id:user_id,
       password:'',
