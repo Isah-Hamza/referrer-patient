@@ -24,13 +24,15 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import LoadingModal from '../../Loader/LoadingModal';
 import { errorToast, successToast } from '../../utils/Helper';
+import Bank from '../../services/Bank';
+import { CustomValidationError } from '../../components/Register/StepOne';
 
 const Profile = ({  }) => {
   const [activeTab, setActiveTab] = useState(0);
   const [successful, setSuccessful] = useState(false);
   const [deleteAccount, setDeleteAccount] = useState(false);   
   const user_id = JSON.parse(localStorage.getItem('referrer-data'))?.doctor_id;
-
+  const [banks, setBanks] = useState([]);
 
   const toggleSuccessful = () => setSuccessful(!successful);
   const toggleDeleteAccount = () => setDeleteAccount(!deleteAccount);
@@ -46,6 +48,60 @@ const Profile = ({  }) => {
       errorToast(firstError);
   }
   })
+
+  const { isLoading:updatingBank, mutate:updateBank  } = useMutation(ProfileService.UpdateBank, {
+    onSuccess:res => {
+      successToast(res.data.message);
+      refetchProfile();
+    },
+    onError: e => {
+      const firstError = Object.entries(e.errors)[0][1];
+      errorToast(firstError);
+  }
+  })
+
+const { touched, values, errors, handleSubmit:handleSubmitBank, getFieldProps:getfieldPropsBank, setFieldValue:setFieldValueBank} = useFormik({
+    initialValues:{
+        "doctor_id": user_id, 
+        "bank_name": profile?.data?.bank_name ,
+        "account_number":profile?.data?.account_number ,
+        "account_name": profile?.data?.account_name,
+    },
+    validationSchema: Yup.object().shape({
+        "doctor_id": Yup.string().required('This field is required'),
+        "bank_name": Yup.string().required('This field is required'),
+        "account_number": Yup.string().required('This field is required'),
+        "account_name": Yup.string().required('This field is required')
+    }),
+    onSubmit:values => {
+        updateBank(values);
+    }
+})
+
+  const { isLoading:loadingBanks, data } = useQuery('banks', Bank.AllBanks, {
+    onSuccess:res => {
+        setBanks(res.data.data.map(bank => ({ label:bank.BankName, value:bank.BankName })))
+    }
+})
+
+const { mutate:verifyBankAccount, isLoading:verifying } = useMutation(Bank.VerifyAccount, {
+    onSuccess:res => {
+        setFieldValueBank('account_name',res.data.account_name);
+        successToast(res.data.message);
+    },
+    onError:e => {
+        errorToast('Invalid or not matching bank details.');
+    }
+})
+
+const verifyAccount = () => {
+  const payload = {
+      account_number:values.account_number,
+      bank_code: data?.data?.data?.find(item => item.BankName == values.bank_name)?.BankCode,
+  }
+
+  verifyBankAccount(payload);
+}
 
 
   const tabs = [
@@ -89,7 +145,7 @@ const Profile = ({  }) => {
     },
 ]
 
-const { getFieldProps, values, errors, handleSubmit} = useFormik({
+const { getFieldProps, handleSubmit} = useFormik({
   initialValues:{
     "doctor_id":user_id,
     "full_name": profile?.data?.full_name ,
@@ -108,7 +164,7 @@ const { getFieldProps, values, errors, handleSubmit} = useFormik({
       console.log(values);
       updateProfile(values);
     }
-  })
+})
 
 
 
@@ -182,29 +238,43 @@ const { getFieldProps, values, errors, handleSubmit} = useFormik({
           </div>
         </form>
         : activeTab == 1 ? 
-        <div className="flex-1 p-10 pt-7  h-[calc(100vh-120px)] overflow-y-auto">
-        <div className="flex justify-between">
-            <div id='patient' className="">
-              <p className='font-semibold mb-1' >Payout Settings</p>
-              <p className='text-sm' >Manage your bank information.</p>
-            </div>
-        </div>
+        <form onSubmit={handleSubmitBank} className="flex-1 p-10 pt-7  h-[calc(100vh-120px)] overflow-y-auto">
+          <div className="flex justify-between">
+              <div id='patient' className="">
+                <p className='font-semibold mb-1' >Payout Settings</p>
+                <p className='text-sm' >Manage your bank information.</p>
+              </div>
+          </div>
 
-        <div className="mt-5 grid gap-5 max-w-[600px]">
-        <div className="mt-5">
-                <Select label={'Bank Name'} options={[]} icon={<RiBankCard2Line size={22} />}/>
-            </div>
-            <div className="">
-                <Input label={'Account Number'}  placeholder={'0232322951'} icon={<MdOutlineAccountTree size={22} />}/>
-            </div>
-            <div className="">
-                <Input label={'Account Name'}  placeholder={'Isah Hamza Onipe'} icon={<BiUser size={22} />}/>
-            </div>
-        </div>
-        <div className='w-fit mt-10' >
-          <Button className={'px-14'} title={'Update'} />
-        </div>
-      </div>
+          <div className="mt-5 grid max-w-[600px]">
+          <div className="mt-5">
+                      <Select {...getfieldPropsBank('bank_name')} label={'Bank Name'} options={banks} icon={<RiBankCard2Line size={22} />}/>
+                      {
+                      touched.bank_name && errors.bank_name && <CustomValidationError text={errors.bank_name} />
+                  }
+                  </div>
+                  <div className="mt-5">
+                      <Input label={'Account Number'} {...getfieldPropsBank('account_number')} placeholder={'0232322951'} icon={<MdOutlineAccountTree size={22} />}/>
+                      <div className="flex items-center justify-between gap-5">
+                          <p>
+                          {
+                              touched.account_number && errors.account_number && <CustomValidationError text={errors.account_number} />
+                          }
+                          </p>
+                          <button type='button' onClick={verifyAccount} className='text-xs font-medium'>Verify Account</button>
+                      </div>
+                  </div>
+                  <div className="mt-5">
+                      <Input label={'Account Name'} {...getfieldPropsBank('account_name')} disabled={true}  placeholder={'Account Name'} icon={<CiUser size={22} />}/>
+                      {
+                      touched.account_name && errors.account_name && <CustomValidationError text={errors.account_name} />
+                  }
+                  </div>
+          </div>
+          <div className='w-fit mt-10' >
+            <Button type='submit' className={'px-14'} title={'Update'} />
+          </div>
+        </form>
         : activeTab == 2 ?
         <div className="flex-1 p-10 pt-7  h-[calc(100vh-120px)] overflow-y-auto">
         <div className="flex justify-between">
@@ -278,7 +348,7 @@ const { getFieldProps, values, errors, handleSubmit} = useFormik({
         </div> : null
       }
       {
-        (updatingProfile) ? <LoadingModal /> : null
+        (updatingProfile || verifying || updatingBank) ? <LoadingModal /> : null
       }
     </div>
   )
