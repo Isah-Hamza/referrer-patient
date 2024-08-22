@@ -22,6 +22,15 @@ const endpoints = {
     CREATE_REFERRAL:'add-referral',
     TEST_CATEGORIES:'category/all',
     CATEGORY_TESTS:'medical-test/view'
+  },
+  payment:{
+    ALL_TRANSACTIONS:'all-transactions'
+  },
+  profile:{
+    GET_PROFILE:'doctor/profile=details',
+    UPDATE_PASSWORD:'doctor/password-update',
+    UPDATE_ACCOUNT:'doctor/account-update',
+    UPDATE_PROFILE:'doctor/profile-update',
   }
 };
 

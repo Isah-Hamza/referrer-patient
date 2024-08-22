@@ -28,7 +28,7 @@ import PageLoading from '../../Loader/PageLoading';
 const Dashboard = () => {
 
     const navigate = useNavigate('');
-    const user_id =localStorage.getItem('referrer-user_id');
+    const user_id =localStorage.getItem('referrer-user_id') ?? JSON.parse(localStorage.getItem('referrer-user'))?.user_id;
     const [showDetails, setShowDetails] = useState(false);
 
     const toggleShowDetails = () => setShowDetails(!showDetails);
@@ -56,38 +56,6 @@ const Dashboard = () => {
         },
     ]
 
-    const activities = [
-        {
-            title:'You have referred Benjamin Wales ',
-            desc:'You assigned 2 tests. Waiting for your rebate.',
-            time:'5m ago',
-            img:test,
-        },
-        {
-            title:'You have referred Samuel Sandra ',
-            desc:'You assigned 2 tests. Waiting for your rebate.',
-            time:'1m ago',
-            img:test,
-        },
-        {
-            title:'You have earned your rebate from Benjamin Wales ',
-            desc:'Hurray, ₦23,000 has been added to your wallet.',
-            time:'2d ago',
-            img:earn,
-        },
-        {
-            title:'You have initiated a withdrawal request.',
-            desc:'₦350,000 will be credited into your bank account soon.',
-            time:'2d ago',
-            img:bank,
-        },
-        {
-            title:'You have earned your rebate from Temites Flyn ',
-            desc:'Hurray, ₦23,000 has been added to your wallet.',
-            time:'12d ago',
-            img:earn,
-        },
-    ]
 
     if(loadingActivities || loadingDetails){
         return <PageLoading />
