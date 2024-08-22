@@ -119,8 +119,8 @@ const StepTwo = ({ next }) => {
                 <div className="mt-5">
                     <Select  label={'Professional Title'} options={titleOptions} {...getFieldProps('professional_title')} icon={<CiUser size={22} />}/>
                     {
-                    touched.professional_title && errors.professional_title && <CustomValidationError text={errors.professional_title} />
-                }
+                        touched.professional_title && errors.professional_title && <CustomValidationError text={errors.professional_title} />
+                    }
                 </div>
                 <div className="mt-5">
                     <Select {...getFieldProps('bank_name')} label={'Bank Name'} options={banks} icon={<RiBankCard2Line size={22} />}/>

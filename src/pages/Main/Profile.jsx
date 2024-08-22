@@ -94,6 +94,17 @@ const { mutate:verifyBankAccount, isLoading:verifying } = useMutation(Bank.Verif
     }
 })
 
+const { mutate:changePassword, isLoading:changingPassword } = useMutation(ProfileService.UpdatePassword, {
+    onSuccess:res => {
+        resetFormPassword();
+        successToast(res.data.message);
+        
+    },
+    onError:e => {
+        errorToast(e.message);
+    }
+})
+
 const verifyAccount = () => {
   const payload = {
       account_number:values.account_number,
@@ -168,6 +179,24 @@ const { getFieldProps, handleSubmit} = useFormik({
 
 
 
+const { resetForm:resetFormPassword, errors:errorsPassword, handleSubmit:handleSubmitPassword, touched:touchedPassword, getFieldProps:getFieldPropsPassword } = useFormik({
+  initialValues:{
+      doctor_id:user_id,
+      password:'',
+      old_password:'',
+      password_confirmation:'',
+  },
+  validationSchema: Yup.object().shape({
+    password: Yup.string().required().min(8),
+    old_password: Yup.string().required(),
+    password_confirmation: Yup.string().required('This field is required').oneOf([Yup.ref('password')],'Passwords mismatch'),
+
+  }),
+  onSubmit:values => {
+      // console.log(values);
+      changePassword(values);
+  }
+})
 
   const close = () => {
     toggleSuccessful();
@@ -276,7 +305,7 @@ const { getFieldProps, handleSubmit} = useFormik({
           </div>
         </form>
         : activeTab == 2 ?
-        <div className="flex-1 p-10 pt-7  h-[calc(100vh-120px)] overflow-y-auto">
+        <form onSubmit={handleSubmitPassword} className="flex-1 p-10 pt-7  h-[calc(100vh-120px)] overflow-y-auto">
         <div className="flex justify-between">
             <div id='patient' className="">
               <p className='font-semibold mb-1' >Account & Security</p>
@@ -286,22 +315,31 @@ const { getFieldProps, handleSubmit} = useFormik({
 
         <div className="mt-10 grid gap-5 max-w-[600px]">
             <div className="">
-                <Input label={'Old Password'} type={'password'} placeholder={'************'} icon={<MdOutlineLockPerson size={22} />}/>
+                <Input label={'Old Password'} {...getFieldPropsPassword('old_password')} type={'password'} placeholder={'************'} icon={<MdOutlineLockPerson size={22} />}/>
+                {
+                    touchedPassword.old_password && errorsPassword.old_password && <CustomValidationError text={errorsPassword.old_password} />
+                }
             </div>
             <div className="">
-                <Input label={'New Password'} type={'password'} placeholder={'************'} icon={<MdOutlineLockPerson size={22} />}/>
+                <Input label={'New Password'} {...getFieldPropsPassword('password')} type={'password'} placeholder={'************'} icon={<MdOutlineLockPerson size={22} />}/>
+                {
+                    touchedPassword.password && errorsPassword.password && <CustomValidationError text={errorsPassword.password} />
+                }
                 <p className='text-xs text-text_color' >Password must contain at least one lowercase letters, uppercase letters, numbers and special symbols</p>
             </div>
             <div className="">
-                <Input label={'Confirm New Password'} type={'password'} placeholder={'************'} icon={<MdOutlineLockPerson size={22} />}/>
+                <Input label={'Confirm New Password'} {...getFieldPropsPassword('password_confirmation')} type={'password'} placeholder={'************'} icon={<MdOutlineLockPerson size={22} />}/>
+                {
+                    touchedPassword.password_confirmation && errorsPassword.password_confirmation && <CustomValidationError text={errorsPassword.password_confirmation} />
+                }
             </div>
           </div>
         <div className='w-fit mt-10' >
-          <Button className={'px-14'} title={'Update Password'} />
+          <Button type='submit' className={'px-14'} title={'Update Password'} />
         </div>
         <hr className='w-full my-3 mt-14' />
-        <button onClick={toggleDeleteAccount} className={'text-red-700 font-semibold'}>Delete Account</button>
-        </div>
+        <button type='button' onClick={toggleDeleteAccount} className={'text-red-700 font-semibold'}>Delete Account</button>
+        </form>
         : null
       }
       </>:
@@ -341,14 +379,14 @@ const { getFieldProps, handleSubmit} = useFormik({
             <p className='text-base font-semibold' >Delete Your Account</p>
             <p className='text-sm' >Are you sure you want to delete your account? This action is irreversible.</p>
             <div className="mt-10 flex items-center gap-5 ">
-            <Button onClick={toggleDeleteAccount} className={'!px-5 !bg-white !text-text_color border border-text_color '} title={'Cancel'} />
-            <Button onClick={toggleDeleteAccount} className={'!px-5 bg-red-600'} title={'Yes Proceed'} />
+            <Button type='button' onClick={toggleDeleteAccount} className={'!px-5 !bg-white !text-text_color border border-text_color '} title={'Cancel'} />
+            <Button type='button' onClick={toggleDeleteAccount} className={'!px-5 bg-red-600'} title={'Yes Proceed'} />
             </div>
           </div>
         </div> : null
       }
       {
-        (updatingProfile || verifying || updatingBank) ? <LoadingModal /> : null
+        (updatingProfile || verifying || updatingBank || changingPassword) ? <LoadingModal /> : null
       }
     </div>
   )
