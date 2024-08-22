@@ -28,7 +28,7 @@ import PageLoading from '../../Loader/PageLoading';
 const Dashboard = () => {
 
     const navigate = useNavigate('');
-    const user_id =localStorage.getItem('referrer-user_id') ?? JSON.parse(localStorage.getItem('referrer-user'))?.user_id;
+    const user_id = JSON.parse(localStorage.getItem('referrer-data'))?.doctor_id;
     const [showDetails, setShowDetails] = useState(false);
 
     const toggleShowDetails = () => setShowDetails(!showDetails);

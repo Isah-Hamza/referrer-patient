@@ -20,7 +20,7 @@ import moment from 'moment'
 
 const Referrals = () => {
 
-    const user_id =localStorage.getItem('referrer-user_id') ?? JSON.parse(localStorage.getItem('referrer-user'))?.user_id;
+    const user_id = JSON.parse(localStorage.getItem('referrer-data'))?.doctor_id;
     const query = useLocation().search.split('=')[1];
     const [selectedRef, setSelectedRef] = useState(null);
 
