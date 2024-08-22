@@ -24,6 +24,7 @@ import DashboardService from '../../services/Dashboard';
 import RebateBarChart from '../../components/Chart/RebateBarChart';
 import PageLaoding from '../../Loader/PageLoading'
 import PageLoading from '../../Loader/PageLoading';
+import moment from 'moment';
 
 const Dashboard = () => {
 
@@ -132,16 +133,16 @@ const Dashboard = () => {
                 </div>
                 <div className="p-5">
                     {
-                        notifications?.data?.length ?
+                        notifications?.data?.notifications?.length ?
                         <div className="grid gap-7">
                     {
-                        notifications?.data?.map((item,idx) => (
+                        notifications?.data?.notifications?.map((item,idx) => (
                             <div key={idx} className='flex items-center gap-4' >
-                                <img src={item.img} alt="image" />
+                                <img src={item.type == 'withdraw' ? earn : test} alt="image" />
                                 <div className="text-sm">
-                                    <p className='font-medium' >{item.title}</p>
-                                    <p className='my-1' >{item.desc}</p>
-                                    <p className='text-text_color text-xs' >{item.time}</p>
+                                    <p className='font-medium' >{item.subject}</p>
+                                    <p className='my-1' >{item.data}</p>
+                                    <p className='text-text_color text-xs' >{moment().format('ll')}</p>
                                 </div>
                             </div>
                         ))

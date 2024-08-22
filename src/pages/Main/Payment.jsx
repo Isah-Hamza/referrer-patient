@@ -13,6 +13,7 @@ import { useQuery } from 'react-query';
 import { ConvertToNaira } from '../../utils/Helper';
 import EmptyTable from '../../components/Table/EmptyTable';
 import PageLoading from '../../Loader/PageLoading';
+import moment from 'moment';
 
 const Payment = () => {
   const [showWithdraw, setShowWithdraw] = useState(false);
@@ -129,15 +130,15 @@ const Payment = () => {
             </div>
             <div className="mt-6 w-full rounded-2xl p-2 pb-3 flex justify-center flex-col bg-[#f9f9f9]">
               <div className="mx-auto flex items-center gap-4 text-base">
-                <span className='font-medium' >John Doe</span>
+                <span className='font-medium' >{tnx?.data?.account_name}</span>
                 <div className="flex items-center gap-1 text-light_blue text-sm font-medium cursor-pointer">
                   <BiEdit /> <span>Change</span>
                 </div>
               </div>
               <div className="mx-auto font-medium mt-2 flex items-center bg-[#DCDCDC] rounded-3xl p-2 text-sm gap-2">
-              <span>0232322951</span>
+              <span>{tnx?.data?.account_number}</span>
               <span> | </span>
-              <span>Access Bank</span>
+              <span>{tnx?.data?.bank}</span>
             </div>
             </div>
             <div className="mt-12">

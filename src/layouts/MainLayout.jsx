@@ -37,6 +37,7 @@ const MainLayout = () => {
         REMOVE_FROM_LOCALSTORAGE('referrer-data');
         REMOVE_FROM_LOCALSTORAGE('referrer-user');
         REMOVE_FROM_LOCALSTORAGE('referrer-token');
+        REMOVE_FROM_LOCALSTORAGE('referrer-user_id');
         navigate('/')
     }
 
@@ -44,7 +45,6 @@ const MainLayout = () => {
   useEffect(() => {
 
     const active_item = window.location.pathname.split("/")[2];
-    console.log('active',active_item)
     
     if(active_item == 'dashboard') setActiveTab(0);
     if(active_item == 'referrals') setActiveTab(1);
@@ -59,7 +59,7 @@ const MainLayout = () => {
   return (
     <div className='px-5 h-screen flex flex-col gap-5 w-full bg-[#f8f8f8]'>
       <header className='flex items-center justify-between gap-5 py-5' >
-        <img onClick={logout} className='cursor-pointer w-40' src={logo} alt="logo" />
+        <img onClick={() => navigate('/')} className='cursor-pointer w-40' src={logo} alt="logo" />
         <div className="flex gap-5 bg-[#ededed] rounded-3xl">
             {
                 tabs.map((item,idx) => (
@@ -75,7 +75,7 @@ const MainLayout = () => {
             }
         </div>
         <div className="flex items-center gap-3 ">
-            <button onClick={() => navigate('/')} className="w-10 h-10 bg-[#ededed] grid place-content-center rounded-full">
+            <button onClick={logout} className="w-10 h-10 bg-[#ededed] grid place-content-center rounded-full">
                 <IoLogOut size={20} color='red' />
             </button>
             <button>

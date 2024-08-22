@@ -25,11 +25,11 @@ export const GET_FROM_LOCALSTORAGE = (key) => {
 };
 
 export const GET_STORAGE_ITEM = (key) => {
-  if (typeof window != "undefined") JSON.parse(window.localStorage.getItem(key));
+  if (typeof window != "undefined") return JSON.parse(window.localStorage.getItem(key));
 };
 
 export const REMOVE_FROM_LOCALSTORAGE = (key) => {
-  if (typeof window != "undefined") window.localStorage.removeItem(key);
+   window.localStorage.removeItem(key);
 };
 
 export const ConvertToNaira = (amount = 0) => {
