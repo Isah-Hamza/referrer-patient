@@ -17,14 +17,36 @@ import { FaLocationPin } from 'react-icons/fa6';
 import { RiBankCard2Line } from "react-icons/ri";
 import { MdOutlineAccountTree } from "react-icons/md";
 import deleteIcon from '../../assets/images/delete.svg';
+import { useMutation, useQuery } from 'react-query';
+import ProfileService from '../../services/Profile';
+import PageLoading from '../../Loader/PageLoading';
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
+import LoadingModal from '../../Loader/LoadingModal';
+import { errorToast, successToast } from '../../utils/Helper';
 
 const Profile = ({  }) => {
   const [activeTab, setActiveTab] = useState(0);
   const [successful, setSuccessful] = useState(false);
-  const [deleteAccount, setDeleteAccount] = useState(false);
+  const [deleteAccount, setDeleteAccount] = useState(false);   
+  const user_id = JSON.parse(localStorage.getItem('referrer-data'))?.doctor_id;
+
 
   const toggleSuccessful = () => setSuccessful(!successful);
   const toggleDeleteAccount = () => setDeleteAccount(!deleteAccount);
+
+  const { isLoading:loadingProfile, data:profile, refetch:refetchProfile  } = useQuery('profile', ()=>ProfileService.GetProfile(user_id))
+  const { isLoading:updatingProfile, mutate:updateProfile  } = useMutation(ProfileService.UpdateProfile, {
+    onSuccess:res => {
+      successToast(res.data.message);
+      refetchProfile();
+    },
+    onError: e => {
+      const firstError = Object.entries(e.errors)[0][1];
+      errorToast(firstError);
+  }
+  })
+
 
   const tabs = [
     {
@@ -48,11 +70,56 @@ const Profile = ({  }) => {
     },
   ]
 
+  const titleOptions = [
+    {
+        label:'Doctor',
+        value:'doctor',
+    },
+    {
+        label:'Pharmacist',
+        value:'pharmacist',
+    },
+    {
+        label:'Oculist',
+        value:'oculist',
+    },
+    {
+        label:'Dentist',
+        value:'dentist',
+    },
+]
+
+const { getFieldProps, values, errors, handleSubmit} = useFormik({
+  initialValues:{
+    "doctor_id":user_id,
+    "full_name": profile?.data?.full_name ,
+    "email": profile?.data?.email ,
+    "phone_number": profile?.data?.phone_number ,
+    "hospital_name":profile?.data?.hospital_name ,
+    "professional_title":profile?.data?.professional_title ,
+    "bank_name": profile?.data?.bank_name ,
+    "account_number": profile?.data?.account_number ,
+    "account_name": profile?.data?.account_name ,
+  },
+  validationSchema: Yup.object().shape({
+
+  }),
+  onSubmit:values => {
+      console.log(values);
+      updateProfile(values);
+    }
+  })
+
+
+
 
   const close = () => {
     toggleSuccessful();
   }
 
+  if(loadingProfile){
+    return <PageLoading />
+  }
 
   return (
      <div className='w-full bg-white rounded-xl flex' >
@@ -73,7 +140,7 @@ const Profile = ({  }) => {
         </div>
         </div>
         { activeTab == 0 ? 
-        <div className="flex-1 p-10 pt-7  h-[calc(100vh-120px)] overflow-y-auto">
+        <form onSubmit={handleSubmit} className="flex-1 p-10 pt-7  h-[calc(100vh-120px)] overflow-y-auto">
           <div className="flex justify-between">
               <div id='patient' className="">
                 <p className='font-semibold mb-1' >Profile Details</p>
@@ -88,32 +155,32 @@ const Profile = ({  }) => {
             </div>
           </div>
           <div className="mt-10 grid grid-cols-2 gap-5 max-w-[600px]">
-            <div className="">
-                <Input label={'First Name'} placeholder={'John Doe'} icon={<CiUser size={24} />}/>
+            <div className="col-span-2">
+                <Input label={'First Name'} placeholder={'John Doe'} {...getFieldProps('full_name')} icon={<CiUser size={24} />}/>
             </div>
-            <div className="">
+            {/* <div className="">
                 <Input label={'Last Name'} placeholder={'Doe'} icon={<CiUser size={24} />}/>
+            </div> */}
+            <div className=" col-span-2">
+                <Input disabled label={'Email Address'} placeholder={'support@lifebridge.com'} type={'email'} {...getFieldProps('email')} icon={<MdOutlineMarkEmailUnread size={22} />}/>
             </div>
             <div className=" col-span-2">
-                <Input label={'Email Address'} placeholder={'support@lifebridge.com'} type={'email'} icon={<MdOutlineMarkEmailUnread size={22} />}/>
+                <Input label={'Phone Number'} placeholder={'Phone Number'} {...getFieldProps('phone_number')} icon={<BiPhoneIncoming size={24} />}/>
             </div>
             <div className=" col-span-2">
-                <Input label={'Phone Number'} placeholder={'Phone Number'} icon={<BiPhoneIncoming size={24} />}/>
-            </div>
-            <div className=" col-span-2">
-                <Input label={'Hospital Name'} placeholder={'Lifebridge Medical Diagnostic'} icon={<CiUser size={24} />}/>
+                <Input label={'Hospital Name'} placeholder={'Lifebridge Medical Diagnostic'} {...getFieldProps('hospital_name')} icon={<CiUser size={24} />}/>
             </div>
             <div className="">
                 <Input label={'Location'} placeholder={'Wuye, Abuja'} icon={<CiLocationOn size={24} />}/>
             </div>
             <div className="">
-                <Select label={'Professional Title'} options={[{label:'Gyneacology',value:0,}]} icon={<MdTitle size={24} />}/>
+                <Select label={'Professional Title'} {...getFieldProps('professional_title')} options={titleOptions} icon={<MdTitle size={24} />}/>
             </div>
           </div>
           <div className='w-fit mt-10' >
-            <Button className={'px-14'} title={'Update'} />
+            <Button type='submit' className={'px-14'} title={'Update'} />
           </div>
-        </div>
+        </form>
         : activeTab == 1 ? 
         <div className="flex-1 p-10 pt-7  h-[calc(100vh-120px)] overflow-y-auto">
         <div className="flex justify-between">
@@ -209,6 +276,9 @@ const Profile = ({  }) => {
             </div>
           </div>
         </div> : null
+      }
+      {
+        (updatingProfile) ? <LoadingModal /> : null
       }
     </div>
   )

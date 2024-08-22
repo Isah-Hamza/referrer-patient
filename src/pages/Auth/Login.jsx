@@ -32,6 +32,7 @@ const Login = () => {
           total_referrals:res.data.total_referrals,
           pending_referrals:res.data.pending_referrals,
           completed_referrals:res.data.completed_referrals,
+          doctor_id:res.data.doctor_id,
         }
 
         window.localStorage.setItem('referrer-data',JSON.stringify(data));

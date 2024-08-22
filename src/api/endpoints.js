@@ -27,7 +27,7 @@ const endpoints = {
     ALL_TRANSACTIONS:'all-transactions'
   },
   profile:{
-    GET_PROFILE:'doctor/profile=details',
+    GET_PROFILE:'doctor/profile-details',
     UPDATE_PASSWORD:'doctor/password-update',
     UPDATE_ACCOUNT:'doctor/account-update',
     UPDATE_PROFILE:'doctor/profile-update',

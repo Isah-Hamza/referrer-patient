@@ -4,6 +4,7 @@ import { Outlet, useNavigate } from 'react-router-dom'
 import logo from '../assets/images/logo.svg';
 import { AiOutlineHome } from "react-icons/ai";
 import avatar from '../assets/images/avatar.svg';
+import { REMOVE_FROM_LOCALSTORAGE } from '../utils/Helper';
 
 const MainLayout = () => {
     const navigate = useNavigate();
@@ -32,6 +33,13 @@ const MainLayout = () => {
         },
     ]
 
+    const logout = () => {
+        REMOVE_FROM_LOCALSTORAGE('referrer-data');
+        REMOVE_FROM_LOCALSTORAGE('referrer-user');
+        REMOVE_FROM_LOCALSTORAGE('referrer-token');
+        navigate('/')
+    }
+
         
   useEffect(() => {
 
@@ -51,7 +59,7 @@ const MainLayout = () => {
   return (
     <div className='px-5 h-screen flex flex-col gap-5 w-full bg-[#f8f8f8]'>
       <header className='flex items-center justify-between gap-5 py-5' >
-        <img onClick={() => navigate('/')} className='cursor-pointer w-40' src={logo} alt="logo" />
+        <img onClick={logout} className='cursor-pointer w-40' src={logo} alt="logo" />
         <div className="flex gap-5 bg-[#ededed] rounded-3xl">
             {
                 tabs.map((item,idx) => (

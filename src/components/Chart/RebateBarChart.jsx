@@ -8,8 +8,8 @@ import { useQuery } from 'react-query';
 
  const RebateBarChart = () =>  {
   
-    const user_id =localStorage.getItem('referrer-user_id') ?? JSON.parse(localStorage.getItem('referrer-user'))?.user_id;
-    const { isLoading:loadingEarnings, data:earnings  } = useQuery('earnings', ()=> Dashboard.GetRebateEarnings(user_id))
+  const user_id = JSON.parse(localStorage.getItem('referrer-data'))?.doctor_id;
+  const { isLoading:loadingEarnings, data:earnings  } = useQuery('earnings', ()=> Dashboard.GetRebateEarnings(user_id))
 
 
     const data = [
