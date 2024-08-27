@@ -19,7 +19,7 @@ import { ConvertToNaira, errorToast, successToast } from '../../utils/Helper';
 import LoadingModal from '../../Loader/LoadingModal';
 
 const New = ({ toggleNewReferral, refetch }) => {
-  const user_id =localStorage.getItem('referrer-user_id');
+  const user_id = JSON.parse(localStorage.getItem('referrer-data'))?.doctor_id;
 
   const [activeTab, setActiveTab] = useState(0);
   const [categories, setCategories] = useState([]);
@@ -54,12 +54,12 @@ const New = ({ toggleNewReferral, refetch }) => {
         "selected_tests": [''],
     },
     validationSchema: Yup.object().shape({
-        "doctor_id": Yup.string().required(),
-        "email": Yup.string().email().required(),
-        "full_name": Yup.string().required(),
-        "phone_number": Yup.string().required().min(11, 'Should be exactly 11 digits').max(11, 'Should be exactly 11 digits'),
-        "gender": Yup.string().required(),
-        "selected_tests": Yup.array().required(),
+        // "doctor_id": Yup.string().required(),
+        // "email": Yup.string().email().required(),
+        // "full_name": Yup.string().required(),
+        // "phone_number": Yup.string().required().min(11, 'Should be exactly 11 digits').max(11, 'Should be exactly 11 digits'),
+        // "gender": Yup.string().required(),
+        // "selected_tests": Yup.array().required(),
     }),
     onSubmit:values => {
         if(!selectedTests.length){

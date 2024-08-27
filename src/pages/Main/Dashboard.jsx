@@ -85,7 +85,7 @@ const Dashboard = () => {
 
                         }
                     </p>
-                    <button className="font-semibold flex items-center gap-1 text-primary">
+                    <button onClick={() =>navigate('payments')} className="font-semibold flex items-center gap-1 text-primary">
                         <span className='text-sm' >Visit Wallet</span>
                         <BsArrowRight />
                     </button>
