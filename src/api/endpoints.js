@@ -40,6 +40,7 @@ const endpoints = {
     INITIATE_PAYMENT:'payments/initialize',
     PATIENT_DETAILS:'patient/details',
     PATIENT_ALL_DETAILS:'patient/all-details',
+    CONFIRM_DETAILS:'patient/confirm-details',
   }
 };
 

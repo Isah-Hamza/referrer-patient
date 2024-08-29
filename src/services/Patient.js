@@ -45,6 +45,13 @@ const InitializePayment = (data) => {
     .catch((error) => Promise.reject(error));
 }
 
+const ConfirmDetails = (data) => {
+  return axiosClient()
+    .post(`${endpoints.patient.CONFIRM_DETAILS}`, data)
+    .then((res) => res)
+    .catch((error) => Promise.reject(error));
+}
+
   const GetTestCategories = () => {
     return axiosClient()
       .get(`${endpoints.referrals.TEST_CATEGORIES}`)
@@ -69,6 +76,13 @@ const InitializePayment = (data) => {
 
   const GetPatientDetails = (ref_code) => {
     return axiosClient()
+      .get(`${endpoints.patient.PATIENT_DETAILS}/${ref_code}`)
+      .then((res) => res)
+      .catch((error) => Promise.reject(error));
+  }
+
+  const GetAllPatientDetails = (ref_code) => {
+    return axiosClient()
       .get(`${endpoints.patient.PATIENT_ALL_DETAILS}/${ref_code}`)
       .then((res) => res)
       .catch((error) => Promise.reject(error));
@@ -77,7 +91,7 @@ const InitializePayment = (data) => {
 
 
 export default {
-  ManualBooking, GetDoctors, GetTimeSlots, BookAppointment, InitializePayment, GetPatientDetails,
-  GetReferral, GetRefferals, GetTestCategories, GetTestCategories, GetTests
+  ManualBooking, GetDoctors, GetTimeSlots, BookAppointment, InitializePayment, GetPatientDetails, GetAllPatientDetails,
+  ConfirmDetails, GetReferral, GetRefferals, GetTestCategories, GetTestCategories, GetTests
 };
 

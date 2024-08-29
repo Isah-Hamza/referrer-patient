@@ -77,7 +77,17 @@ const Patient = () => {
         },
     ]
     
-    const { isLoading:loadingPatientDetails, data:patientDetails, refetch:refetchPatientDetails } = useQuery(['patient-details',otp], () => PatientService.GetPatientDetails(otp), {
+    const { isLoading:loadingPatientDetails, data:patientDetails, refetch:refetchPatientDetails , isFetching:fetchingDetails } = useQuery(['patient-details',otp], () => PatientService.GetPatientDetails(otp), {
+        enabled:false,
+        onSuccess: res => {
+            successToast(res.data.message);
+            setPatient(res.data.referral);
+            setProcess('ref');
+            nextStep(); 
+        }
+    })
+    
+    const { isLoading:loadingAllPatientDetails, data:allPatientDetails, refetch:refetchAllPatientDetails , isFetching:fetchingAllDetails } = useQuery(['patient-details',otp], () => PatientService.GetPatientDetails(otp), {
         enabled:false,
         onSuccess: res => {
             successToast(res.data.message);
@@ -195,6 +205,27 @@ const Patient = () => {
         onSubmit:values => {
             console.log(values);
             toggleConfirmed();
+        }
+    })
+
+    const { getFieldProps:getFieldPropsPatient  } = useFormik({
+        enableReinitialize:true,
+        initialValues:{
+            "email": patientDetails?.data?.referral?.patient?.email,
+            "full_name": patientDetails?.data?.referral?.patient?.name,
+            "phone_number": patientDetails?.data?.referral?.patient?.phone,
+            "gender": patientDetails?.data?.referral?.patient?.gender,
+        },
+        validationSchema: Yup.object().shape({
+            email:Yup.string().email().required('This field is required'),
+            full_name:Yup.string().required('This field is required'),
+            phone_number:Yup.string().required('This field is required'),
+            gender:Yup.string().required('This field is required'),
+
+        }),
+        onSubmit:values => {
+            console.log(values);
+            // toggleConfirmed();
         }
     })
 
@@ -440,23 +471,29 @@ const Patient = () => {
                             <p className='font-semibold mb-1' >Patient Details</p>
                             <p className='text-sm' >Please kindly edit and confirm your information below.</p>
                         </div>
-                        <div className="grid gap-5 mt-7">
+                        <form className="grid gap-5 mt-7">
                             <div className="">
-                                <Input disabled={true} defaultValue={'emma.nuella2024@gmail.com'} label={'Email Address'} placeholder={'support@lifebridge.com'} type={'email'} icon={<MdOutlineMarkEmailUnread size={22} />}/>
+                                <Input {...getFieldPropsPatient('email')} disabled={true}  label={'Email Address'} placeholder={'support@lifebridge.com'} type={'email'} icon={<MdOutlineMarkEmailUnread size={22} />}/>
                             </div>
                             <div className="">
-                                <Input defaultValue={'Emmanuella Bami'} label={'Full Name'} placeholder={'John Doe'} icon={<CiUser size={24} />}/>
+                                <Input {...getFieldPropsPatient('full_name')} label={'Full Name'} placeholder={'John Doe'} icon={<CiUser size={24} />}/>
                             </div>
                             <div className="">
-                                <Input defaultValue={'(234) 123-4567-890'} label={'Phone Number'} placeholder={'Phone Number'} icon={<BiPhoneIncoming size={24} />}/>
+                                <Input {...getFieldPropsPatient('phone_number')} label={'Phone Number'} placeholder={'Phone Number'} icon={<BiPhoneIncoming size={24} />}/>
+                            </div>
+                            <div className="">
+                                <Select options={[ { label:"Male",value:"Male" }, {label:"Female", value:"Female" } ]} {...getFieldPropsPatient('gender')} label={'Gender'} placeholder={'Gender'} icon={<SiConcourse size={24} />}/>
+                                {
+                                    touched.gender && errors.gender && <CustomValidationError text={errors.gender} />
+                                }
                             </div>
                             <div className="">
                                 <p className='font-medium mb-1 text-sm' >Invited By</p>
                                 <div className='rounded-full p-1.5 text-sm w-fit bg-custom_gray flex gap-2 px-2 pr-5' >
                                     <img className='w-10' src={avatar} alt="avatar" />
                                     <div>
-                                        <p className='font-semibold' >Emmanuel Igwe</p>
-                                        <p>Code Invite: <span className='font-semibold' >JUPQR</span> </p>
+                                        <p className='font-semibold' >{patientDetails?.data?.referral?.referred_by}</p>
+                                        <p>Code Invite: <span className='font-semibold' >{patientDetails?.data?.referral?.referral_code}</span> </p>
                                     </div>
                                 </div>
                             </div>
@@ -464,7 +501,7 @@ const Patient = () => {
                                 <button onClick={() => {previousStep(); setConfirmed(false)}} className='underline' >back</button>
                                 <Button onClick={toggleConfirmed} className={'!w-fit !px-12 !py-2.5 !text-sm'} title={'Confirm Details'} />
                             </div>
-                        </div>
+                        </form>
                     </>
                     :
                     <>
@@ -603,7 +640,7 @@ const Patient = () => {
         </div>
         </div>
         {
-            (bookingLoading || loadingSlots || bookAppointmentLoading || initializingPayment || loadingPatientDetails) ? <LoadingModal /> : null
+            (bookingLoading || loadingSlots || bookAppointmentLoading || initializingPayment || loadingPatientDetails || fetchingDetails ) ? <LoadingModal /> : null
         }
     </>
   )
