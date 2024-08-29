@@ -38,6 +38,7 @@ const Patient = () => {
     const [selectedTime,setSelectedTime] = useState(null);
     const [doctors, setDoctors] = useState([]);
     const [refCode, setRefCode] = useState("");
+    const [paymentAccessCode, setPaymentAccessCode] = useState('');
 
     const [categories, setCategories] = useState([]);
     const [tests, setTests] = useState([]);
@@ -74,23 +75,20 @@ const Patient = () => {
             desc:'Your appointment is now scheduled. You will receive a confirmation and further instructions.',
         },
     ]
-
     
-  const { isLoading:loadingCategories } = useQuery('test-categories', PatientService.GetTestCategories, {
-    onSuccess: res => {
-      setCategories(res.data.categories.map(item => ({ label:item.name, value:item.cat_id })));
-    }
-  })
+    const { isLoading:loadingCategories } = useQuery('test-categories', PatientService.GetTestCategories, {
+        onSuccess: res => {
+        setCategories(res.data.categories.map(item => ({ label:item.name, value:item.cat_id })));
+        }
+    })
 
-  const { isLoading:loadingTests, mutate:getTests, data:rawTests } = useMutation(PatientService.GetTests, {
-    onSuccess: res => {
-      setTests(res.data.tests.map(item => ({ label:item.name+' ('+ ConvertToNaira(item.price)+')', value:item.test_id })));
-      setSelectedCategoryName(res.data.category);
-    },
-    enabled:false,
-  })
-
-
+    const { isLoading:loadingTests, mutate:getTests, data:rawTests } = useMutation(PatientService.GetTests, {
+        onSuccess: res => {
+        setTests(res.data.tests.map(item => ({ label:item.name+' ('+ ConvertToNaira(item.price)+')', value:item.test_id })));
+        setSelectedCategoryName(res.data.category);
+        },
+        enabled:false,
+    })
 
     const { isLoading:loadingSlots, data:slots, refetch:refetchTimeSlots } = useQuery(['date', date], () => PatientService.GetTimeSlots(moment(date).format('YYYY-MM-DD')), {
         enabled:false,
@@ -117,12 +115,19 @@ const Patient = () => {
     const { isLoading:bookAppointmentLoading , data:appointmentData,  mutate:bookAppointmentMutate } = useMutation(PatientService.BookAppointment, {
         onSuccess:res => { 
             successToast(res.data.message);
-            // setRefCode(res.data.referral_code);
             nextStep();
          },
          onError:e => errorToast(e.message),
     })
-
+    const { isLoading:initializingPayment ,  mutate:initPayment } = useMutation(PatientService.InitializePayment, {
+        onSuccess:res => { 
+            successToast(res.data.message);
+            window.open(res.data.redirection_url,'_blank');
+            setPaymentAccessCode(res.data.access_token);
+            nextStep();
+         },
+         onError:e => errorToast(e.message),
+    })
     
     const personal = [
         {
@@ -195,33 +200,38 @@ const Patient = () => {
         setSelectedTests(prev => [test,...prev])
     }
 
-  const removeTest = (id) => {
-    setSelectedTests(prev => prev.filter(test => test.test_id !== id))
-  }
-
-  const bookManualAppoointment = () => {
-    if(!selectedTests.length){
-      errorToast('Please select at least one test to continue.')
-      return
+    const removeTest = (id) => {
+        setSelectedTests(prev => prev.filter(test => test.test_id !== id))
     }
-    const tests = selectedTests.map(item => item.test_id);
-    values.selected_tests = tests;
-    console.log(values);
 
-    bookManually(values);
-    // toggleSuccessful();
-}
+    const bookManualAppoointment = () => {
+        if(!selectedTests.length){
+        errorToast('Please select at least one test to continue.')
+        return
+        }
+        const tests = selectedTests.map(item => item.test_id);
+        values.selected_tests = tests;
+        console.log(values);
 
-const bookAppointment = () => {
+        bookManually(values);
+        // toggleSuccessful();
+    }
 
-    const payload = {
-        referral_code: refCode || "ZINAUN",
-        date: moment(date).format('YYYY-MM-DD'),
-        time: selectedTime,
-    };
+    const bookAppointment = () => {
 
-    bookAppointmentMutate(payload);
-}
+        const payload = {
+            referral_code: refCode || "ZINAUN",
+            date: moment(date).format('YYYY-MM-DD'),
+            time: selectedTime,
+        };
+
+        bookAppointmentMutate(payload);
+    }
+
+    const initializePayment = () => {
+        const payload = { ref_code: refCode }
+        initPayment(payload);
+    }
 
   useEffect(() => {
     if(selectedCategory) getTests(selectedCategory)
@@ -565,7 +575,7 @@ const bookAppointment = () => {
                             }
                     </div>
                     <div className="mt-10">
-                        <Button title={'Pay Now'} />
+                        <Button onClick={initializePayment} title={'Pay Now'} />
                         <p className='mt-4 text-center text-sm'>
                         Note that,  While payment is optional, we suggest making payment in advance<br />  to ensure prompt service upon your arrival.
                         </p>
@@ -578,7 +588,7 @@ const bookAppointment = () => {
         </div>
         </div>
         {
-            (bookingLoading || loadingSlots || bookAppointmentLoading) ? <LoadingModal /> : null
+            (bookingLoading || loadingSlots || bookAppointmentLoading || initializingPayment) ? <LoadingModal /> : null
         }
     </>
   )

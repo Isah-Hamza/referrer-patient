@@ -37,6 +37,7 @@ const endpoints = {
     ALl_DOCTORS:'patient/all-doctors',
     TIME_SLOTS:'patient/appointments/available-slots',
     BOOK_APPOINTMENT:'patient/book-appointment',
+    INITIATE_PAYMENT:'payments/initialize',
   }
 };
 

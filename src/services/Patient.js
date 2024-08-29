@@ -38,6 +38,13 @@ const BookAppointment = (data) => {
     .catch((error) => Promise.reject(error));
 }
 
+const InitializePayment = (data) => {
+  return axiosClient()
+    .post(`${endpoints.patient.INITIATE_PAYMENT}`, data)
+    .then((res) => res)
+    .catch((error) => Promise.reject(error));
+}
+
   const GetTestCategories = () => {
     return axiosClient()
       .get(`${endpoints.referrals.TEST_CATEGORIES}`)
@@ -62,7 +69,7 @@ const BookAppointment = (data) => {
 
 
 export default {
-  ManualBooking, GetDoctors, GetTimeSlots, BookAppointment,
+  ManualBooking, GetDoctors, GetTimeSlots, BookAppointment, InitializePayment,
   GetReferral, GetRefferals, GetTestCategories, GetTestCategories, GetTests
 };
 
