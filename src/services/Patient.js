@@ -67,9 +67,17 @@ const InitializePayment = (data) => {
   }
 
 
+  const GetPatientDetails = (ref_code) => {
+    return axiosClient()
+      .get(`${endpoints.patient.PATIENT_DETAILS}/${ref_code}`)
+      .then((res) => res)
+      .catch((error) => Promise.reject(error));
+  }
+
+
 
 export default {
-  ManualBooking, GetDoctors, GetTimeSlots, BookAppointment, InitializePayment,
+  ManualBooking, GetDoctors, GetTimeSlots, BookAppointment, InitializePayment, GetPatientDetails,
   GetReferral, GetRefferals, GetTestCategories, GetTestCategories, GetTests
 };
 

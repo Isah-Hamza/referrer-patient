@@ -122,9 +122,9 @@ const Patient = () => {
     const { isLoading:initializingPayment ,  mutate:initPayment } = useMutation(PatientService.InitializePayment, {
         onSuccess:res => { 
             successToast(res.data.message);
-            window.open(res.data.redirection_url,'_blank');
+            window.open(res.data.redirection_link);
             setPaymentAccessCode(res.data.access_token);
-            nextStep();
+            // nextStep();
          },
          onError:e => errorToast(e.message),
     })
@@ -211,7 +211,6 @@ const Patient = () => {
         }
         const tests = selectedTests.map(item => item.test_id);
         values.selected_tests = tests;
-        console.log(values);
 
         bookManually(values);
         // toggleSuccessful();
@@ -290,7 +289,7 @@ const Patient = () => {
                             numInputs={6}
                             placeholder={'J4UT9P'}
                             containerStyle={{ display:'flex', gap:'10px' }}
-                            inputStyle={{ borderBottom:'2px solid #dcdcdc', fontSize:30, width:'1.3em', height:'2em', outline:'none', color:'#9ca3af', fontWeight:700 }}
+                            inputStyle={{ borderBottom:'2px solid #dcdcdc', fontSize:30, width:'1.3em', height:'2em', outline:'none', color:'#000', fontWeight:700 }}
                             renderSeparator={<span> </span>}
                             renderInput={(props) => <input {...props} />}
                             />

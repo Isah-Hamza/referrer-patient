@@ -38,6 +38,7 @@ const endpoints = {
     TIME_SLOTS:'patient/appointments/available-slots',
     BOOK_APPOINTMENT:'patient/book-appointment',
     INITIATE_PAYMENT:'payments/initialize',
+    PATIENT_DETAILS:'patient/details'
   }
 };
 
