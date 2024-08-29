@@ -47,10 +47,7 @@ const Patient = () => {
     const [selectedTest, setSelectedTest] = useState(null);
     const [selectedTests, setSelectedTests] = useState([]);
 
-    const [availableTimes, setAvailableTimes] = useState([
-        '08:30 AM','09:00 AM','10:00 AM','10:45 AM','11:30 AM',
-        '12:00 PM','12:30 PM','01:00 PM','01:15 PM','02:30 PM',
-    ])
+
     const toggleConfirmed = () => setConfirmed(!confirmed);
 
     const nextStep = () => setActiveTab(activeTab + 1);
@@ -76,42 +73,6 @@ const Patient = () => {
             title:'Appointment Summary',
             desc:'Your appointment is now scheduled. You will receive a confirmation and further instructions.',
         },
-    ]
-
-
-    const personal = [
-        {
-            title:'Name',
-            value:'Emmanuella Bami',
-        },
-        {
-            title:'Email Address',
-            value:'emma.nuella2024@gmail.com',
-        },
-        {
-            title:'Phone Number',
-            value:'(234) 123-4567-890',
-        },
-        {
-            title:'Referred By',
-            value:'Emmanuella Igwe',
-        },
-    ]
-
-    const booking = [
-        {
-            title:'Date',
-            value:'27th July, 2024',
-        },
-        {
-            title:'Time',
-            value:'12:00 AM',
-        },
-        {
-            title:'Booking Number',
-            value:'093',
-            span:2,
-        }, 
     ]
 
     
@@ -152,6 +113,51 @@ const Patient = () => {
          },
          onError:e => errorToast(e.message),
     })
+
+    const { isLoading:bookAppointmentLoading , data:appointmentData,  mutate:bookAppointmentMutate } = useMutation(PatientService.BookAppointment, {
+        onSuccess:res => { 
+            successToast(res.data.message);
+            // setRefCode(res.data.referral_code);
+            nextStep();
+         },
+         onError:e => errorToast(e.message),
+    })
+
+    
+    const personal = [
+        {
+            title:'Name',
+            value: appointmentData?.data?.referral?.patient?.name,
+        },
+        {
+            title:'Email Address',
+            value:appointmentData?.data?.referral?.patient?.email,
+        },
+        {
+            title:'Phone Number',
+            value:appointmentData?.data?.referral?.patient?.phone,
+        },
+        {
+            title:'Referred By',
+            value:appointmentData?.data?.referral?.referred_by ?? "_",
+        },
+    ]
+
+    const booking = [
+        {
+            title:'Date',
+            value:moment(appointmentData?.data?.referral?.date.split(' ')[0]).format('ll'),
+        },
+        {
+            title:'Time',
+            value:appointmentData?.data?.referral?.date.split(' ')[1],
+        },
+        {
+            title:'Booking Number',
+            value: appointmentData?.data?.referral?.appointment_number,
+            span:2,
+        }, 
+    ]
 
     const { values, getFieldProps, errors, touched, handleSubmit } = useFormik({
         initialValues:{
@@ -206,12 +212,23 @@ const Patient = () => {
     // toggleSuccessful();
 }
 
+const bookAppointment = () => {
+
+    const payload = {
+        referral_code: refCode || "ZINAUN",
+        date: moment(date).format('YYYY-MM-DD'),
+        time: selectedTime,
+    };
+
+    bookAppointmentMutate(payload);
+}
+
   useEffect(() => {
     if(selectedCategory) getTests(selectedCategory)
   }, [selectedCategory])
   
   useEffect(() => {
-    if(date) refetchTimeSlots();
+    if(date && activeTab == 2) refetchTimeSlots();
   }, [date])
   
 
@@ -496,7 +513,7 @@ const Patient = () => {
                         }
                         <div className="mt-16 flex items-center justify-between">
                                 <button onClick={() => {previousStep();selectedTime('')}} className='underline' >back</button>
-                                <Button disabled={!selectedTime} onClick={nextStep} className={'!w-fit !px-12 !py-2.5 !text-sm'} title={'Book Appointment'} />
+                                <Button disabled={!selectedTime} onClick={bookAppointment} className={'!w-fit !px-12 !py-2.5 !text-sm'} title={'Book Appointment'} />
                         </div>
                     </div>
                 </div>
@@ -506,7 +523,7 @@ const Patient = () => {
                 <div className="grid text-center">
                     <img className='w-32 mx-auto' src={success} alt="success" />
                     <p className='font-semibold mb-1' >Your Appointment has been booked successfully</p>
-                    <p className='text-sm' >Dear Emmanuella Bami, you'll soon receive your booking confirmation via email within 5 minutes. Kindly review your booking details below:</p>
+                    <p className='text-sm' >Dear {appointmentData?.data?.referral?.patient?.name}, you'll soon receive your booking confirmation via email within 5 minutes. Kindly review your booking details below:</p>
                     <div className="font-medium border-b mt-14 pb-2 text-sm">PERSONAL DETAILS</div>
                     <div className="grid grid-cols-2 gap-10 mt-10">
                         {
@@ -521,16 +538,16 @@ const Patient = () => {
                     <div className="font-medium border-b mt-14 pb-2 text-sm">TEST DETAILS</div>
                     <div className="grid grid-cols-2 gap-10 mt-10 text-center">
                         {
-                            selectedTests.map((item,idx) => (
+                            appointmentData?.data?.referral?.selected_tests?.map((item,idx) => (
                                 <div key={idx} className="text-sm text-center">
                                     <div className="mb-2 font-semibold flex gap-2 justify-center items-center">
-                                        <p className='' >{idx + 1}.</p>
-                                        <p className='' >{item.type}</p>
+                                        <p className='' >{item.test_id}.</p>
+                                        <p className='' >{item.name}</p>
                                     </div>
                                     <div className="flex items-center justify-center gap-2">
                                         <p className='' >{item.category}</p>
                                         &bull;
-                                        <p className='' >{item.amount}</p>
+                                        <p className='' >{ConvertToNaira(item.price)}</p>
                                     </div>
                                 </div>
                             ))
@@ -561,7 +578,7 @@ const Patient = () => {
         </div>
         </div>
         {
-            (bookingLoading || loadingSlots ) ? <LoadingModal /> : null
+            (bookingLoading || loadingSlots || bookAppointmentLoading) ? <LoadingModal /> : null
         }
     </>
   )
