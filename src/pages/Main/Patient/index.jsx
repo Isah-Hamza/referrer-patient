@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import logo from '../../../assets/images/logo.svg';
 import Button from '../../../components/Button'
 import { FcGoogle } from 'react-icons/fc';
@@ -7,32 +7,46 @@ import OTPInput from 'react-otp-input';
 import Input from '../../../components/Inputs';
 import { CiUser } from 'react-icons/ci';
 import { MdOutlineMarkEmailUnread } from 'react-icons/md';
-import { BiPhoneIncoming } from 'react-icons/bi';
+import { BiPhone, BiPhoneIncoming } from 'react-icons/bi';
 import avatar from '../../../assets/images/stacey.svg';
 import tick from  '../../../assets/images/Tick.svg';
 import { PiTestTubeFill } from 'react-icons/pi';
 import Select from '../../../components/Inputs/Select';
-import { BsFillTrashFill } from 'react-icons/bs';
+import { BsFillTrashFill, BsPlus } from 'react-icons/bs';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import success from '../../../assets/images/success.svg';
 import { useMutation, useQuery } from 'react-query';
 import PatientService from '../../../services/Patient';
-import { errorToast, successToast } from '../../../utils/Helper';
+import { ConvertToNaira, errorToast, successToast } from '../../../utils/Helper';
 import LoadingModal from '../../../Loader/LoadingModal';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
+import { SiConcourse } from 'react-icons/si';
+import { CustomValidationError } from '../../../components/Register/StepOne';
+import moment from 'moment';
 
+// ZINAUN -> sample refcode
 
 const Patient = () => {
     const navigate = useNavigate();
     const [otp, setOtp] = useState('');
-    const [activeTab, setActiveTab] = useState(0);
+    const [activeTab, setActiveTab] = useState(2);
     const [process, setProcess] = useState('');
     const [confirmed, setConfirmed] = useState(false);
-    const [date, setDate] = useState();
+    const [date, setDate] = useState(moment().format('YYYY-MM-DD'));
     const [selectedTime,setSelectedTime] = useState(null);
     const [doctors, setDoctors] = useState([]);
+    const [refCode, setRefCode] = useState("");
+
+    const [categories, setCategories] = useState([]);
+    const [tests, setTests] = useState([]);
+    const [successful, setSuccessful] = useState(false);
+    const [selectedCategory, setSelectedCategory] = useState(null);
+    const [selectedCategoryName, setSelectedCategoryName] = useState(null);
+    const [selectedTest, setSelectedTest] = useState(null);
+    const [selectedTests, setSelectedTests] = useState([]);
+
     const [availableTimes, setAvailableTimes] = useState([
         '08:30 AM','09:00 AM','10:00 AM','10:45 AM','11:30 AM',
         '12:00 PM','12:30 PM','01:00 PM','01:15 PM','02:30 PM',
@@ -64,35 +78,6 @@ const Patient = () => {
         },
     ]
 
-    const selectedTests = [
-        {
-          type:'C.T. Scan - Pelvimetry',
-          category:'C.T Test',
-          amount:'₦28,000',
-        },
-        {
-            type:'Menstrual Irregularities',
-            category:'Endocrinology',
-            amount:'₦8,000',
-        },
-        {
-          type:'C.T. Scan - Pelvimetry',
-          category:'C.T Test',
-          amount:'₦28,000',
-        },
-        {
-            type:'Fibronology',
-            category:'HAEMATOLOGY',
-            amount:'₦5,500',
-        },
-    ]
-
-    const emptyOption = [
-        {
-          label:'Select an option',
-          value:0
-        }, 
-      ]
 
     const personal = [
         {
@@ -129,6 +114,30 @@ const Patient = () => {
         }, 
     ]
 
+    
+  const { isLoading:loadingCategories } = useQuery('test-categories', PatientService.GetTestCategories, {
+    onSuccess: res => {
+      setCategories(res.data.categories.map(item => ({ label:item.name, value:item.cat_id })));
+    }
+  })
+
+  const { isLoading:loadingTests, mutate:getTests, data:rawTests } = useMutation(PatientService.GetTests, {
+    onSuccess: res => {
+      setTests(res.data.tests.map(item => ({ label:item.name+' ('+ ConvertToNaira(item.price)+')', value:item.test_id })));
+      setSelectedCategoryName(res.data.category);
+    },
+    enabled:false,
+  })
+
+
+
+    const { isLoading:loadingSlots, data:slots, refetch:refetchTimeSlots } = useQuery(['date', date], () => PatientService.GetTimeSlots(moment(date).format('YYYY-MM-DD')), {
+        enabled:false,
+        onSuccess:res => {successToast(res.data.message); setSelectedTime(null)},
+        onError:e => errorToast(e.message ?? "The Date Must be Today or Later"),
+        retry:0,
+    })
+
     const { isLoading:loadingDoctors, data } = useQuery('doctors', PatientService.GetDoctors, {
         onSuccess : res => {
             setDoctors(res.data.referrals.map(item =>({ value:item.doctor_id, label:item.doctor_fullname+' ('+item.doctor_phone+')' })))
@@ -138,29 +147,74 @@ const Patient = () => {
     const { isLoading:bookingLoading , mutate:bookManually } = useMutation(PatientService.ManualBooking, {
         onSuccess:res => { 
             successToast(res.data.message);
+            setRefCode(res.data.referral_code);
+            nextStep();
          },
          onError:e => errorToast(e.message),
     })
 
-    const { } = useFormik({
-        intitialValues:{
+    const { values, getFieldProps, errors, touched, handleSubmit } = useFormik({
+        initialValues:{
             "email": "",
             "full_name": "",
             "phone_number": "",
             "gender": "",
+            "doctor_id":"",
             "selected_tests": []
         },
         validationSchema: Yup.object().shape({
             email:Yup.string().email().required('This field is required'),
             full_name:Yup.string().required('This field is required'),
             phone_number:Yup.string().required('This field is required'),
-            // gender:Yup.string().required('This field is required'),
+            gender:Yup.string().required('This field is required'),
 
         }),
         onSubmit:values => {
             console.log(values);
+            toggleConfirmed();
         }
     })
+
+    const addTest = () => {
+        const matchedTest = rawTests?.data?.tests.find(item => item.test_id == selectedTest);
+        console.log(matchedTest);
+
+        const test = {
+        price: matchedTest.price,
+        test: matchedTest.name,
+        category: selectedCategoryName,
+        test_id: matchedTest.test_id,
+        }
+
+        setSelectedTests(prev => [test,...prev])
+    }
+
+  const removeTest = (id) => {
+    setSelectedTests(prev => prev.filter(test => test.test_id !== id))
+  }
+
+  const bookManualAppoointment = () => {
+    if(!selectedTests.length){
+      errorToast('Please select at least one test to continue.')
+      return
+    }
+    const tests = selectedTests.map(item => item.test_id);
+    values.selected_tests = tests;
+    console.log(values);
+
+    bookManually(values);
+    // toggleSuccessful();
+}
+
+  useEffect(() => {
+    if(selectedCategory) getTests(selectedCategory)
+  }, [selectedCategory])
+  
+  useEffect(() => {
+    if(date) refetchTimeSlots();
+  }, [date])
+  
+
 
   return (
     <>
@@ -237,25 +291,40 @@ const Patient = () => {
                             <p className='font-semibold mb-1' >Patient Details</p>
                             <p className='text-sm' >Please kindly edit and confirm your information below.</p>
                         </div>
-                        <div className="grid gap-5 mt-7">
+                        <form onSubmit={handleSubmit} className="grid gap-5 mt-7">
                             <div className="">
-                                <Input label={'Email Address'} placeholder={'support@lifebridge.com'} type={'email'} icon={<MdOutlineMarkEmailUnread size={22} />}/>
+                                <Input {...getFieldProps('email')} label={'Email Address'} placeholder={'support@lifebridge.com'} type={'email'} icon={<MdOutlineMarkEmailUnread size={22} />}/>
+                                {
+                                    touched.email && errors.email && <CustomValidationError text={errors.email} />
+                                }
                             </div>
                             <div className="">
-                                <Input label={'Full Name'} placeholder={'Emmanuella John'} icon={<CiUser size={24} />}/>
+                                <Input {...getFieldProps('full_name')} label={'Full Name'} placeholder={'Emmanuella John'} icon={<CiUser size={24} />}/>
+                                {
+                                    touched.full_name && errors.full_name && <CustomValidationError text={errors.full_name} />
+                                }
                             </div>
                             <div className="">
-                                <Input label={'Phone Number'} placeholder={'Phone Number'} icon={<BiPhoneIncoming size={24} />}/>
+                                <Input {...getFieldProps('phone_number')} label={'Phone Number'} placeholder={'09017693317'} icon={<BiPhone size={24} />}/>
+                                {
+                                    touched.phone_number && errors.phone_number && <CustomValidationError text={errors.phone_number} />
+                                }
                             </div>
                             <div className="">
-                                <Select options={doctors} label={'Who is Referring You?'} placeholder={'Emmanuella Bami'} icon={<CiUser size={24} />}/>
+                                <Select options={[ { label:"Male",value:"Male" }, {label:"Female", value:"Female" } ]} {...getFieldProps('gender')} label={'Gender'} placeholder={'Gender'} icon={<SiConcourse size={24} />}/>
+                                {
+                                    touched.gender && errors.gender && <CustomValidationError text={errors.gender} />
+                                }
+                            </div>
+                            <div className="">
+                                <Select {...getFieldProps('doctor_id')} options={doctors} label={'Who is Referring You?'} placeholder={'Emmanuella Bami'} icon={<CiUser size={24} />}/>
                             </div>
                         
                             <div className="mt-20 flex items-center justify-between">
-                                <button onClick={() => {previousStep(); setConfirmed(false)}} className='underline' >back</button>
-                                <Button onClick={toggleConfirmed} className={'!w-fit !px-12 !py-2.5 !text-sm'} title={'Confirm Details'} />
+                                <button type='button' onClick={() => {previousStep(); setConfirmed(false)}} className='underline' >back</button>
+                                <Button type='submit' className={'!w-fit !px-12 !py-2.5 !text-sm'} title={'Confirm Details'} />
                             </div>
-                        </div>
+                        </form>
                     </>
                     :
                     <>
@@ -265,10 +334,10 @@ const Patient = () => {
                                 <button onClick={toggleConfirmed} className='underline text-sm' >Edit Details</button>
                             </div>
                             <div className="grid gap-3 text-sm pb-10 border-b">
-                                <p className='text-sm' >Emmanuella Bami</p>
-                                <p className='text-sm' >emma.nuella2024@gmail.com</p>
-                                <p>(234) 123-4567-890</p>
-                                <p>Refered by: Emmanuella Igwe</p>
+                                <p className='text-sm' >{ values.full_name} ({values.gender})</p>
+                                <p className='text-sm' >{values.email}</p>
+                                <p>{values.phone_number}</p>
+                                <p>Refered by: {doctors.find(item => item.value == values.doctor_id)?.label ??  "N/A"}</p>
                             </div>
                             <div className="mt-6">
                                 <div id='' className="">
@@ -276,11 +345,16 @@ const Patient = () => {
                                     <p className='text-sm' >Review and proceed to book appointment.</p>
                                 </div>
                                 <div className="mt-6">
-                                    <Select label={'Test Category'} options={emptyOption}  icon={<PiTestTubeFill size={22} />}/>
+                                    <Select
+                                    onChange={e => {setSelectedCategory(e.target.value)}}
+                                    label={'Test Category'} options={categories}  icon={<PiTestTubeFill size={22} />}/>
                                 </div>
                                 <div className="mt-4">
-                                    <Select label={'Test Type'} options={emptyOption}  icon={<PiTestTubeFill size={22} />}/>
+                                    <Select label={'Test Type'}  onChange={e => setSelectedTest(e.target.value)} options={tests}  icon={<PiTestTubeFill size={22} />}/>
                                 </div>
+                                <button onClick={addTest} type='button' className=" mt-2 flex ml-auto items-center gap-1 text-sm font-semibold">
+                                <BsPlus /> Add Test
+                                </button>
                                 <div className="mt-7 flex items-center gap-2">
                                     <p className='font-semibold mb-1' >Selected Tests</p>
                                     <hr className='flex-1 bg-[gainsboro] text-[gainsboro]' />
@@ -289,10 +363,10 @@ const Patient = () => {
                                     {
                                     selectedTests.map((item,idx) => (
                                         <div key={idx} className='relative grid  text-sm bg-[#f9f9f9] border p-3 rounded-lg ' >
-                                        <p className='font-medium mb-1' >{ item.type }</p>  
-                                        <p className='uppercase mb-10' >{ item.category }</p>  
-                                        <p className='mt-auto text-light_blue text-lg font-semibold' >{ item.amount }</p>
-                                        <button className="absolute -top-3 -right-3 w-9 h-9 rounded-full bg-white border grid place-content-center">
+                                        <p className='font-medium mb-1' >{ item.category }</p>  
+                                        <p className='uppercase mb-10' >{ item.test }</p>  
+                                        <p className='mt-auto text-light_blue text-lg font-semibold' >{ConvertToNaira(item.price) }</p>
+                                        <button type='button' onClick={() => removeTest(item.test_id)} className="absolute -top-3 -right-3 w-9 h-9 rounded-full bg-white border grid place-content-center">
                                         <BsFillTrashFill size={15} color='red' />
                                         </button>  
                                         </div>
@@ -300,10 +374,16 @@ const Patient = () => {
                                     }
                                 </div>
                                 <div className="mt-4">
-                                    <p className='text-sm'>Total Test Amount: <span className='font-semibold'>₦54,500</span></p>
+                                    {
+                                        selectedTests.length ? 
+                                        <p className='text-sm'>Total Test Amount: <span className='font-semibold'> { ConvertToNaira(selectedTests.reduce((prev, curr) => {return prev += Number(curr.price)}, 0)) }</span></p>
+                                        :  <div className="mt-5 mb-32 text-center font-medium text-sm">
+                                        <p>No Test Selected Yet.</p>
+                                      </div>
+                                    }
                                     <div className="mt-16 flex items-center justify-between">
                                         <button onClick={() => {previousStep(); setConfirmed(false)}} className='underline' >back</button>
-                                        <Button onClick={nextStep} className={'!w-fit !px-12 !py-2.5 !text-sm'} title={'Proceed To Appointment'} />
+                                        <Button onClick={bookManualAppoointment} className={'!w-fit !px-12 !py-2.5 !text-sm'} title={'Proceed To Appointment'} />
                                     </div>
                                 </div>
                             </div>
@@ -403,10 +483,10 @@ const Patient = () => {
                     <div className="mt-10 max-w-[600px]">
                         {
                         date ?  <>
-                                <p className='font-semibold' >Available Time Slots</p>
+                                <p className='font-semibold' >Available Time Slots ({JSON.stringify(moment(date).format('ll'))})</p>
                                 <div className="mt-5 grid grid-cols-4 gap-5">
                                     {
-                                        availableTimes.map((time,idx) => (
+                                        slots?.data?.available_slots?.map((time,idx) => (
                                             <button onClick={() => setSelectedTime(time)} key={idx} 
                                             className={`border rounded-2xl px-7 py-2 text-sm ${time == selectedTime && 'text-white font-medium bg-light_blue'}`} >{time}</button>
                                         ))
@@ -481,7 +561,7 @@ const Patient = () => {
         </div>
         </div>
         {
-            (bookingLoading) ? <LoadingModal /> : null
+            (bookingLoading || loadingSlots ) ? <LoadingModal /> : null
         }
     </>
   )

@@ -31,6 +31,13 @@ const ManualBooking = (data) => {
     .catch((error) => Promise.reject(error));
 }
 
+const BookAppointment = (data) => {
+  return axiosClient()
+    .post(`${endpoints.patient.BOOK_APPOINTMENT}`, data)
+    .then((res) => res)
+    .catch((error) => Promise.reject(error));
+}
+
   const GetTestCategories = () => {
     return axiosClient()
       .get(`${endpoints.referrals.TEST_CATEGORIES}`)
@@ -45,10 +52,17 @@ const ManualBooking = (data) => {
       .catch((error) => Promise.reject(error));
   }
 
+  const GetTimeSlots = (date) => {
+    return axiosClient()
+      .get(`${endpoints.patient.TIME_SLOTS}?date=${date}`)
+      .then((res) => res)
+      .catch((error) => Promise.reject(error));
+  }
+
 
 
 export default {
-  ManualBooking, GetDoctors,
+  ManualBooking, GetDoctors, GetTimeSlots, BookAppointment,
   GetReferral, GetRefferals, GetTestCategories, GetTestCategories, GetTests
 };
 

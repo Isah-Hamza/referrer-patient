@@ -35,6 +35,8 @@ const endpoints = {
   patient:{
     MANUAL_BOOKIGN:'patient/manual-booking',
     ALl_DOCTORS:'patient/all-doctors',
+    TIME_SLOTS:'patient/appointments/available-slots',
+    BOOK_APPOINTMENT:'patient/book-appointment',
   }
 };
 
