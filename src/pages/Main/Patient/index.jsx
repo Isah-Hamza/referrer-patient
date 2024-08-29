@@ -83,17 +83,17 @@ const Patient = () => {
             successToast(res.data.message);
             setPatient(res.data.referral);
             setProcess('ref');
-            nextStep(); 
-        }
+            if(activeTab == 0) nextStep(); 
+           
+        },
+        onError: e => errorToast(e.message),
     })
     
-    const { isLoading:loadingAllPatientDetails, data:allPatientDetails, refetch:refetchAllPatientDetails , isFetching:fetchingAllDetails } = useQuery(['patient-details',otp], () => PatientService.GetPatientDetails(otp), {
+    const { isLoading:loadingAllPatientDetails, data:allPatientDetails, refetch:refetchAllPatientDetails , isFetching:fetchingAllDetails } = useQuery(['patient-all-details',otp], () => PatientService.GetAllPatientDetails(otp), {
         enabled:false,
         onSuccess: res => {
             successToast(res.data.message);
             setPatient(res.data.referral);
-            setProcess('ref');
-            nextStep(); 
         }
     })
     
@@ -101,6 +101,14 @@ const Patient = () => {
         onSuccess: res => {
         setCategories(res.data.categories.map(item => ({ label:item.name, value:item.cat_id })));
         }
+    })
+
+    const { isLoading:confirmingDetails, mutate:confirmDetails } = useMutation(PatientService.ConfirmDetails, {
+        onSuccess: res => {
+            successToast(res.data.message);
+            setConfirmed(true);
+        },
+        onError: e => errorToast(e.message),
     })
 
     const { isLoading:loadingTests, mutate:getTests, data:rawTests } = useMutation(PatientService.GetTests, {
@@ -208,7 +216,7 @@ const Patient = () => {
         }
     })
 
-    const { getFieldProps:getFieldPropsPatient  } = useFormik({
+    const { getFieldProps:getFieldPropsPatient, handleSubmit:handleSubmitPatient  } = useFormik({
         enableReinitialize:true,
         initialValues:{
             "email": patientDetails?.data?.referral?.patient?.email,
@@ -225,7 +233,15 @@ const Patient = () => {
         }),
         onSubmit:values => {
             console.log(values);
-            // toggleConfirmed();
+
+            const payload = {
+                full_name:values.full_name,
+                phone_number:values.phone_number,
+                patient_id: patientDetails?.data?.referral?.patient?.patient_id,
+            }
+
+            confirmDetails(payload);
+            
         }
     })
 
@@ -259,10 +275,14 @@ const Patient = () => {
         // toggleSuccessful();
     }
 
+    const bookAppointmentByRef = () => {
+        nextStep()
+    }
+
     const bookAppointment = () => {
 
         const payload = {
-            referral_code: refCode || "ZINAUN",
+            referral_code: process == 'manual' ? refCode : patient?.referral_code,
             date: moment(date).format('YYYY-MM-DD'),
             time: selectedTime,
         };
@@ -271,11 +291,12 @@ const Patient = () => {
     }
 
     const initializePayment = () => {
-        const payload = { ref_code: refCode }
+        const payload = { ref_code: process == 'manual' ?  refCode : patient?.referral_code }
         initPayment(payload);
     }
 
     const verify = () => {
+        setConfirmed(false);
         refetchPatientDetails()
     }
 
@@ -286,6 +307,11 @@ const Patient = () => {
   useEffect(() => {
     if(date && activeTab == 2) refetchTimeSlots();
   }, [date])
+
+  useEffect(() => {
+    if(activeTab == 1 && confirmed ) refetchAllPatientDetails();
+  }, [activeTab,confirmed])
+  
 
   
 
@@ -349,7 +375,7 @@ const Patient = () => {
                                 <hr className='flex-1' />
                             </div>
                             <button 
-                                onClick={() => {setProcess('manual'); nextStep()}} 
+                                onClick={() => {setConfirmed(false); setProcess('manual'); nextStep()}} 
                                 className='w-full font-medium justify-center flex items-center gap-2 py-2.5 border bg-white rounded-[30px]' > 
                             Book Appointment </button>
                     </div>
@@ -471,7 +497,7 @@ const Patient = () => {
                             <p className='font-semibold mb-1' >Patient Details</p>
                             <p className='text-sm' >Please kindly edit and confirm your information below.</p>
                         </div>
-                        <form className="grid gap-5 mt-7">
+                        <form onSubmit={handleSubmitPatient} className="grid gap-5 mt-7">
                             <div className="">
                                 <Input {...getFieldPropsPatient('email')} disabled={true}  label={'Email Address'} placeholder={'support@lifebridge.com'} type={'email'} icon={<MdOutlineMarkEmailUnread size={22} />}/>
                             </div>
@@ -499,7 +525,7 @@ const Patient = () => {
                             </div>
                             <div className="mt-20 flex items-center justify-between">
                                 <button onClick={() => {previousStep(); setConfirmed(false)}} className='underline' >back</button>
-                                <Button onClick={toggleConfirmed} className={'!w-fit !px-12 !py-2.5 !text-sm'} title={'Confirm Details'} />
+                                <Button type='submit' className={'!w-fit !px-12 !py-2.5 !text-sm'} title={'Confirm Details'} />
                             </div>
                         </form>
                     </>
@@ -523,7 +549,7 @@ const Patient = () => {
                                 </div>
                                 <div className="mt-7 grid grid-cols-2 gap-3">
                                     {
-                                        patient?.selected_tests.map((item,idx) => (
+                                        patient?.selected_tests?.map((item,idx) => (
                                         <div key={idx} className='relative grid  text-sm bg-[#f9f9f9] border p-3 rounded-lg ' >
                                             <p className='font-medium mb-1' >{ item.name }</p>  
                                             <p className='uppercase mb-7' >{ item.category }</p>  
@@ -539,7 +565,7 @@ const Patient = () => {
                                     <p className='text-sm'>Total Test Amount: <span className='font-semibold'>{ConvertToNaira(patient?.total_test_amount)}</span></p>
                                     <div className="mt-16 flex items-center justify-between">
                                         <button onClick={() => {previousStep(); setConfirmed(false)}} className='underline' >back</button>
-                                        <Button onClick={nextStep} className={'!w-fit !px-12 !py-2.5 !text-sm'} title={'Proceed To Appointment'} />
+                                        <Button onClick={bookAppointmentByRef} className={'!w-fit !px-12 !py-2.5 !text-sm'} title={'Proceed To Appointment'} />
                                     </div>
                                 </div>
                             </div>
@@ -640,7 +666,7 @@ const Patient = () => {
         </div>
         </div>
         {
-            (bookingLoading || loadingSlots || bookAppointmentLoading || initializingPayment || loadingPatientDetails || fetchingDetails ) ? <LoadingModal /> : null
+            (bookingLoading || loadingSlots || bookAppointmentLoading || initializingPayment || loadingPatientDetails || fetchingDetails || confirmingDetails ) ? <LoadingModal /> : null
         }
     </>
   )
