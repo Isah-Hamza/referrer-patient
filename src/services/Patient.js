@@ -69,7 +69,7 @@ const InitializePayment = (data) => {
 
   const GetPatientDetails = (ref_code) => {
     return axiosClient()
-      .get(`${endpoints.patient.PATIENT_DETAILS}/${ref_code}`)
+      .get(`${endpoints.patient.PATIENT_ALL_DETAILS}/${ref_code}`)
       .then((res) => res)
       .catch((error) => Promise.reject(error));
   }

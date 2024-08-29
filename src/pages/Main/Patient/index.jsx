@@ -39,6 +39,7 @@ const Patient = () => {
     const [doctors, setDoctors] = useState([]);
     const [refCode, setRefCode] = useState("");
     const [paymentAccessCode, setPaymentAccessCode] = useState('');
+    const [patient, setPatient] = useState(null);
 
     const [categories, setCategories] = useState([]);
     const [tests, setTests] = useState([]);
@@ -75,6 +76,16 @@ const Patient = () => {
             desc:'Your appointment is now scheduled. You will receive a confirmation and further instructions.',
         },
     ]
+    
+    const { isLoading:loadingPatientDetails, data:patientDetails, refetch:refetchPatientDetails } = useQuery(['patient-details',otp], () => PatientService.GetPatientDetails(otp), {
+        enabled:false,
+        onSuccess: res => {
+            successToast(res.data.message);
+            setPatient(res.data.referral);
+            setProcess('ref');
+            nextStep(); 
+        }
+    })
     
     const { isLoading:loadingCategories } = useQuery('test-categories', PatientService.GetTestCategories, {
         onSuccess: res => {
@@ -119,6 +130,7 @@ const Patient = () => {
          },
          onError:e => errorToast(e.message),
     })
+
     const { isLoading:initializingPayment ,  mutate:initPayment } = useMutation(PatientService.InitializePayment, {
         onSuccess:res => { 
             successToast(res.data.message);
@@ -232,6 +244,10 @@ const Patient = () => {
         initPayment(payload);
     }
 
+    const verify = () => {
+        refetchPatientDetails()
+    }
+
   useEffect(() => {
     if(selectedCategory) getTests(selectedCategory)
   }, [selectedCategory])
@@ -239,8 +255,8 @@ const Patient = () => {
   useEffect(() => {
     if(date && activeTab == 2) refetchTimeSlots();
   }, [date])
-  
 
+  
 
   return (
     <>
@@ -295,7 +311,7 @@ const Patient = () => {
                             />
                         </div>
                     <div className='mt-20 ' >
-                            <Button className={'!py-2.5'} onClick={() => {nextStep(); setProcess('ref')}} title='Verify Referral' />
+                            <Button className={'!py-2.5'} onClick={verify} title='Verify Referral' />
                             <div className="flex items-center gap-2 my-7">
                                 <hr className='flex-1' />
                                 <span className='font-semibold text-sm' >OR</span>
@@ -458,10 +474,10 @@ const Patient = () => {
                                 <button onClick={toggleConfirmed} className='underline text-sm' >Edit Details</button>
                             </div>
                             <div className="grid gap-3 text-sm pb-16 border-b">
-                                <p className='text-sm' >Emmanuella Bami</p>
-                                <p className='text-sm' >emma.nuella2024@gmail.com</p>
-                                <p>(234) 123-4567-890</p>
-                                <p>Refered by: Emmanuella Igwe</p>
+                                <p className='text-sm' >{patient?.patient?.name}</p>
+                                <p className='text-sm' >{patient?.patient?.email}</p>
+                                <p>{patient?.patient?.phone}</p>
+                                <p>Refered by: {patient?.referred_by}</p>
                             </div>
                             <div className="mt-10">
                                 <div id='' className="">
@@ -470,20 +486,20 @@ const Patient = () => {
                                 </div>
                                 <div className="mt-7 grid grid-cols-2 gap-3">
                                     {
-                                        selectedTests.map((item,idx) => (
+                                        patient?.selected_tests.map((item,idx) => (
                                         <div key={idx} className='relative grid  text-sm bg-[#f9f9f9] border p-3 rounded-lg ' >
-                                        <p className='font-medium mb-1' >{ item.type }</p>  
-                                        <p className='uppercase mb-7' >{ item.category }</p>  
-                                        <p className='mt-auto text-light_blue text-lg font-semibold' >{ item.amount }</p>
-                                        {/* <button className="absolute -top-3 -right-3 w-9 h-9 rounded-full bg-white border grid place-content-center">
-                                            <BsFillTrashFill size={15} color='red' />
-                                            </button>   */}
+                                            <p className='font-medium mb-1' >{ item.name }</p>  
+                                            <p className='uppercase mb-7' >{ item.category }</p>  
+                                            <p className='mt-auto text-light_blue text-lg font-semibold' >{ ConvertToNaira(item.price) }</p>
+                                            {/* <button className="absolute -top-3 -right-3 w-9 h-9 rounded-full bg-white border grid place-content-center">
+                                                <BsFillTrashFill size={15} color='red' />
+                                                </button>   */}
                                         </div>
                                         ))
                                     }
                                 </div>
                                 <div className="mt-4">
-                                    <p className='text-sm'>Total Test Amount: <span className='font-semibold'>₦54,500</span></p>
+                                    <p className='text-sm'>Total Test Amount: <span className='font-semibold'>{ConvertToNaira(patient?.total_test_amount)}</span></p>
                                     <div className="mt-16 flex items-center justify-between">
                                         <button onClick={() => {previousStep(); setConfirmed(false)}} className='underline' >back</button>
                                         <Button onClick={nextStep} className={'!w-fit !px-12 !py-2.5 !text-sm'} title={'Proceed To Appointment'} />
@@ -587,7 +603,7 @@ const Patient = () => {
         </div>
         </div>
         {
-            (bookingLoading || loadingSlots || bookAppointmentLoading || initializingPayment) ? <LoadingModal /> : null
+            (bookingLoading || loadingSlots || bookAppointmentLoading || initializingPayment || loadingPatientDetails) ? <LoadingModal /> : null
         }
     </>
   )
