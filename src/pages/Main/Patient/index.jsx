@@ -79,6 +79,7 @@ const Patient = () => {
     
     const { isLoading:loadingPatientDetails, data:patientDetails, refetch:refetchPatientDetails , isFetching:fetchingDetails } = useQuery(['patient-details',otp], () => PatientService.GetPatientDetails(otp), {
         enabled:false,
+        retry:1,
         onSuccess: res => {
             successToast(res.data.message);
             setPatient(res.data.referral);
@@ -91,6 +92,7 @@ const Patient = () => {
     
     const { isLoading:loadingAllPatientDetails, data:allPatientDetails, refetch:refetchAllPatientDetails , isFetching:fetchingAllDetails } = useQuery(['patient-all-details',otp], () => PatientService.GetAllPatientDetails(otp), {
         enabled:false,
+        retry:1,
         onSuccess: res => {
             successToast(res.data.message);
             setPatient(res.data.referral);
