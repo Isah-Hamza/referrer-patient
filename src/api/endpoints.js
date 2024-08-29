@@ -31,6 +31,10 @@ const endpoints = {
     UPDATE_PASSWORD:'doctor/password-update',
     UPDATE_ACCOUNT:'doctor/account-update',
     UPDATE_PROFILE:'doctor/profile-update',
+  },
+  patient:{
+    MANUAL_BOOKIGN:'patient/manual-booking',
+    ALl_DOCTORS:'patient/all-doctors',
   }
 };
 
