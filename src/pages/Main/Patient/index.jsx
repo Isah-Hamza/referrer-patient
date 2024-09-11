@@ -31,7 +31,7 @@ import moment from 'moment';
 const Patient = () => {
     const navigate = useNavigate();
     const [otp, setOtp] = useState('');
-    const [activeTab, setActiveTab] = useState(2);
+    const [activeTab, setActiveTab] = useState(0);
     const [process, setProcess] = useState('');
     const [confirmed, setConfirmed] = useState(false);
     const [date, setDate] = useState(moment().format('YYYY-MM-DD'));
@@ -631,7 +631,7 @@ const Patient = () => {
                             appointmentData?.data?.referral?.selected_tests?.map((item,idx) => (
                                 <div key={idx} className="text-sm text-center">
                                     <div className="mb-2 font-semibold flex gap-2 justify-center items-center">
-                                        <p className='' >{item.test_id}.</p>
+                                        <p className='' >{idx + 1}.</p>
                                         <p className='' >{item.name}</p>
                                     </div>
                                     <div className="flex items-center justify-center gap-2">

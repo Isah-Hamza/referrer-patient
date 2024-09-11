@@ -93,12 +93,12 @@ function App() {
   return (
     // <Register />
     <>
-    <ToastContainer
+  <ToastContainer
     theme="colored"
     hideProgressBar
     pauseOnHover
     draggable
-    autoClose={false}
+    autoClose={true}
     closeOnClick={true}
     stacked={false}
     position="top-right"
