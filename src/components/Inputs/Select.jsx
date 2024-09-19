@@ -12,7 +12,7 @@ const Select = ({options, className, label, labelClass, value, onChange,icon, ..
           value={value}
           {...rest}
         >
-          <option disabled className="text-text_color" value={""}>Select</option>
+          <option className="text-text_color" value={""}>Select</option>
           {options?.map((item, idx) => (
             <option key={idx} value={item.value ?? item.id}>
               {item.label ?? item.text ?? item.name}

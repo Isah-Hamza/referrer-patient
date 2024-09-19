@@ -32,11 +32,11 @@ const New = ({ toggleNewReferral, refetch }) => {
 
   const toggleSuccessful = () => setSuccessful(!successful);
 
-  const { isLoading:creatingReferral, mutate:createReferrer } = useMutation(Referrals.CreateReferrer, {
+  const { data, isLoading:creatingReferral, mutate:createReferrer } = useMutation(Referrals.CreateReferrer, {
     onSuccess:res => {
       refetch();
       successToast(res.data.message);
-      close();
+      // close();
     },
     onError: e => {
       errorToast(e.message);
@@ -70,7 +70,7 @@ const New = ({ toggleNewReferral, refetch }) => {
         values.selected_tests = tests;
         console.log(values);
         createReferrer(values);
-        // toggleSuccessful();
+        toggleSuccessful();
     }
 })
 
@@ -254,11 +254,11 @@ const New = ({ toggleNewReferral, refetch }) => {
        <div className='p-10 h-[calc(100vh-130px)] flex flex-col justify-center items-center w-full' >
             <img className='-mt-5 w-[120px]' src={success} alt="success" />
             <div className="max-w-[600px] grid justify-center text-center">
-              <p className='font-semibold' >You have successfuly referred Emmanuella Bami</p>
+              <p className='font-semibold' >You have successfuly referred{data?.data?.patient?.name}</p>
               <p className='text-sm max-w-[450px] text-center mx-auto ' >Get ready for a surprise! When your patients make a payment, your rebate will be sent to your wallet within 24 hours. </p>
                 <p className='mt-6' >Copy your referral link below:</p>
                 <div className="flex justify-between items-center gap-10 mt-3 bg-[#f9f9f9] text-light_blue rounded-3xl border px-1 pl-3 py-1">
-                  <p className='underline ' >https://www.patients.lifebridge.com?ref=UYBFJK</p>
+                  <p className='underline ' >https://www.patients.lifebridge.com?ref={data?.data?.referral_code}</p>
                   <button className='rounded-3xl text-black font-semibold bg-light_blue px-5 py-2 flex items-center gap-1' >
                     <BiCopy />
                     Copy
@@ -266,7 +266,7 @@ const New = ({ toggleNewReferral, refetch }) => {
                 </div>
                 <p className='mt-10' >Or Copy Your Invite Code</p>
                   <div className='mx-auto font-semibold text-light_blue px-5 py-2 flex items-center gap-1' >
-                    UYBFJK
+                    {data?.data?.referral_code}
                     <BiCopy />
                   </div>
                   <div className="mt-10 justify-center flex items-center gap-7">

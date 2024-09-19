@@ -140,7 +140,9 @@ const Patient = () => {
             setRefCode(res.data.referral_code);
             nextStep();
          },
-         onError:e => errorToast(e.message),
+         onError:e => {
+            errorToast(e?.errors?.selected_tests ?? e.message ?? e.errors );
+        },
     })
 
     const { isLoading:bookAppointmentLoading , data:appointmentData,  mutate:bookAppointmentMutate } = useMutation(PatientService.BookAppointment, {
@@ -208,7 +210,7 @@ const Patient = () => {
         validationSchema: Yup.object().shape({
             email:Yup.string().email().required('This field is required'),
             full_name:Yup.string().required('This field is required'),
-            phone_number:Yup.string().required('This field is required'),
+            phone_number:Yup.string().required('This field is required').length(11,'Phone number must be 11 digits'),
             gender:Yup.string().required('This field is required'),
 
         }),
@@ -229,7 +231,7 @@ const Patient = () => {
         validationSchema: Yup.object().shape({
             email:Yup.string().email().required('This field is required'),
             full_name:Yup.string().required('This field is required'),
-            phone_number:Yup.string().required('This field is required'),
+            phone_number:Yup.string().required('This field is required').length(11,'Phone number should be 11 digits'),
             gender:Yup.string().required('This field is required'),
 
         }),
@@ -248,8 +250,10 @@ const Patient = () => {
     })
 
     const addTest = () => {
+        if(!selectedTest || !selectedCategoryName){
+            return;
+        }
         const matchedTest = rawTests?.data?.tests.find(item => item.test_id == selectedTest);
-        console.log(matchedTest);
 
         const test = {
         price: matchedTest.price,
@@ -453,7 +457,7 @@ const Patient = () => {
                                 <div className="mt-4">
                                     <Select label={'Test Type'}  onChange={e => setSelectedTest(e.target.value)} options={tests}  icon={<PiTestTubeFill size={22} />}/>
                                 </div>
-                                <button onClick={addTest} type='button' className=" mt-2 flex ml-auto items-center gap-1 text-sm font-semibold">
+                                <button onClick={addTest} type='button' className="bg-light_blue px-7 py-2 text-white rounded-3xl mt-4 flex ml-auto items-center gap-1 text-sm font-semibold">
                                 <BsPlus /> Add Test
                                 </button>
                                 <div className="mt-7 flex items-center gap-2">
