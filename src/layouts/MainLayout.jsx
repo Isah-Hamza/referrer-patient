@@ -5,6 +5,7 @@ import logo from '../assets/images/logo.svg';
 import { AiOutlineHome } from "react-icons/ai";
 import avatar from '../assets/images/avatar.svg';
 import { REMOVE_FROM_LOCALSTORAGE } from '../utils/Helper';
+import Button from '../components/Button';
 
 const MainLayout = () => {
     const navigate = useNavigate();
@@ -75,11 +76,13 @@ const MainLayout = () => {
             }
         </div>
         <div className="flex items-center gap-3 ">
-            <button onClick={logout} className="w-10 h-10 bg-[#ededed] grid place-content-center rounded-full">
+            <Button onClick={() => navigate('referrals?open=true')} title={'Refer Now!'} className={'!px-5 !py-2.5 !text-sm  !bg-light_blue'} />
+
+            <button onClick={logout} className="min-w-10 min-h-10 bg-[#ededed] grid place-content-center rounded-full">
                 <IoLogOut size={20} color='red' />
             </button>
             <button>
-                <img className='w-10' src={avatar} alt="" />
+                <img className='min-w-10' src={avatar} alt="" />
             </button>
         </div>
       </header>

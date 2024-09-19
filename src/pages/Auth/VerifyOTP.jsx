@@ -35,7 +35,7 @@ const VerifyOTP = () => {
         navigate(`/change-password`);
     },
     onError: e => { 
-      errorToast(e.error);
+      errorToast(e.message ?? e.error);
     }
 })
 

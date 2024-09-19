@@ -81,10 +81,10 @@ const Payment = () => {
               <p className='font-bold text-4xl text-primary mb-3 mt-2' >{ConvertToNaira(tnx?.data?.balance)}</p> : <p className='py-3.5 font-bold text-2xl ' >****</p>
 
           }
-          <button onClick={toggleShowWithdraw} className='w-fit mx-auto flex items-center gap-2 text-white bg-light_blue px-14 py-2 rounded-3xl' >
+          {/* <button onClick={toggleShowWithdraw} className='w-fit mx-auto flex items-center gap-2 text-white bg-light_blue px-14 py-2 rounded-3xl' >
             <span>Instant Withdrawal</span>
             <span><TbArrowBigRightLinesFilled /></span>
-          </button>
+          </button> */}
           <div className="mt-2 text-sm flex items-center gap-2 justify-center">
             <HiInformationCircle className='text-primary' size={22} />
             <span>Earnings of the week are automatically sent to your bank account every Friday.</span>
