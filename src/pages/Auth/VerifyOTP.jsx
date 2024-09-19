@@ -63,7 +63,7 @@ useEffect(() => {
               </div>
               
               <div className='mt-5' >
-                  <Button onClick={() => mutate({ email, otp:Number(otp) })} title='Vefify OTP' />
+                  <Button onClick={() => mutate({ email, otp:otp })} title='Vefify OTP' />
               </div>
         </div>
       </div>
