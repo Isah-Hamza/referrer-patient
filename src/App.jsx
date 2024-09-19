@@ -98,7 +98,7 @@ function App() {
     hideProgressBar
     pauseOnHover
     draggable
-    autoClose={true}
+    autoClose={5000}
     closeOnClick={true}
     stacked={false}
     position="top-right"

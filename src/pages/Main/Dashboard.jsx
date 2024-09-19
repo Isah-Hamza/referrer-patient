@@ -16,7 +16,7 @@ import bank from '../../assets/images/Bank.svg';
 import test from '../../assets/images/Test.svg';
 import earn from '../../assets/images/Earn.svg';
 
-import refer from '../../assets/images/refer_and_earn.svg';
+import refer from '../../assets/images/refer_and_earn3.svg';
 import { useNavigate } from 'react-router-dom';
 import { ConvertToNaira } from '../../utils/Helper';
 import { useQuery } from 'react-query';

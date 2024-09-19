@@ -12,13 +12,15 @@ const customToastComponent = (msg, error = false) => {
 
   console.log(msg);
   if (error)
-    toast(<CustomErrorToast mssg={msg} id={id}  />, {
+    toast(<CustomErrorToast  mssg={msg} id={id}  />, {
+      autoClose:5000,
       position: 'top-right',
       closeButton: CloseButton,
       toastId: 'so',
     });
-  else
+    else
     toast(<CustomSuccessToast mssg={msg} id={id} />, {
+      autoClose:5000,
       position: 'top-right',
       // closeButton: false,
       toastId: 'so',

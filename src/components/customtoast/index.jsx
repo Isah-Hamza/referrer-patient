@@ -45,7 +45,7 @@ const CustomToast = () => {
   return (
     <ToastContainer
       position="top-right"
-      autoClose={2500}
+      autoClose={5000}
       hideProgressBar={true}
       newestOnTop={true}
       closeOnClick={true}
