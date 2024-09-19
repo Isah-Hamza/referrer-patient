@@ -16,6 +16,7 @@ import { BsFillTrashFill, BsPlus } from 'react-icons/bs';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import success from '../../../assets/images/success.svg';
+// import logo from '../../../assets/images/logo.svg';
 import { useMutation, useQuery } from 'react-query';
 import PatientService from '../../../services/Patient';
 import { ConvertToNaira, errorToast, successToast } from '../../../utils/Helper';
@@ -40,6 +41,7 @@ const Patient = () => {
     const [refCode, setRefCode] = useState("");
     const [paymentAccessCode, setPaymentAccessCode] = useState('');
     const [patient, setPatient] = useState(null);
+    const [paymentSuccessful, setPaymentSuccessful] = useState(false);
 
     const [categories, setCategories] = useState([]);
     const [tests, setTests] = useState([]);
@@ -263,6 +265,7 @@ const Patient = () => {
         }
 
         setSelectedTests(prev => [test,...prev])
+        setSelectedTest(null);
     }
 
     const removeTest = (id) => {
@@ -305,6 +308,41 @@ const Patient = () => {
         setConfirmed(false);
         refetchPatientDetails()
     }
+
+    const paymentTnx = [
+        {
+            title:"Amount",
+            value:'₦208,000',
+        },
+        {
+            title:"Payment Date",
+            value:'19th Sept, 2024',
+        },
+        {
+            title:"Transaction Number",
+            value:'1234567890',
+            span:2,
+        },
+    ]
+
+    const paymentBooking = [
+        {
+            title:'Date',
+            value:'19th Sept, 2024',
+        },
+        {
+            title:'Time',
+            value:'11:30AM',
+        },
+        {
+            title:'Booking Number',
+            value:'14',
+        },
+        {
+            title:'Referred By',
+            value:'Emmanuella Igwe',
+        },
+    ]
 
   useEffect(() => {
     if(selectedCategory) getTests(selectedCategory)
@@ -355,7 +393,9 @@ const Patient = () => {
             </div>
         </div>
         <div className="flex-1 overflow-y-auto">
-        { activeTab == 0 ? <div className="w-full h-full grid place-content-center">
+            { 
+            activeTab == 0 ? 
+            <div className="w-full h-full grid place-content-center">
                 <div className="max-w-[400px] text-sm text-center">
                     <p className='font-bold text-base mb-2'>Redeem Referral Code</p>
                     <p>Enter your referral code below to schedule your test and book an appointment.</p>
@@ -387,7 +427,8 @@ const Patient = () => {
                     </div>
                     </div>
                 </div>
-            </div> : activeTab == 1 ?
+            </div> : 
+            activeTab == 1 ?
             <>
             {process == 'manual' ?
                 <div className='max-w-[600px] ml-20 py-14' >
@@ -671,6 +712,45 @@ const Patient = () => {
 
         </div>
         </div>
+        {
+         paymentSuccessful ?<div className="">
+            <div className='fixed inset-0 w-screen h-screen bg-white py-10 pb-5 grid place-content-center overflow-y-auto' >
+                <div className="grid text-center w-full sm:min-w-[600px] md:min-w-[750px]">
+                    <div className="mt-24 mx-auto">
+                    <img className='mt-24 mb-20 w-52' src={logo} alt="logo" />
+                    </div>
+                    <img className='w-24 mx-auto' src={success} alt="success" />
+                    <p className='font-semibold mb-1' >Payment successful</p>
+                    <p className='text-sm' >Thank You for your time, view your payment details below:</p>
+                    <div className="font-medium border-b mt-8 pb-2 text-sm">TRANSACTION DETAILS</div>
+                    <div className="grid grid-cols-2 gap-10 mt-6 text-center">
+                        {
+                            paymentTnx?.map((item,idx) => (
+                                <div key={idx} className={`text-sm ${item.span && 'col-span-2 mt-2'}`}>
+                                    <p className=' mb-2' >{item.title}</p>
+                                    <p className=' font-semibold' >{item.value}</p>
+                                </div>
+                            ))
+                        }
+                    </div>
+                    <div className="font-medium border-b mt-14 pb-2 text-sm">BOOKING DETAILS</div>
+                    <div className="grid grid-cols-2 gap-10 mt-6 text-center place-content-center">
+                            {
+                                paymentBooking.map((item,idx) => (
+                                    <div key={idx} className={`text-sm ${item.span && 'col-span-2 mt-2'}`}>
+                                        <p className=' mb-2' >{item.title}</p>
+                                        <p className=' font-semibold' >{item.value}</p>
+                                    </div>
+                                ))
+                            }
+                    </div>
+                    <div className="mt-10">
+                        <Button className={'!w-fit bg-white !font-semibold !text-light_blue px-3 py-2'} onClick={() => setPaymentSuccessful(false)} title={'Go Back Home'} />
+                    </div>
+                </div>
+            </div> 
+        </div> : null 
+        }
         {
             (bookingLoading || loadingSlots || bookAppointmentLoading || initializingPayment || loadingPatientDetails || fetchingDetails || confirmingDetails ) ? <LoadingModal /> : null
         }

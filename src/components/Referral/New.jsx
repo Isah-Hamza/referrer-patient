@@ -36,7 +36,7 @@ const New = ({ toggleNewReferral, refetch }) => {
     onSuccess:res => {
       refetch();
       successToast(res.data.message);
-      // close();
+      toggleSuccessful();
     },
     onError: e => {
       errorToast(e.message);
@@ -70,7 +70,6 @@ const New = ({ toggleNewReferral, refetch }) => {
         values.selected_tests = tests;
         console.log(values);
         createReferrer(values);
-        toggleSuccessful();
     }
 })
 
@@ -130,8 +129,8 @@ const New = ({ toggleNewReferral, refetch }) => {
   }
 
   const addTest = () => {
+    if(!selectedCategoryName || !selectedTest ) return;
     const matchedTest = rawTests?.data?.tests.find(item => item.test_id == selectedTest);
-    console.log(matchedTest);
 
     const test = {
       price: matchedTest.price,
@@ -140,7 +139,8 @@ const New = ({ toggleNewReferral, refetch }) => {
       test_id: matchedTest.test_id,
     }
 
-    setSelectedTests(prev => [test,...prev])
+    setSelectedTests(prev => [test,...prev]);
+    setSelectedTest(null);
   }
 
   const removeTest = (id) => {
@@ -220,7 +220,7 @@ const New = ({ toggleNewReferral, refetch }) => {
             <div className="mt-4">
                 <Select label={'Test Type'}  onChange={e => setSelectedTest(e.target.value)} options={tests}  icon={<PiTestTubeFill size={22} />}/>
             </div>
-            <button onClick={addTest} type='button' className=" mt-2 flex ml-auto items-center gap-1 text-sm font-semibold">
+            <button onClick={addTest} type='button' className="!px-6 !py-2 rounded-3xl mt-3 bg-light_blue text-white flex ml-auto items-center gap-1 text-sm font-semibold">
               <BsPlus /> Add Test
             </button>
             <div className="mt-7 flex items-center gap-2">
@@ -254,7 +254,7 @@ const New = ({ toggleNewReferral, refetch }) => {
        <div className='p-10 h-[calc(100vh-130px)] flex flex-col justify-center items-center w-full' >
             <img className='-mt-5 w-[120px]' src={success} alt="success" />
             <div className="max-w-[600px] grid justify-center text-center">
-              <p className='font-semibold' >You have successfuly referred{data?.data?.patient?.name}</p>
+              <p className='font-semibold' >You have successfuly referred {data?.data?.patient?.name}</p>
               <p className='text-sm max-w-[450px] text-center mx-auto ' >Get ready for a surprise! When your patients make a payment, your rebate will be sent to your wallet within 24 hours. </p>
                 <p className='mt-6' >Copy your referral link below:</p>
                 <div className="flex justify-between items-center gap-10 mt-3 bg-[#f9f9f9] text-light_blue rounded-3xl border px-1 pl-3 py-1">
