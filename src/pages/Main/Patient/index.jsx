@@ -32,7 +32,7 @@ import moment from 'moment';
 const Patient = () => {
     const navigate = useNavigate();
     const [otp, setOtp] = useState('');
-    const [activeTab, setActiveTab] = useState(3);
+    const [activeTab, setActiveTab] = useState(0);
     const [process, setProcess] = useState('');
     const [confirmed, setConfirmed] = useState(false);
     const [date, setDate] = useState(moment().format('YYYY-MM-DD'));
@@ -165,27 +165,20 @@ const Patient = () => {
          },
          onError:e => errorToast(e.message),
     })
-    
-    const personal = [
+
+
+    const booking = [
         {
-            title:'Name',
-            value: appointmentData?.data?.referral?.patient?.name,
+            title:'Date',
+            value:moment(date).format('ll'),
         },
         {
-            title:'Email Address',
-            value:appointmentData?.data?.referral?.patient?.email,
-        },
-        {
-            title:'Phone Number',
-            value:appointmentData?.data?.referral?.patient?.phone,
-        },
-        {
-            title:'Referred By',
-            value:appointmentData?.data?.referral?.referred_by ?? "_",
+            title:'Time',
+            value:selectedTime,
         },
     ]
 
-    const booking = [
+    const bookingWithNumber = [
         {
             title:'Date',
             value:moment(appointmentData?.data?.referral?.date.split(' ')[0]).format('ll'),
@@ -223,7 +216,7 @@ const Patient = () => {
         }
     })
 
-    const { getFieldProps:getFieldPropsPatient, handleSubmit:handleSubmitPatient  } = useFormik({
+    const { getFieldProps:getFieldPropsPatient, handleSubmit:handleSubmitPatient,values:valuesPatient  } = useFormik({
         enableReinitialize:true,
         initialValues:{
             "email": patientDetails?.data?.referral?.patient?.email,
@@ -251,6 +244,25 @@ const Patient = () => {
             
         }
     })
+
+    const personal = [
+        {
+            title:'Name',
+            value: process =='manual' ? values.full_name : valuesPatient.full_name,
+        },
+        {
+            title:'Email Address',
+            value:process =='manual' ? values.email : valuesPatient.email,
+        },
+        {
+            title:'Phone Number',
+            value:process =='manual' ? values.phone_number : valuesPatient.phone_number,
+        },
+        {
+            title:'Referred By',
+            value:process =='manual' ? '_' : patient?.referred_by,
+        },
+    ]
 
     const addTest = () => {
         if(!selectedTest || !selectedCategoryName){
@@ -678,13 +690,13 @@ const Patient = () => {
                         <div className="font-medium border-b mt-14 pb-2 text-sm">TEST DETAILS</div>
                         <div className="grid grid-cols-2 gap-10 mt-10 text-center">
                             {
-                                appointmentData?.data?.referral?.selected_tests?.map((item,idx) => (
-                                    <div key={idx} className="text-sm text-center">
-                                        <div className="mb-2 font-semibold flex gap-2 justify-center items-center">
+                                selectedTests?.map((item,idx) => (
+                                    <div key={idx} className="text-sm">
+                                        <div className="mb-2 font-semibold flex gap-2  items-center">
                                             <p className='' >{idx + 1}.</p>
-                                            <p className='' >{item.name}</p>
+                                            <p className='' >{item.test}</p>
                                         </div>
-                                        <div className="flex items-center justify-center gap-2">
+                                        <div className="flex items-center  gap-2">
                                             <p className='' >{item.category}</p>
                                             &bull;
                                             <p className='' >{ConvertToNaira(item.price)}</p>
@@ -716,7 +728,7 @@ const Patient = () => {
             : activeTab == 3 && level == 'book' ? 
                 <div className='max-w-[600px] ml-20 py-10 grid place-content-center' >
                     <div className="grid text-center">
-                        <img className='w-32 mx-auto' src={success} alt="success" />
+                        <img className='w-28 mx-auto' src={success} alt="success" />
                         <p className='font-semibold mb-1' >Your Appointment has been booked successfully</p>
                         <p className='text-sm' >Dear {appointmentData?.data?.referral?.patient?.name}, you'll soon receive your booking confirmation via email address ({appointmentData?.data?.referral?.patient?.email}) within 5 minutes. Kindly review your booking details below:</p>
                         {/* <div className="font-medium border-b mt-14 pb-2 text-sm">PERSONAL DETAILS</div>
@@ -751,7 +763,7 @@ const Patient = () => {
                         <div className="font-medium border-b mt-14 pb-2 text-sm">BOOKING DETAILS</div>
                         <div className="grid grid-cols-2 gap-10 mt-10 text-center place-content-center">
                                 {
-                                    booking.map((item,idx) => (
+                                    bookingWithNumber.map((item,idx) => (
                                         <div key={idx} className={`text-sm ${item.span && 'col-span-2 mt-2'}`}>
                                             <p className=' mb-2' >{item.title}</p>
                                             <p className=' font-semibold' >{item.value}</p>
