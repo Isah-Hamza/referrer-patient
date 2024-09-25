@@ -32,7 +32,7 @@ import moment from 'moment';
 const Patient = () => {
     const navigate = useNavigate();
     const [otp, setOtp] = useState('');
-    const [activeTab, setActiveTab] = useState(0);
+    const [activeTab, setActiveTab] = useState(3);
     const [process, setProcess] = useState('');
     const [confirmed, setConfirmed] = useState(false);
     const [date, setDate] = useState(moment().format('YYYY-MM-DD'));
@@ -50,6 +50,7 @@ const Patient = () => {
     const [selectedCategoryName, setSelectedCategoryName] = useState(null);
     const [selectedTest, setSelectedTest] = useState(null);
     const [selectedTests, setSelectedTests] = useState([]);
+    const [level,setLevel] = useState('confirm');
 
 
     const toggleConfirmed = () => setConfirmed(!confirmed);
@@ -150,7 +151,7 @@ const Patient = () => {
     const { isLoading:bookAppointmentLoading , data:appointmentData,  mutate:bookAppointmentMutate } = useMutation(PatientService.BookAppointment, {
         onSuccess:res => { 
             successToast(res.data.message);
-            nextStep();
+            setLevel('book');
          },
          onError:e => errorToast(e.message),
     })
@@ -636,77 +637,141 @@ const Patient = () => {
                         {
                         date ?  <>
                                 <p className='font-semibold' >Available Time Slots ({JSON.stringify(moment(date).format('ll'))})</p>
-                                <div className="mt-5 grid grid-cols-4 gap-5">
+                                {slots?.data?.available_slots?.length ?<div className="mt-5 grid grid-cols-4 gap-5">
                                     {
                                         slots?.data?.available_slots?.map((time,idx) => (
                                             <button onClick={() => setSelectedTime(time)} key={idx} 
                                             className={`border rounded-2xl px-7 py-2 text-sm ${time == selectedTime && 'text-white font-medium bg-light_blue'}`} >{time}</button>
                                         ))
                                     }
+                                </div> : 
+                                <div className='my-12 text- text-center' >
+                                    <p>There are no available time slots for the selected date.</p>
+                                    <p>Please choose another day.</p>
                                 </div>
+                                }
                             </> : null
                         }
                         <div className="mt-16 flex items-center justify-between">
                                 <button onClick={() => {previousStep();selectedTime('')}} className='underline' >back</button>
-                                <Button disabled={!selectedTime} onClick={bookAppointment} className={'!w-fit !px-12 !py-2.5 !text-sm'} title={'Book Appointment'} />
+                                <Button disabled={!selectedTime} onClick={nextStep} className={'!w-fit !px-12 !py-2.5 !text-sm'} title={'Review Appointment'} />
                         </div>
                     </div>
                 </div>
             </div> 
-            : activeTab == 3 ? 
-            <div className='max-w-[600px] ml-20 py-10 grid place-content-center' >
-                <div className="grid text-center">
-                    <img className='w-32 mx-auto' src={success} alt="success" />
-                    <p className='font-semibold mb-1' >Your Appointment has been booked successfully</p>
-                    <p className='text-sm' >Dear {appointmentData?.data?.referral?.patient?.name}, you'll soon receive your booking confirmation via email within 5 minutes. Kindly review your booking details below:</p>
-                    <div className="font-medium border-b mt-14 pb-2 text-sm">PERSONAL DETAILS</div>
-                    <div className="grid grid-cols-2 gap-10 mt-10">
-                        {
-                            personal.map((item,idx) => (
-                                <div key={idx} className="text-sm">
-                                    <p className=' mb-2' >{item.title}</p>
-                                    <p className=' font-semibold' >{item.value}</p>
-                                </div>
-                            ))
-                        }
-                    </div>
-                    <div className="font-medium border-b mt-14 pb-2 text-sm">TEST DETAILS</div>
-                    <div className="grid grid-cols-2 gap-10 mt-10 text-center">
-                        {
-                            appointmentData?.data?.referral?.selected_tests?.map((item,idx) => (
-                                <div key={idx} className="text-sm text-center">
-                                    <div className="mb-2 font-semibold flex gap-2 justify-center items-center">
-                                        <p className='' >{idx + 1}.</p>
-                                        <p className='' >{item.name}</p>
-                                    </div>
-                                    <div className="flex items-center justify-center gap-2">
-                                        <p className='' >{item.category}</p>
-                                        &bull;
-                                        <p className='' >{ConvertToNaira(item.price)}</p>
-                                    </div>
-                                </div>
-                            ))
-                        }
-                    </div>
-                    <div className="font-medium border-b mt-14 pb-2 text-sm">BOOKING DETAILS</div>
-                    <div className="grid grid-cols-2 gap-10 mt-10 text-center place-content-center">
+            : activeTab == 3 && level=='confirm' ? 
+                <div className='max-w-[600px] ml-20 py-10 grid' >
+                    <div className="grid">
+                        <p className='font-semibold mb-1' >Review Your Appointment</p>
+                        <p className='text-sm' >Check if the details below are accurate:</p>
+                        <div className="font-medium border-b mt-14 pb-2 text-sm">PERSONAL DETAILS</div>
+                        <div className="grid grid-cols-2 gap-10 mt-10">
                             {
-                                booking.map((item,idx) => (
-                                    <div key={idx} className={`text-sm ${item.span && 'col-span-2 mt-2'}`}>
+                                personal.map((item,idx) => (
+                                    <div key={idx} className="text-sm">
                                         <p className=' mb-2' >{item.title}</p>
                                         <p className=' font-semibold' >{item.value}</p>
                                     </div>
                                 ))
                             }
+                        </div>
+                        <div className="font-medium border-b mt-14 pb-2 text-sm">TEST DETAILS</div>
+                        <div className="grid grid-cols-2 gap-10 mt-10 text-center">
+                            {
+                                appointmentData?.data?.referral?.selected_tests?.map((item,idx) => (
+                                    <div key={idx} className="text-sm text-center">
+                                        <div className="mb-2 font-semibold flex gap-2 justify-center items-center">
+                                            <p className='' >{idx + 1}.</p>
+                                            <p className='' >{item.name}</p>
+                                        </div>
+                                        <div className="flex items-center justify-center gap-2">
+                                            <p className='' >{item.category}</p>
+                                            &bull;
+                                            <p className='' >{ConvertToNaira(item.price)}</p>
+                                        </div>
+                                    </div>
+                                ))
+                            }
+                        </div>
+                        <div className="font-medium border-b mt-14 pb-2 text-sm">BOOKING DETAILS</div>
+                        <div className="grid grid-cols-2 gap-10 mt-10 place-content-center">
+                                {
+                                    booking.map((item,idx) => (
+                                        <div key={idx} className={`text-sm ${item.span && 'col-span-2 mt-2'}`}>
+                                            <p className=' mb-2' >{item.title}</p>
+                                            <p className=' font-semibold' >{item.value}</p>
+                                        </div>
+                                    ))
+                                }
+                        </div>
+                        <div className="mt-14">
+                            <div className="flex items-center justify-between gap-5">
+                                <button onClick={previousStep} className='font-medium text-sm'>back</button>
+                                <Button className={'!w-fit !px-6 !py-2.5'} onClick={bookAppointment} title={'Confirm Booking'} />
+                            </div>
+                            
+                        </div>
                     </div>
-                    <div className="mt-10">
-                        <Button onClick={initializePayment} title={'Pay Now'} />
-                        <p className='mt-4 text-center text-sm'>
-                        Note that,  While payment is optional, we suggest making payment in advance<br />  to ensure prompt service upon your arrival.
-                        </p>
+                </div> 
+            : activeTab == 3 && level == 'book' ? 
+                <div className='max-w-[600px] ml-20 py-10 grid place-content-center' >
+                    <div className="grid text-center">
+                        <img className='w-32 mx-auto' src={success} alt="success" />
+                        <p className='font-semibold mb-1' >Your Appointment has been booked successfully</p>
+                        <p className='text-sm' >Dear {appointmentData?.data?.referral?.patient?.name}, you'll soon receive your booking confirmation via email address ({appointmentData?.data?.referral?.patient?.email}) within 5 minutes. Kindly review your booking details below:</p>
+                        {/* <div className="font-medium border-b mt-14 pb-2 text-sm">PERSONAL DETAILS</div>
+                        <div className="grid grid-cols-2 gap-10 mt-10">
+                            {
+                                personal.map((item,idx) => (
+                                    <div key={idx} className="text-sm">
+                                        <p className=' mb-2' >{item.title}</p>
+                                        <p className=' font-semibold' >{item.value}</p>
+                                    </div>
+                                ))
+                            }
+                        </div> */}
+                        <div className="font-medium border-b mt-14 pb-2 text-sm">TEST DETAILS</div>
+                        <div className="grid grid-cols-2 gap-10 mt-10 text-center">
+                            {
+                                appointmentData?.data?.referral?.selected_tests?.map((item,idx) => (
+                                    <div key={idx} className="text-sm text-center">
+                                        <div className="mb-2 font-semibold flex gap-2 justify-center items-center">
+                                            <p className='' >{idx + 1}.</p>
+                                            <p className='' >{item.name}</p>
+                                        </div>
+                                        <div className="flex items-center justify-center gap-2">
+                                            <p className='' >{item.category}</p>
+                                            &bull;
+                                            <p className='' >{ConvertToNaira(item.price)}</p>
+                                        </div>
+                                    </div>
+                                ))
+                            }
+                        </div>
+                        <div className="font-medium border-b mt-14 pb-2 text-sm">BOOKING DETAILS</div>
+                        <div className="grid grid-cols-2 gap-10 mt-10 text-center place-content-center">
+                                {
+                                    booking.map((item,idx) => (
+                                        <div key={idx} className={`text-sm ${item.span && 'col-span-2 mt-2'}`}>
+                                            <p className=' mb-2' >{item.title}</p>
+                                            <p className=' font-semibold' >{item.value}</p>
+                                        </div>
+                                    ))
+                                }
+                        </div>
+                        <div className="mt-10">
+                            <div className="">
+                                <p className='text-sm font-semibold'>Would You like to make payment now ?</p>
+                            <p className='mt-1 text-center text-sm'>
+                            Note that,  While payment is optional, we suggest making payment in advance<br />  to ensure prompt service upon your arrival.
+                            </p>
+                            </div>
+                            <div className="mt-6 flex gap-5 justify-between">
+                            <Button className={'!w-fits !px-6 !py-2.5'} onClick={initializePayment} title={'Pay ' + ConvertToNaira(appointmentData?.data?.referral?.total_test_amount)} />
+                            </div>
+                        </div>
                     </div>
-                </div>
-            </div> 
+                </div> 
             : null
             }
 

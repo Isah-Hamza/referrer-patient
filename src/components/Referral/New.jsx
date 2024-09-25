@@ -251,12 +251,18 @@ const New = ({ toggleNewReferral, refetch }) => {
           </div>
         </form>
       </>:
-       <div className='p-10 h-[calc(100vh-130px)] flex flex-col justify-center items-center w-full' >
-            <img className='-mt-5 w-[120px]' src={success} alt="success" />
-            <div className="max-w-[600px] grid justify-center text-center">
-              <p className='font-semibold' >You have successfuly referred {data?.data?.patient?.name}</p>
-              <p className='text-sm max-w-[450px] text-center mx-auto ' >Get ready for a surprise! When your patients make a payment, your rebate will be sent to your wallet within 24 hours. </p>
-                <p className='mt-6' >Copy your referral link below:</p>
+       <div className='p-10 pt-5 overflow-y-auto h-[calc(100vh-130px)] grid justify-center items-center w-full' >
+            <img className=' mx-auto w-[100px]' src={success} alt="success" />
+            <div className="">
+              <p className='font-semibold text-center mb-3' >You have successfuly referred {data?.data?.patient?.name}</p>
+              <div className="bg-[#f9f9f9] max-w-[1100px] mx-auto p-3 roudned-md text-sm grid gap-3">
+                <p className="font-medium">You’ve just made a successful referral! To ensure your rebate is processed smoothly, please follow these next steps:</p>
+                <p>1. Tell your patient to go to their <b>mailbox</b>  and open the <b>email</b>  that we just sent them.</p>
+                <p>2. Encourage them to <b>book an appointment on time.</b> </p>
+                <p>3. You'll get your rebate as soon as <b>your patient makes payment.</b> </p>
+                <p>You’re all set! Thanks for your referral. You’ll be notified as soon as the payment is processed.</p>
+              </div>
+              <div className="max-w-[600px] flex flex-col mx-auto text-center justify-center ">
                 <div className="flex justify-between items-center gap-10 mt-3 bg-[#f9f9f9] text-light_blue rounded-3xl border px-1 pl-3 py-1">
                   <p className='underline ' >https://www.patients.lifebridge.com?ref={data?.data?.referral_code}</p>
                   <button className='rounded-3xl text-black font-semibold bg-light_blue px-5 py-2 flex items-center gap-1' >
@@ -276,6 +282,7 @@ const New = ({ toggleNewReferral, refetch }) => {
                     </button> 
                     <button onClick={close} className='font-semibold' >Cancel</button>
                   </div>
+              </div>
             </div>
         </div>  
       }
