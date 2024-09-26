@@ -94,14 +94,14 @@ const StepOne = ({ next }) => {
             </div>
             <div className='mt-10' >
                 <Button type='submit' title='Create Account' />
-                <div className="flex items-center gap-2 my-7">
+                {/* <div className="flex items-center gap-2 my-7">
                     <hr className='flex-1' />
                     <span className='font-semibold text-sm' >OR</span>
                     <hr className='flex-1' />
                 </div>
                 <button className='w-full font-medium justify-center flex items-center gap-2 py-3 border bg-white rounded-[30px]' > 
                 <span><FcGoogle size={26} /></span>
-                Signup With Google </button>
+                Signup With Google </button> */}
             </div>
             <div className="mt-14">
                 <p className='text-center text-sm' >
