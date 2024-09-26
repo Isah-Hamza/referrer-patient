@@ -67,12 +67,14 @@ const { touched, values, errors, handleSubmit:handleSubmitBank, getFieldProps:ge
         "bank_name": profile?.data?.bank_name ,
         "account_number":profile?.data?.account_number ,
         "account_name": profile?.data?.account_name,
+        "bank_code": profile?.data?.bank_code ?? "",
     },
     validationSchema: Yup.object().shape({
         "doctor_id": Yup.string().required('This field is required'),
         "bank_name": Yup.string().required('This field is required'),
         "account_number": Yup.string().required('This field is required'),
-        "account_name": Yup.string().required('This field is required')
+        "account_name": Yup.string().required('This field is required'),
+        // "bank_code": Yup.string().required('This field is required'),
     }),
     onSubmit:values => {
         updateBank(values);
@@ -81,13 +83,14 @@ const { touched, values, errors, handleSubmit:handleSubmitBank, getFieldProps:ge
 
   const { isLoading:loadingBanks, data } = useQuery('banks', Bank.AllBanks, {
     onSuccess:res => {
-        setBanks(res.data.data.map(bank => ({ label:bank.BankName, value:bank.BankName })))
+        setBanks(res.data.data.map(bank => ({ label:bank.name, value:bank.name })))
     }
 })
 
 const { mutate:verifyBankAccount, isLoading:verifying } = useMutation(Bank.VerifyAccount, {
     onSuccess:res => {
         setFieldValueBank('account_name',res.data.account_name);
+        setFieldValueBank('bank_code', data?.data?.data?.find(item => item.name == values.bank_name)?.code)
         successToast(res.data.message);
     },
     onError:e => {
@@ -109,7 +112,7 @@ const { mutate:changePassword, isLoading:changingPassword } = useMutation(Profil
 const verifyAccount = () => {
   const payload = {
       account_number:values.account_number,
-      bank_code: data?.data?.data?.find(item => item.BankName == values.bank_name)?.BankCode,
+      bank_code: data?.data?.data?.find(item => item.name == values.bank_name)?.code,
   }
 
   verifyBankAccount(payload);
