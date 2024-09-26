@@ -31,7 +31,8 @@ const StepTwo = ({ next }) => {
             "professional_title": "",
             "bank_name": "",
             "account_number": "",
-            "account_name": ""
+            "account_name": "",
+            "bank_code": "",
         },
         validationSchema: Yup.object().shape({
             "user_id": Yup.string().required('This field is required'),
@@ -69,13 +70,14 @@ const StepTwo = ({ next }) => {
 
     const { isLoading:loadingBanks, data } = useQuery('banks', Bank.AllBanks, {
         onSuccess:res => {
-            setBanks(res.data.data.map(bank => ({ label:bank.BankName, value:bank.BankName })))
+            setBanks(res.data.data.map(bank => ({ label:bank.name, value:bank.name })))
         }
     })
 
     const { mutate:verifyBankAccount, isLoading:verifying } = useMutation(Bank.VerifyAccount, {
         onSuccess:res => {
             setFieldValue('account_name',res.data.account_name);
+            setFieldValue('bank_code', data?.data?.data?.find(item => item.name == values.bank_name)?.code)
             successToast(res.data.message);
         },
         onError:e => {
@@ -97,7 +99,7 @@ const StepTwo = ({ next }) => {
     const verifyAccount = () => {
         const payload = {
             account_number:values.account_number,
-            bank_code: data?.data?.data?.find(item => item.BankName == values.bank_name)?.BankCode,
+            bank_code: data?.data?.data?.find(item => item.name == values.bank_name)?.code,
         }
 
         verifyBankAccount(payload);
