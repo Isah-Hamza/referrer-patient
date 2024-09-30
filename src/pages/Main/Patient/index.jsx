@@ -33,7 +33,7 @@ import ReactSelect from 'react-select';
 const Patient = () => {
     const navigate = useNavigate();
     const [otp, setOtp] = useState('');
-    const [activeTab, setActiveTab] = useState(0);
+    const [activeTab, setActiveTab] = useState(2);
     const [process, setProcess] = useState('');
     const [confirmed, setConfirmed] = useState(false);
     const [date, setDate] = useState(moment().format('YYYY-MM-DD'));
@@ -657,7 +657,7 @@ const Patient = () => {
                         <p className='text-sm' >When do you want to come?</p>
                     </div>
                     <div className="mt-10 ">
-                        <Calendar className={'min-w-[1000px'} onChange={setDate}  />
+                        <Calendar minDate={new Date()} className={'min-w-[1000px'} onChange={setDate}  />
                     </div>
                     <div className="mt-10 max-w-[600px]">
                         {
