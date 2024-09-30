@@ -26,6 +26,7 @@ import * as Yup from 'yup';
 import { SiConcourse } from 'react-icons/si';
 import { CustomValidationError } from '../../../components/Register/StepOne';
 import moment from 'moment';
+import ReactSelect from 'react-select';
 
 // ZINAUN -> sample refcode
 
@@ -51,6 +52,7 @@ const Patient = () => {
     const [selectedTest, setSelectedTest] = useState(null);
     const [selectedTests, setSelectedTests] = useState([]);
     const [level,setLevel] = useState('confirm');
+
 
 
     const toggleConfirmed = () => setConfirmed(!confirmed);
@@ -503,13 +505,25 @@ const Patient = () => {
                                     <p className='font-semibold mb-1' >Assigned Tests Details</p>
                                     <p className='text-sm' >Review and proceed to book appointment.</p>
                                 </div>
-                                <div className="mt-6">
+                                {/* <div className="mt-6">
                                     <Select
                                     onChange={e => {setSelectedCategory(e.target.value)}}
                                     label={'Test Category'} options={categories}  icon={<PiTestTubeFill size={22} />}/>
                                 </div>
                                 <div className="mt-4">
                                     <Select label={'Test Type'}  onChange={e => setSelectedTest(e.target.value)} options={tests}  icon={<PiTestTubeFill size={22} />}/>
+                                </div> */}
+                                <div className="mt-6">
+                                    {/* <Select
+                                    onChange={e => {setSelectedCategory(e.target.value)}}
+                                    label={'Test Category'}  icon={<PiTestTubeFill size={22} />}/> */}
+                                    <p>Test Categories</p>
+                                    <ReactSelect options={categories} onChange={(item) => setSelectedCategory(item.value)} isSearchable />
+                                </div>
+                                <div className="mt-4">
+                                    <p>Test Types</p>
+                                    <ReactSelect options={tests} onChange={(item) => setSelectedTest(item.value)} isSearchable />
+                                    {/* <Select label={'Test Type'}  onChange={e => setSelectedTest(e.target.value)} options={tests}  icon={<PiTestTubeFill size={22} />}/> */}
                                 </div>
                                 <button onClick={addTest} type='button' className="bg-light_blue px-7 py-2 text-white rounded-3xl mt-4 flex ml-auto items-center gap-1 text-sm font-semibold">
                                 <BsPlus /> Add Test
