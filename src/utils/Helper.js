@@ -3,6 +3,12 @@ import {CustomSuccessToast} from "../components/customtoast";
 import customToastComponent from "../components/Toast/customToast";
 import moment from "moment";
 
+export const copyText = (text) => {
+  const copyText = text; 
+  navigator.clipboard.writeText(copyText);
+  successToast('Copied Successfully');
+}
+
 export const successToast = (msg) => {
   customToastComponent(msg ?? "Operation successful!");
 };

@@ -15,8 +15,9 @@ import * as Yup from 'yup';
 import Referrals from '../../services/Referrals';
 import { useMutation, useQuery } from 'react-query';
 import { CustomValidationError } from '../Register/StepOne';
-import { ConvertToNaira, errorToast, successToast } from '../../utils/Helper';
+import { ConvertToNaira, copyText, errorToast, successToast } from '../../utils/Helper';
 import LoadingModal from '../../Loader/LoadingModal';
+import ReactSelect from 'react-select';
 
 const New = ({ toggleNewReferral, refetch }) => {
   const user_id = JSON.parse(localStorage.getItem('referrer-data'))?.doctor_id;
@@ -148,6 +149,7 @@ const New = ({ toggleNewReferral, refetch }) => {
   }
 
   useEffect(() => {
+    console.log(selectedCategory);
     if(selectedCategory) getTests(selectedCategory)
   }, [selectedCategory])
   
@@ -213,12 +215,16 @@ const New = ({ toggleNewReferral, refetch }) => {
           </div>
           <div className=" max-w-[650px]">
             <div className="mt-6">
-                <Select
+                {/* <Select
                 onChange={e => {setSelectedCategory(e.target.value)}}
-                label={'Test Category'} options={categories}  icon={<PiTestTubeFill size={22} />}/>
+                label={'Test Category'}  icon={<PiTestTubeFill size={22} />}/> */}
+                <p>Test Categories</p>
+                <ReactSelect options={categories} onChange={(item) => setSelectedCategory(item.value)} isSearchable />
             </div>
             <div className="mt-4">
-                <Select label={'Test Type'}  onChange={e => setSelectedTest(e.target.value)} options={tests}  icon={<PiTestTubeFill size={22} />}/>
+                <p>Test Types</p>
+                <ReactSelect options={tests} onChange={(item) => setSelectedTest(item.value)} isSearchable />
+                {/* <Select label={'Test Type'}  onChange={e => setSelectedTest(e.target.value)} options={tests}  icon={<PiTestTubeFill size={22} />}/> */}
             </div>
             <button onClick={addTest} type='button' className="!px-6 !py-2 rounded-3xl mt-3 bg-light_blue text-white flex ml-auto items-center gap-1 text-sm font-semibold">
               <BsPlus /> Add Test
@@ -265,13 +271,13 @@ const New = ({ toggleNewReferral, refetch }) => {
               <div className="max-w-[600px] flex flex-col mx-auto text-center justify-center ">
                 <div className="flex justify-between items-center gap-10 mt-3 bg-[#f9f9f9] text-light_blue rounded-3xl border px-1 pl-3 py-1">
                   <p className='underline ' >https://www.patients.lifebridge.com?ref={data?.data?.referral_code}</p>
-                  <button className='rounded-3xl text-black font-semibold bg-light_blue px-5 py-2 flex items-center gap-1' >
+                  <button onClick={() => copyText(`https://www.patients.lifebridge.com?ref=${data?.data?.referral_code}`)} className='rounded-3xl text-black font-semibold bg-light_blue px-5 py-2 flex items-center gap-1' >
                     <BiCopy />
                     Copy
                   </button> 
                 </div>
                 <p className='mt-10' >Or Copy Your Invite Code</p>
-                  <div className='mx-auto font-semibold text-light_blue px-5 py-2 flex items-center gap-1' >
+                  <div onClick={() => copyText(data?.data?.referral_code)} className='cursor-pointer mx-auto font-semibold text-light_blue px-5 py-2 flex items-center gap-1' >
                     {data?.data?.referral_code}
                     <BiCopy />
                   </div>
