@@ -6,10 +6,14 @@ import { AiOutlineHome } from "react-icons/ai";
 import avatar from '../assets/images/avatar.svg';
 import { REMOVE_FROM_LOCALSTORAGE } from '../utils/Helper';
 import Button from '../components/Button';
+import { BiMenu } from 'react-icons/bi';
 
 const MainLayout = () => {
     const navigate = useNavigate();
     const [activeTab, setActiveTab] = useState(0);
+    const [showDropdown, setShowDropdown] = useState(false);
+
+    const toggleShowDown = () => setShowDropdown(!showDropdown);
 
     const tabs = [
         {
@@ -61,7 +65,7 @@ const MainLayout = () => {
     <div className='px-5 h-screen flex flex-col gap-5 w-full bg-[#f8f8f8]'>
       <header className='flex items-center justify-between gap-5 py-5' >
         <img onClick={() => navigate('/')} className='cursor-pointer w-40' src={logo} alt="logo" />
-        <div className="flex gap-5 bg-[#ededed] rounded-3xl">
+        <div className="hidden lg:flex gap-5 bg-[#ededed] rounded-3xl">
             {
                 tabs.map((item,idx) => (
                     <button onClick={() => {
@@ -76,13 +80,16 @@ const MainLayout = () => {
             }
         </div>
         <div className="flex items-center gap-3 ">
-            <Button onClick={() => navigate('referrals?open=true')} title={'Refer Now!'} className={'!px-5 !py-2.5 !text-sm  !bg-light_blue'} />
-
-            <button onClick={logout} className="min-w-10 min-h-10 bg-[#ededed] grid place-content-center rounded-full">
+            <Button onClick={() => navigate('referrals?open=true')} title={'Refer Now!'} className={'hidden sm:block !px-5 !py-2.5 !text-sm  !bg-light_blue'} />
+            <button className={'text-sm font-medium sm:hidden block'}>Refer Now!</button>
+            <button onClick={logout} className=" min-w-10 min-h-10 bg-[#ededed] hidden sm:grid place-content-center rounded-full">
                 <IoLogOut size={20} color='red' />
             </button>
             <button>
-                <img className='min-w-10' src={avatar} alt="" />
+                <img className='max-w-8 sm:min-w-10' src={avatar} alt="" />
+            </button>
+            <button className='block lg:hidden' >
+                <BiMenu size={20} />
             </button>
         </div>
       </header>
