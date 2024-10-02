@@ -61,7 +61,7 @@ const { touched, errors, values, getFieldProps, handleSubmit } = useFormik({
 
   return (
     <AuthLayout>
-      <div className="grid place-content-center p-10 h-screen overflow-y-auto">
+      <div className="grid sm:place-content-center p-6 sm:p-10 h-screen overflow-y-auto">
       <form onSubmit={handleSubmit} className="w-full sm:w-[500px] m-auto">
         <div className='' >
             <h4 className='font-semibold text-xl' >Sign In</h4>

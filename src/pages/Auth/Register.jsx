@@ -16,19 +16,19 @@ const Register = () => {
 
   return (
     <AuthLayout>
-      <div className="p-10 h-screen overflow-y-auto">
+      <div className="px-6 sm:px-10 py-10 h-screen overflow-y-auto">
         <div className="flex items-center gap-7">
             {
                 tabs.map((tab,idx) => (
                     <div key={idx} className='flex gap-5 items-center'>
-                        <div className="flex items-center gap-1">
+                        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-1">
                             <div className={`${activeTab == idx && 'text-primary font-semibold'} ${activeTab > idx && 'bg-green-500 font-semibold'} grid place-content-center w-6 h-6 rounded-full bg-[gainsboro] text-sm`}>
                               {
                                 activeTab > idx ? <IoMdCheckmark size={18} color='white' /> :
                                <span>{idx + 1}</span> 
                                }
                             </div>
-                            <p className={`${activeTab == idx && 'text-primary font-semibold'} ${activeTab > idx && 'text-green-500 font-semibold'}`} >{tab}</p>
+                            <p className={`text-xs sm:text-base ${activeTab == idx && 'text-primary font-semibold'} ${activeTab > idx && 'text-green-500 font-semibold'}`} >{tab}</p>
                         </div>
                         { idx+1 != tabs.length ? <IoIosArrowForward /> : null }
                     </div>
