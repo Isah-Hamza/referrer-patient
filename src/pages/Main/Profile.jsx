@@ -213,7 +213,7 @@ const { resetForm:resetFormPassword, errors:errorsPassword, handleSubmit:handleS
   return (
      <div className='w-full bg-white rounded-xl flex flex-col sm:flex-row' >
       { !successful ? 
-      <div>
+      <div className='flex w-full flex-col sm:flex-row'>
         <div className="hidden sm:block sm:w-[300px] md:w-[350px] border-r h-[calc(100vh-120px)] p-5 pt-7">
           <p className='font-semibold pl-7' >Settings</p> 
           <div className="mt-7 grid gap-7 max-w-[250px]">
@@ -228,7 +228,7 @@ const { resetForm:resetFormPassword, errors:errorsPassword, handleSubmit:handleS
             }
           </div>
         </div>
-        <div className="relative text-xs pt-5 p-3">
+        <div className="sm:hidden relative text-xs pt-5 p-3">
             <div className="grid grid-cols-3 gap-5 text-sm">
                 {
                   tabs.map((item, idx) => (
