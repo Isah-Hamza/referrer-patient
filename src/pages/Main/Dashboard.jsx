@@ -63,12 +63,12 @@ const Dashboard = () => {
     }
 
   return (
-    <>
-        <div className="w-2/6 max-h-[calc(100vh-115px)] overflow-y-auto">
+    <div className='grid sm:flex gap-5 sm:gap-0 '>
+        <div className="w-full sm:w-1/2 md:w-2/6 md:max-h-[calc(100vh-115px)] overflow-y-auto">
             <div className="p-4 rounded-lg border border-custom_gray bg-white">
                 <p className='text-text_color'>Good Afternoon ☀️</p>
                 <p className='text-xl font-semibold mt-2' >{dashboardDetails?.data?.name}</p>
-                <div className="mt-32">
+                <div className="mt-16 sm:mt-32">
                     <div className="flex items-center gap-1">
                         <span className='text-xs text-text_color' >Your wallet balance</span>
                         <button onClick={toggleShowDetails} className='text-primary' >
@@ -98,15 +98,15 @@ const Dashboard = () => {
                 </div>
                 <div className="p-5">
                     <p className='' >Earning history displayed per week</p>
-                    <div className="mt-5 -ml-10 min-w-[400px] h-[300px]">
+                    <div className="mt-5 -ml-16 sm:-ml-10 min-w-[400px] h-[300px]">
                         <RebateBarChart />
                     </div>
                 </div>
             </div>
         </div>
-        <div className="w-4/6 max-h-[calc(100vh-115px)] overflow-y-auto">
-            <div className="top flex gap-3">
-                <div className="w-2/5 flex flex-col gap-3">
+        <div className="w-full sm:w-1/2 md:w-4/6 md:max-h-[calc(100vh-115px)] overflow-y-auto">
+            <div className="top flex flex-col md:flex-row gap-3">
+                <div className="w-full md:w-2/5 flex flex-col gap-3">
                     {
                         analysis.map((item, idx) =>(
                             <div key={idx} className='border border-custom_gray rounded-lg bg-white p-3' >
@@ -126,7 +126,7 @@ const Dashboard = () => {
                         ))
                     }
                 </div>
-                <div className="right w-3/5 flex-1 border border-custom_gray rounded-lg bg-white">
+                <div className="right w-full md:w-3/5 flex-1 border border-custom_gray rounded-lg bg-white">
                 <div className="flex items-center justify-between p-3 border-b">
                     <p className='font-semibold' >Your Activities</p>
                    <img src={note} alt="note" />
@@ -157,7 +157,7 @@ const Dashboard = () => {
                 </div>
             </div>
             </div>
-            <div className="bottom rounded-2xl border bg-white items-center border-custom_gray grid grid-cols-2 gap-9 mt-5 ">
+            <div className="bottom rounded-2xl border bg-white items-center border-custom_gray grid md:grid-cols-2 gap-9 mt-5 ">
                 <img className='cursor-pointer' onClick={() => navigate('referrals?open=true')} src={refer} alt="refer" />
                 <div className="p-5">
                     <p className='font-semibold text-xl  ' >Earn Rebates by Referring <br /> Patients!</p>
@@ -166,7 +166,7 @@ const Dashboard = () => {
                 </div>
             </div>
         </div>
-    </>
+    </div>
   )
 }
 

@@ -3,7 +3,7 @@ import Input from '../../components/Inputs'
 import { BiCopy, BiCopyAlt, BiPhoneIncoming, BiSearch, BiUser } from 'react-icons/bi'
 import Select from '../../components/Inputs/Select'
 import Button from '../../components/Button'
-import { CgClose } from 'react-icons/cg'
+import { CgClose, CgEyeAlt } from 'react-icons/cg'
 import stacey from '../../assets/images/stacey.svg'
 import { MdOutlineEmail } from 'react-icons/md'
 import completed from '../../assets/images/completed.svg'
@@ -62,54 +62,90 @@ const Referrals = () => {
   <>
    {!newReferral ? 
     <div className='w-full border border-custom_gray rounded-xl bg-white mb-7'>
-            <div className="border-b p-3 flex justify-between items-center">
-                <p className='font-semibold' >My Referrals</p>
+            <div className="border-b p-3 flex gap-3 flex-col md:flex-row justify-between md:items-center">
+                <div className="flex items-center justify-between">
+                    <p className='font-semibold' >My Referrals</p>
+                    <Button onClick={toggleNewReferral} title={'Refer'} className={'block !w-fit md:hidden !px-5 !py-2 !text-sm  !bg-light_blue'} />
+                </div>
                 <div className="flex items-center gap-4">
-                    <Input className={'!rounded-3xl !py-2.5 !min-w-[300px]'} placeholder={'Type user name here...'} icon={<BiSearch size={20} className='text-custom_gray' />} />
-                    <Select className={'!rounded-3xl !py-2.5 !min-w-[120px]'} options={[ { label:'All Status',value:null }]} />
-                    <Button onClick={toggleNewReferral} title={'Refer'} className={'!px-10 !py-2.5 !text-sm  !bg-light_blue'} />
+                    <Input className={'!rounded-3xl !py-2.5 sm:!min-w-[300px]'} placeholder={'Type user name here...'} icon={<BiSearch size={20} className='text-custom_gray' />} />
+                    <Select className={'hidden md:block !rounded-3xl !py-2.5 sm:!min-w-[120px]'} options={[ { label:'All Status',value:null }]} />
+                    <Button onClick={toggleNewReferral} title={'Refer'} className={'hidden md:block !px-10 !py-2.5 !text-sm  !bg-light_blue'} />
                 </div>
             </div>
             {
             referrals.data?.referrals.length ?
-                <div className="mt-5 text-sm">
-                <div className="header grid grid-cols-9 gap-3 px-5 font-medium">
-                    <p className='col-span-2 line-clamp-1' >Full Name</p>
-                    <p className='col-span-2 line-clamp-1' >Email Address</p>
-                    <p className='' >Phone Number</p>
-                    <p className='' >Gender</p>
-                    <p className='' >Test Completed</p>
-                    <p className='' >Rebate Earned</p>
-                    <p className='' >Action</p>
-                </div>
-                <div className="data  text-text_color mt-3">
-                    {
-                        referrals?.data?.referrals?.map((item,idx) => (
-                        <div key={idx} className={`${idx % 2 !== 1 && 'bg-[#f9f9f9]'} header grid grid-cols-9  gap-3 px-5 py-6 font-medium`}>
-                            <p className='col-span-2 line-clamp-1' >{item.patient_name}</p>
-                            <p className='col-span-2 line-clamp-1' >{item.patient_email}</p>
-                            <p className='' >{item.patient_phone}</p>
-                            <p className='' >{item.patient_gender}</p>
-                            <p className='' >{item.completed_test}</p>
-                            <p className='' >{ConvertToNaira(item.rebate_earned)}</p>
-                            <p onClick={() => { 
-                                setSelectedRef(item.ref_id); 
-                                toggleViewDetails()}
-                                }
-                             className='font-semibold text-light_blue cursor-pointer' >View Details</p>
+                <>
+                    <div className="hidden md:block mt-5 text-sm">
+                        <div className="header grid grid-cols-9 gap-3 px-5 font-medium">
+                            <p className='col-span-2 line-clamp-1' >Full Name</p>
+                            <p className='col-span-2 line-clamp-1' >Email Address</p>
+                            <p className='' >Phone Number</p>
+                            <p className='' >Gender</p>
+                            <p className='' >Test Completed</p>
+                            <p className='' >Rebate Earned</p>
+                            <p className='' >Action</p>
                         </div>
-                        )) 
-                    }
+                        <div className="data  text-text_color mt-3">
+                            {
+                                referrals?.data?.referrals?.map((item,idx) => (
+                                <div key={idx} className={`${idx % 2 !== 1 && 'bg-[#f9f9f9]'} header grid grid-cols-9  gap-3 px-5 py-6 font-medium`}>
+                                    <p className='col-span-2 line-clamp-1' >{item.patient_name}</p>
+                                    <p className='col-span-2 line-clamp-1' >{item.patient_email}</p>
+                                    <p className='' >{item.patient_phone}</p>
+                                    <p className='' >{item.patient_gender}</p>
+                                    <p className='' >{item.completed_test}</p>
+                                    <p className='' >{ConvertToNaira(item.rebate_earned)}</p>
+                                    <p onClick={() => { 
+                                        setSelectedRef(item.ref_id); 
+                                        toggleViewDetails()}
+                                        }
+                                    className='font-semibold text-light_blue cursor-pointer' >View Details</p>
+                                </div>
+                                )) 
+                            }
 
-                </div>
-                </div>
+                        </div>
+                    </div>
+                    <div className="block md:hidden mt-5 text-sm">
+                        <div className="header grid grid-cols-5 gap-3 px-5 font-medium">
+                            <p className='col-span-2 line-clamp-1' >Full Name</p>
+                            <p className='col-span-2 line-clamp-1' >Email Address</p>
+                            {/* <p className='' >Phone Number</p>
+                            <p className='' >Gender</p>
+                            <p className='' >Test Completed</p>
+                            <p className='' >Rebate Earned</p> */}
+                            <p className='' >Action</p>
+                        </div>
+                        <div className="data  text-text_color mt-3">
+                            {
+                                referrals?.data?.referrals?.map((item,idx) => (
+                                <div key={idx} className={`${idx % 2 !== 1 && 'bg-[#f9f9f9]'} header grid grid-cols-5  gap-3 px-5 py-6 font-medium`}>
+                                    <p className='col-span-2 line-clamp-1' >{item.patient_name}</p>
+                                    <p className='col-span-2 line-clamp-1' >{item.patient_email}</p>
+                                    {/* <p className='' >{item.patient_phone}</p>
+                                    <p className='' >{item.patient_gender}</p>
+                                    <p className='' >{item.completed_test}</p>
+                                    <p className='' >{ConvertToNaira(item.rebate_earned)}</p> */}
+                                    <p onClick={() => { 
+                                        setSelectedRef(item.ref_id); 
+                                        toggleViewDetails()}
+                                        }
+                                    className='font-semibold text-light_blue cursor-pointer flex justify-center' ><CgEyeAlt size={18} /></p>
+                                </div>
+                                )) 
+                            }
+
+                        </div>
+                    </div>
+                </>
                 :
                 <EmptyTable />
             }
         {viewDetails ? <div className="fixed inset-0 bg-black/70 flex justify-end">
                 {
                     !loadingReferral ? 
-                    <div className="bg-white w-[450px] max-h-screen overflow-y-auto">
+                    <div className="bg-white w-full sm:w-[450px] max-h-screen overflow-y-auto">
                         <div className="flex items-center justify-between p-3 border-b">
                             <p className='font-semibold' >Referral Details</p>
                             <button onClick={toggleViewDetails} className="font-medium flex items-center gap-2">
@@ -198,7 +234,7 @@ const Referrals = () => {
                         </div>
                      </div>
                 :    
-                <div className="bg-white w-[450px] h-screen grid place-content-center overflow-y-auto">
+                <div className="bg-white w-full sm:w-[450px] h-screen grid place-content-center overflow-y-auto">
                     <PageLoading />
                 </div>
             }

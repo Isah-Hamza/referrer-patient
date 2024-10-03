@@ -13,7 +13,7 @@ const MainLayout = () => {
     const [activeTab, setActiveTab] = useState(0);
     const [showDropdown, setShowDropdown] = useState(false);
 
-    const toggleShowDown = () => setShowDropdown(!showDropdown);
+    const toggleShowDropDown = () => setShowDropdown(!showDropdown);
 
     const tabs = [
         {
@@ -63,7 +63,7 @@ const MainLayout = () => {
 
   return (
     <div className='px-5 h-screen flex flex-col gap-5 w-full bg-[#f8f8f8]'>
-      <header className='flex items-center justify-between gap-5 py-5' >
+      <header className='relative flex items-center justify-between gap-5 py-5' >
         <img onClick={() => navigate('/')} className='cursor-pointer w-40' src={logo} alt="logo" />
         <div className="hidden lg:flex gap-5 bg-[#ededed] rounded-3xl">
             {
@@ -88,10 +88,25 @@ const MainLayout = () => {
             <button>
                 <img className='max-w-8 sm:min-w-10' src={avatar} alt="" />
             </button>
-            <button className='block lg:hidden' >
+            <button onClick={toggleShowDropDown} className='block lg:hidden' >
                 <BiMenu size={20} />
             </button>
         </div>
+       {showDropdown ? <div className="z-10 lg:hidden absolute top-24 -left-5 w-screen flex flex-col gap-5 py-5 bg-[#ededed]">
+            {
+                tabs.map((item,idx) => (
+                    <button onClick={() => {
+                        navigate(item.link);
+                        setActiveTab(idx);
+                        toggleShowDropDown();
+                    }} key={idx} className={`flex items-center gap-2 px-3
+                    ${activeTab == idx && 'text-white bg-primary !px-10 py-3'}`} >
+                        { activeTab == idx ? <item.icon /> : null}
+                        <p>{item.title}</p>
+                    </button>
+            ))
+            }
+        </div> : null}
       </header>
       <main className='flex-1 flex gap-5 w-full' >
         <Outlet />

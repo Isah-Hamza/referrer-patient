@@ -157,7 +157,7 @@ const New = ({ toggleNewReferral, refetch }) => {
   return (
      <div className='w-full bg-white rounded-xl flex' >
       { !successful ? <>
-        <div className="w-[350px] border-r h-[calc(100vh-120px)] p-5 pt-7">
+        <div className="hidden sm:block sm:w-[300px] md:w-[350px] border-r h-[calc(100vh-120px)] p-5 pt-7">
           <p className='font-semibold' >Referral Creation Form </p>
           <div className="mt-7 grid gap-3 max-w-[250px]">
             {
@@ -170,8 +170,8 @@ const New = ({ toggleNewReferral, refetch }) => {
             }
           </div>
         </div>
-        <form onSubmit={handleSubmit} className="flex-1 p-10 pt-7  h-[calc(100vh-120px)] overflow-y-auto">
-          <div className="flex justify-between">
+        <form onSubmit={handleSubmit} className="flex-1 px-5 sm:px-10 p-10 pt-7  h-[calc(100vh-120px)] overflow-y-auto">
+          <div className="flex gap-10 sm:gap-0 flex-col-reverse sm:flex-row justify-between">
               <div id='patient' className="">
                 <p className='font-semibold mb-1' >Patient Details</p>
                 <p className='text-sm' >Please kindly enter your patient information below.</p>
@@ -233,7 +233,7 @@ const New = ({ toggleNewReferral, refetch }) => {
                 <p className='font-semibold mb-1' >Selected Tests</p>
                 <hr className='flex-1 bg-[gainsboro] text-[gainsboro]' />
             </div>
-         {selectedTests.length ? <div className="mt-7 grid grid-cols-4 gap-5">
+         {selectedTests.length ? <div className="mt-7 grid sm:grid-cols-2 md:grid-cols-4 gap-5">
             {
               selectedTests?.map((item,idx) => (
                 <div key={idx} className='relative grid  text-sm bg-[#f9f9f9] border p-3 rounded-lg ' >
@@ -251,7 +251,7 @@ const New = ({ toggleNewReferral, refetch }) => {
             <p>No Test Selected Yet.</p>
           </div>
           }
-            <div className="w-fit flex items-start my-5 mt-12">
+            <div className="sm:w-fit flex items-start my-5 mt-12">
                     <Button type='submit' title={'Submit'} className={'w-fit !px-16 !py-2.5  !bg-light_blue'} />
                 </div>
           </div>
