@@ -33,7 +33,7 @@ import ReactSelect from 'react-select';
 const Patient = () => {
     const navigate = useNavigate();
     const [otp, setOtp] = useState('');
-    const [activeTab, setActiveTab] = useState(2);
+    const [activeTab, setActiveTab] = useState(0);
     const [process, setProcess] = useState('');
     const [confirmed, setConfirmed] = useState(false);
     const [date, setDate] = useState(moment().format('YYYY-MM-DD'));
