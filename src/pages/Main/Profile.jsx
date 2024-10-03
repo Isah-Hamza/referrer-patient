@@ -211,25 +211,36 @@ const { resetForm:resetFormPassword, errors:errorsPassword, handleSubmit:handleS
   }
 
   return (
-     <div className='w-full bg-white rounded-xl flex' >
+     <div className='w-full bg-white rounded-xl flex flex-col sm:flex-row' >
       { !successful ? 
-      <>
-        <div className="w-[350px] border-r h-[calc(100vh-120px)] p-5 pt-7">
-        <p className='font-semibold pl-7' >Settings</p> 
-        <div className="mt-7 grid gap-7 max-w-[250px]">
-          {
-            tabs.map((item,idx) => (
-              <div onClick={() =>{ setActiveTab(idx); item.onClick()}} key={idx} 
-                    className={`hover:font-medium hover:opacity-90 cursor-pointer text-sm flex items-center gap-2 rounded-3xl p-3 px-6 opacity-60 ${idx == activeTab && '!opacity-100 bg-[#f9f9f9] !font-medium'}`} >
-                <span>{item.icon}</span>
-                <span>{item.title}</span>
-              </div>
-            ))
-          }
+      <div>
+        <div className="hidden sm:block sm:w-[300px] md:w-[350px] border-r h-[calc(100vh-120px)] p-5 pt-7">
+          <p className='font-semibold pl-7' >Settings</p> 
+          <div className="mt-7 grid gap-7 max-w-[250px]">
+            {
+              tabs.map((item,idx) => (
+                <div onClick={() =>{ setActiveTab(idx); item.onClick()}} key={idx} 
+                      className={`hover:font-medium hover:opacity-90 cursor-pointer text-sm flex items-center gap-2 rounded-3xl p-3 px-6 opacity-60 ${idx == activeTab && '!opacity-100 bg-[#f9f9f9] !font-medium'}`} >
+                  <span>{item.icon}</span>
+                  <span>{item.title}</span>
+                </div>
+              ))
+            }
+          </div>
         </div>
+        <div className="relative text-xs pt-5 p-3">
+            <div className="grid grid-cols-3 gap-5 text-sm">
+                {
+                  tabs.map((item, idx) => (
+                    <button onClick={() => setActiveTab(idx)} className={`relative line-clamp-1 opacity-70 text-sm ${activeTab==idx && 'font-semibold opacity-100'}`} key={idx}>{item.title}
+                      <div className={`hidden ${activeTab == idx && '!block'} transition-all duration-300 absolute h-0.5 w-full bg-primary left-0 bottom-0 z-10`}></div>
+                        </button>
+                    ))
+                }
+            </div>
         </div>
         { activeTab == 0 ? 
-        <form onSubmit={handleSubmit} className="flex-1 p-10 pt-7  h-[calc(100vh-120px)] overflow-y-auto">
+        <form onSubmit={handleSubmit} className="flex-1 p-5 sm:p-10 py-7  sm:h-[calc(100vh-120px)] overflow-y-auto">
           <div className="flex justify-between">
               <div id='patient' className="">
                 <p className='font-semibold mb-1' >Profile Details</p>
@@ -271,7 +282,7 @@ const { resetForm:resetFormPassword, errors:errorsPassword, handleSubmit:handleS
           </div>
         </form>
         : activeTab == 1 ? 
-        <form onSubmit={handleSubmitBank} className="flex-1 p-10 pt-7  h-[calc(100vh-120px)] overflow-y-auto">
+        <form onSubmit={handleSubmitBank} className="flex-1 p-5 sm:p-10 py-7  sm:h-[calc(100vh-120px)] overflow-y-auto">
           <div className="flex justify-between">
               <div id='patient' className="">
                 <p className='font-semibold mb-1' >Payout Settings</p>
@@ -309,7 +320,7 @@ const { resetForm:resetFormPassword, errors:errorsPassword, handleSubmit:handleS
           </div>
         </form>
         : activeTab == 2 ?
-        <form onSubmit={handleSubmitPassword} className="flex-1 p-10 pt-7  h-[calc(100vh-120px)] overflow-y-auto">
+        <form onSubmit={handleSubmitPassword} className="flex-1 p-5 sm:p-10 py-7  sm:h-[calc(100vh-120px)] overflow-y-auto">
         <div className="flex justify-between">
             <div id='patient' className="">
               <p className='font-semibold mb-1' >Account & Security</p>
@@ -346,7 +357,7 @@ const { resetForm:resetFormPassword, errors:errorsPassword, handleSubmit:handleS
         </form>
         : null
       }
-      </>:
+      </div>:
        <div className='p-10 h-[calc(100vh-130px)] flex flex-col justify-center items-center w-full' >
             <img className='-mt-5 w-[120px]' src={success} alt="success" />
             <div className="max-w-[600px] grid justify-center text-center">
