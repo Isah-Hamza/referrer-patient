@@ -271,11 +271,15 @@ const New = ({ toggleNewReferral, refetch }) => {
               <div className="max-w-[600px] flex flex-col mx-auto text-center justify-center ">
                 <div className="flex justify-between items-center gap-10 mt-3 bg-[#f9f9f9] text-light_blue rounded-3xl border px-1 pl-3 py-1">
                   <p className='underline ' >https://www.patients.lifebridge.com?ref={data?.data?.referral_code}</p>
-                  <button onClick={() => copyText(`https://www.patients.lifebridge.com?ref=${data?.data?.referral_code}`)} className='rounded-3xl text-black font-semibold bg-light_blue px-5 py-2 flex items-center gap-1' >
+                  <button onClick={() => copyText(`https://www.patients.lifebridge.com?ref=${data?.data?.referral_code}`)} className='hidden sm:flex rounded-3xl text-black font-semibold bg-light_blue px-5 py-2 items-center gap-1' >
                     <BiCopy />
                     Copy
                   </button> 
                 </div>
+                <button onClick={() => copyText(`https://www.patients.lifebridge.com?ref=${data?.data?.referral_code}`)} className='w-fit mx-auto mt-3 rounded-3xl text-black font-semibold bg-light_blue px-5 py-2 flex sm:hidden items-center gap-1' >
+                    <BiCopy />
+                    Copy
+                  </button> 
                 <p className='mt-10' >Or Copy Your Invite Code</p>
                   <div onClick={() => copyText(data?.data?.referral_code)} className='cursor-pointer mx-auto font-semibold text-light_blue px-5 py-2 flex items-center gap-1' >
                     {data?.data?.referral_code}

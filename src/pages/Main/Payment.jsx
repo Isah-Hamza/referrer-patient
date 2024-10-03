@@ -54,15 +54,15 @@ const Payment = () => {
   }
 
   return (
-    <div className='bg-white border overflow-hidden mb-5 w-full rounded-2xl p-8' >
-      <div className="mx-auto w-[700px]">
+    <div className='bg-white border overflow-hidden mb-5 w-full rounded-2xl px-3 sm:px-8 py-8' >
+      <div className="mx-auto w-full md:w-[700px]">
         <div className="custom-bg p-5 pb-3 rounded-3xl w-full border text-center grid  items-center" >
           <div className="flex items-center gap-28">
-            <img className='w-32' src={logo} alt="logo" />
-            <div className="flex items-center bg-[#f9f9f9] rounded-3xl p-2 text-sm gap-2">
+            <img className='hidden md:block w-32' src={logo} alt="logo" />
+            <div className="flex items-center bg-[#f9f9f9] rounded-3xl p-2 text-sm gap-2 mx-auto md:mx-[unset]">
               <span>{tnx?.data?.account_number ?? 'Account Number Not Set'}</span>
               <span> | </span>
-              <span>{tnx?.data?.bank ?? 'Bank Not Set'}</span>
+              <span className='line-clamp-1' >{tnx?.data?.bank ?? 'Bank Not Set'}</span>
             </div>
           </div>
           <p className='flex items-center gap-2 mx-auto mt-5'>
@@ -86,31 +86,50 @@ const Payment = () => {
             <span><TbArrowBigRightLinesFilled /></span>
           </button> */}
           <div className="mt-2 text-sm flex items-center gap-2 justify-center">
-            <HiInformationCircle className='text-primary' size={22} />
+            <HiInformationCircle className='!min-w-4 text-primary' size={22} />
             <span>Earnings of the week are automatically sent to your bank account every Friday.</span>
           </div>
         </div>
         <div className="mt-8 text-sm overflow-hidden border rounded-xl">
             <p className='py-3.5 mb-5 border-b font-semibold px-5' >Transaction History</p>
-            <div className="header grid grid-cols-5 gap-3 px-5 font-semibold">
+            <div className="hidden sm:grid header grid-cols-5 gap-3 px-5 font-semibold">
                 <p className='' >Order ID</p>
                 <p className='col-span-2' >Transaction Type</p>
                 <p className='' >Amount</p>
                 <p className='' >Date</p>
             </div>
-            { tnx?.data?.transactions.length ? <div className="data  text-text_color mt-3">
-                {
-                    tnx?.data?.transactions.map((item,idx) => (
-                    <div key={idx} className={`${idx % 2 !== 1 && 'bg-[#f9f9f9]'} header grid grid-cols-5  gap-3 px-5 py-5 font-medium`}>
-                    <p className='' >{item.order_id}</p>
-                    <p className='col-span-2' >{item.type !== 'CREDIT' ? withdraw(idx) : earned(idx)}</p>
-                    <p className='' >{ConvertToNaira(item.amount)}</p>
-                    <p className='' >{moment(item.date).format('ll')}</p> 
-                    </div>
-                    )) 
-                }
+            { tnx?.data?.transactions.length ? 
+            <>
+              <div className="hidden sm:block data  text-text_color mt-3">
+                  {
+                      tnx?.data?.transactions.map((item,idx) => (
+                      <div key={idx} className={`${idx % 2 !== 1 && 'bg-[#f9f9f9]'} header grid grid-cols-5  gap-3 px-5 py-5 font-medium`}>
+                      <p className='' >{item.order_id}</p>
+                      <p className='col-span-2' >{item.type !== 'CREDIT' ? withdraw(idx) : earned(idx)}</p>
+                      <p className='' >{ConvertToNaira(item.amount)}</p>
+                      <p className='' >{moment(item.date).format('ll')}</p> 
+                      </div>
+                      )) 
+                  }
 
-            </div>
+              </div>
+              <div className="block sm:hidden">
+                {
+                  tnx?.data?.transactions.map((item,idx) => (
+                    <div className="flex justify-between px-2 mb-3">
+                      <div className="">
+                        <p className='ml-10 text-xs'>#{item.order_id}</p>
+                        <p className='col-span-2' >{item.type !== 'CREDIT' ? withdraw(idx) : earned(idx)}</p>
+                      </div>
+                      <div className="text-right">
+                        <p className='font-medium ' >{ConvertToNaira(item.amount)}</p>
+                        <p className='text-sm' >{moment(item.date).format('ll')}</p> 
+                      </div>
+                    </div>
+                  ))
+                }
+              </div>
+            </>
           : 
           <div className='my-20'>
             <EmptyTable />  
