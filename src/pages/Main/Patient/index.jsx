@@ -704,11 +704,25 @@ const Patient = () => {
                             <div className="font-medium border-b mt-14 pb-2 text-sm">TEST DETAILS</div>
                             <div className="grid sm:grid-cols-2 gap-10 mt-10 text-center">
                                 {
-                                    selectedTests?.map((item,idx) => (
+                                   process == 'manual' ? selectedTests?.map((item,idx) => (
                                         <div key={idx} className="text-sm">
                                             <div className="mb-2 font-semibold flex gap-2  items-center">
                                                 <p className='' >{idx + 1}.</p>
                                                 <p className='' >{item.test}</p>
+                                            </div>
+                                            <div className="flex items-center  gap-2">
+                                                <p className='' >{item.category}</p>
+                                                &bull;
+                                                <p className='' >{ConvertToNaira(item.price)}</p>
+                                            </div>
+                                        </div>
+                                    ))
+                                    :
+                                    patient?.selected_tests?.map((item,idx) => (
+                                        <div key={idx} className="text-sm">
+                                            <div className="mb-2 font-semibold flex gap-2  items-center">
+                                                <p className='' >{idx + 1}.</p>
+                                                <p className='' >{item.name}</p>
                                             </div>
                                             <div className="flex items-center  gap-2">
                                                 <p className='' >{item.category}</p>

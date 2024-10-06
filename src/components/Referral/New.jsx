@@ -55,11 +55,11 @@ const New = ({ toggleNewReferral, refetch }) => {
         "selected_tests": [''],
     },
     validationSchema: Yup.object().shape({
-        // "doctor_id": Yup.string().required(),
-        // "email": Yup.string().email().required(),
-        // "full_name": Yup.string().required(),
-        // "phone_number": Yup.string().required().min(11, 'Should be exactly 11 digits').max(11, 'Should be exactly 11 digits'),
-        // "gender": Yup.string().required(),
+        "doctor_id": Yup.string().required(),
+        "email": Yup.string().email().required(),
+        "full_name": Yup.string().required(),
+        "phone_number": Yup.string().required().min(11, 'Should be exactly 11 digits').max(11, 'Should be exactly 11 digits'),
+        "gender": Yup.string().required(),
         // "selected_tests": Yup.array().required(),
     }),
     onSubmit:values => {
