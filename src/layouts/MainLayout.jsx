@@ -81,11 +81,11 @@ const MainLayout = () => {
         </div>
         <div className="flex items-center gap-3 ">
             <Button onClick={() => navigate('referrals?open=true')} title={'Refer Now!'} className={'hidden sm:block !px-5 !py-2.5 !text-sm  !bg-light_blue'} />
-            <button className={'text-sm font-medium sm:hidden block'}>Refer Now!</button>
+            <button onClick={() => navigate('referrals?open=true')} className={'text-sm font-medium sm:hidden block'}>Refer Now!</button>
             <button onClick={logout} className=" min-w-10 min-h-10 bg-[#ededed] hidden sm:grid place-content-center rounded-full">
                 <IoLogOut size={20} color='red' />
             </button>
-            <button>
+            <button onClick={()=> navigate('/dashboard/profile')}>
                 <img className='max-w-8 sm:min-w-10' src={avatar} alt="" />
             </button>
             <button onClick={toggleShowDropDown} className='block lg:hidden' >

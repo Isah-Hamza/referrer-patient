@@ -47,6 +47,7 @@ const StepOne = ({ next }) => {
         onSuccess: res => {
             successToast(res.data.message);
             localStorage.setItem('referrer-user', JSON.stringify(res.data.user));
+            localStorage.setItem('referrer-token',res.data.user.token);
             axiosClient().defaults.headers["Authorization"] = "Bearer " + res.data.user.token;
 
             next();
