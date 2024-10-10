@@ -109,9 +109,9 @@ const { mutate:changePassword, isLoading:changingPassword } = useMutation(Profil
     }
 })
 
-const verifyAccount = () => {
+const verifyAccount = (account_number) => {
   const payload = {
-      account_number:values.account_number,
+      account_number: account_number,
       bank_code: data?.data?.data?.find(item => item.name == values.bank_name)?.code,
   }
 
@@ -298,14 +298,24 @@ const { resetForm:resetFormPassword, errors:errorsPassword, handleSubmit:handleS
                   }
                   </div>
                   <div className="mt-5">
-                      <Input label={'Account Number'} {...getfieldPropsBank('account_number')} placeholder={'0232322951'} icon={<MdOutlineAccountTree size={22} />}/>
+                      <Input
+                       label={'Account Number'} 
+                       {...getfieldPropsBank('account_number')} 
+                       placeholder={'0232322951'} 
+                       icon={<MdOutlineAccountTree size={22} />}
+                       onInput = {e => { 
+                        if(e.target.value.length == 10 && values.bank_name){
+                           verifyAccount(e.target.value)
+                          } 
+                        }}
+                       />
                       <div className="flex items-center justify-between gap-5">
                           <p>
                           {
                               touched.account_number && errors.account_number && <CustomValidationError text={errors.account_number} />
                           }
                           </p>
-                          <button type='button' onClick={verifyAccount} className='text-xs font-medium'>Verify Account</button>
+                          {/* <button type='button' onClick={verifyAccount} className='text-xs font-medium'>Verify Account</button> */}
                       </div>
                   </div>
                   <div className="mt-5">

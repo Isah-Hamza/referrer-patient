@@ -96,9 +96,9 @@ const StepTwo = ({ next }) => {
         }
     })
 
-    const verifyAccount = () => {
+    const verifyAccount = (account_number) => {
         const payload = {
-            account_number:values.account_number,
+            account_number:account_number,
             bank_code: data?.data?.data?.find(item => item.name == values.bank_name)?.code,
         }
 
@@ -131,14 +131,24 @@ const StepTwo = ({ next }) => {
                 }
                 </div>
                 <div className="mt-5">
-                    <Input label={'Account Number'} {...getFieldProps('account_number')} placeholder={'0232322951'} icon={<MdOutlineAccountTree size={22} />}/>
+                    <Input 
+                    label={'Account Number'} 
+                    {...getFieldProps('account_number')} 
+                    placeholder={'0232322951'} 
+                    icon={<MdOutlineAccountTree size={22}/>}
+                        onInput = {e => { 
+                        if(e.target.value.length == 10 && values.bank_name){
+                             console.log(e.target.value.length);
+                           verifyAccount(e.target.value)
+                          } 
+                        }}
+                    />
                     <div className="flex items-center justify-between gap-5">
                         <p>
                         {
                             touched.account_number && errors.account_number && <CustomValidationError text={errors.account_number} />
                         }
                         </p>
-                        <button type='button' onClick={verifyAccount} className='text-xs font-medium'>Verify Account</button>
                     </div>
                 </div>
                 <div className="mt-5">

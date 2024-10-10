@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import logo from '../../../assets/images/logo.svg';
 import Button from '../../../components/Button'
 import { FcGoogle } from 'react-icons/fc';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import OTPInput from 'react-otp-input';
 import Input from '../../../components/Inputs';
 import { CiUser } from 'react-icons/ci';
@@ -32,14 +32,15 @@ import ReactSelect from 'react-select';
 
 const Patient = () => {
     const navigate = useNavigate();
-    const [otp, setOtp] = useState('');
+    const [otp, setOtp] = useState(useLocation().search.split('ref=')[1] ||'');
     const [activeTab, setActiveTab] = useState(0);
     const [process, setProcess] = useState('');
     const [confirmed, setConfirmed] = useState(false);
     const [date, setDate] = useState(moment().format('YYYY-MM-DD'));
     const [selectedTime,setSelectedTime] = useState(null);
     const [doctors, setDoctors] = useState([]);
-    const [refCode, setRefCode] = useState("");
+    const [refCode, setRefCode] = useState( "");
+    
     const [paymentAccessCode, setPaymentAccessCode] = useState('');
     const [patient, setPatient] = useState(null);
     const [paymentSuccessful, setPaymentSuccessful] = useState(false);

@@ -30,6 +30,7 @@ const New = ({ toggleNewReferral, refetch }) => {
   const [selectedCategoryName, setSelectedCategoryName] = useState(null);
   const [selectedTest, setSelectedTest] = useState(null);
   const [selectedTests, setSelectedTests] = useState([]);
+  const patient_base_url = `${window.location.origin}/patient`;
 
   const toggleSuccessful = () => setSuccessful(!successful);
 
@@ -270,13 +271,13 @@ const New = ({ toggleNewReferral, refetch }) => {
               </div>
               <div className="max-w-[600px] flex flex-col mx-auto text-center justify-center ">
                 <div className="flex justify-between items-center gap-10 mt-3 bg-[#f9f9f9] text-light_blue rounded-3xl border px-1 pl-3 py-1">
-                  <p className='underline ' >https://www.patients.lifebridge.com?ref={data?.data?.referral_code}</p>
-                  <button onClick={() => copyText(`https://www.patients.lifebridge.com?ref=${data?.data?.referral_code}`)} className='hidden sm:flex rounded-3xl text-black font-semibold bg-light_blue px-5 py-2 items-center gap-1' >
+                  <p className='underline ' >{`${patient_base_url}?ref=${data?.data?.referral_code}`}</p>
+                  <button onClick={() => copyText(`${patient_base_url}?ref=${data?.data?.referral_code}`)} className='hidden sm:flex rounded-3xl text-black font-semibold bg-light_blue px-5 py-2 items-center gap-1' >
                     <BiCopy />
                     Copy
                   </button> 
                 </div>
-                <button onClick={() => copyText(`https://www.patients.lifebridge.com?ref=${data?.data?.referral_code}`)} className='w-fit mx-auto mt-3 rounded-3xl text-black font-semibold bg-light_blue px-5 py-2 flex sm:hidden items-center gap-1' >
+                <button onClick={() => copyText(`${patient_base_url}?ref=${data?.data?.referral_code}`)} className='w-fit mx-auto mt-3 rounded-3xl text-black font-semibold bg-light_blue px-5 py-2 flex sm:hidden items-center gap-1' >
                     <BiCopy />
                     Copy
                   </button> 
