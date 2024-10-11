@@ -93,7 +93,7 @@ const MainLayout = () => {
                 <BiMenu size={20} />
             </button>
         </div>
-       {showDropdown ? <div className="z-10  lg:hidden fixed top-0 left-0 w-screen flex flex-col gap-5 p-5 bg-white h-screen">
+       {showDropdown ? <div className="z-10  lg:hidden fixed top-0 left-0 w-screen flex flex-col gap-5 p-5 bg-white h-dvh">
         <div className="flex justify-end"><CgClose onClick={toggleShowDropDown} className='cursor-pointer' size={20} /></div>
         <div className='mt-7 w-full flex flex-col gap-10'>
             {
