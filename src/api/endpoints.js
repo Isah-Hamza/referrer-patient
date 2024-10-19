@@ -6,6 +6,7 @@ const endpoints = {
     FORGOT_PASSWORD:'forgot-password',
     VERIFY_OTP:'verify-otp',
     CHANGE_PASSWORD:'change-password',
+    PROFESSIONAL_TITLES:'professional-titles',
   },
   bank:{
     ALL_BANKS:'bank/all',

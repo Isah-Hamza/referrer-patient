@@ -483,7 +483,7 @@ const Patient = () => {
                                 </div>
                             
                                 <div className="mt-20 flex items-center justify-between">
-                                    <button type='button' onClick={() => {previousStep(); setConfirmed(false)}} className='underline' >back</button>
+                                    <button type='button' onClick={() => {previousStep(); setConfirmed(false)}} className='underline' >Back</button>
                                     <Button type='submit' className={'!w-fit !px-12 !py-2.5 !text-sm'} title={'Confirm Details'} />
                                 </div>
                             </form>
@@ -556,7 +556,7 @@ const Patient = () => {
                                         </div>
                                         }
                                         <div className="mt-16 flex items-center justify-between">
-                                            <button onClick={() => {previousStep(); setConfirmed(false)}} className='underline' >back</button>
+                                            <button onClick={() => {previousStep(); setConfirmed(false)}} className='underline' >Back</button>
                                             <Button onClick={bookManualAppoointment} className={'!w-fit !px-12 !py-2.5 !text-sm'} title={'Proceed To Appointment'} />
                                         </div>
                                     </div>
@@ -599,7 +599,7 @@ const Patient = () => {
                                     </div>
                                 </div>
                                 <div className="mt-20 flex items-center justify-between">
-                                    <button onClick={() => {previousStep(); setConfirmed(false)}} className='underline' >back</button>
+                                    <button onClick={() => {previousStep(); setConfirmed(false)}} className='underline' >Back</button>
                                     <Button type='submit' className={'!w-fit !px-12 !py-2.5 !text-sm'} title={'Confirm Details'} />
                                 </div>
                             </form>
@@ -639,7 +639,7 @@ const Patient = () => {
                                     <div className="mt-4">
                                         <p className='text-sm'>Total Test Amount: <span className='font-semibold'>{ConvertToNaira(patient?.total_test_amount)}</span></p>
                                         <div className="mt-16 flex items-center justify-between">
-                                            <button onClick={() => {previousStep(); setConfirmed(false)}} className='underline' >back</button>
+                                            <button onClick={() => {previousStep(); setConfirmed(false)}} className='underline' >Back</button>
                                             <Button onClick={bookAppointmentByRef} className={'!w-fit !px-12 !py-2.5 !text-sm'} title={'Proceed To Appointment'} />
                                         </div>
                                     </div>
@@ -680,7 +680,7 @@ const Patient = () => {
                                 </> : null
                             }
                             <div className="mt-16 flex items-center justify-between">
-                                    <button onClick={() => {previousStep();selectedTime('')}} className='underline' >back</button>
+                                    <button onClick={() => {previousStep();selectedTime('')}} className='underline' >Back</button>
                                     <Button disabled={!selectedTime} onClick={nextStep} className={'!w-fit !px-12 !py-2.5 !text-sm'} title={'Review Appointment'} />
                             </div>
                         </div>
@@ -747,7 +747,7 @@ const Patient = () => {
                             </div>
                             <div className="mt-14">
                                 <div className="flex items-center justify-between gap-5">
-                                    <button onClick={previousStep} className='font-medium text-sm'>back</button>
+                                    <button onClick={previousStep} className='font-medium text-sm'>Back</button>
                                     <Button className={'!w-fit !px-6 !py-2.5'} onClick={bookAppointment} title={'Confirm Booking'} />
                                 </div>
                                 

@@ -26,7 +26,7 @@ const StepTwo = ({ next }) => {
 
     const { touched, values, errors, handleSubmit, getFieldProps, setFieldValue} = useFormik({
         initialValues:{
-            "user_id": user?.user_id,
+            "user_id": user?.user_id ?? 1,
             "hospital_name": "",
             "professional_title": "",
             "bank_name": "",
@@ -48,6 +48,7 @@ const StepTwo = ({ next }) => {
     })
 
     const [banks, setBanks] = useState([]);
+    const [titles, setTitles] = useState([]);
 
     const titleOptions = [
         {
@@ -71,6 +72,12 @@ const StepTwo = ({ next }) => {
     const { isLoading:loadingBanks, data } = useQuery('banks', Bank.AllBanks, {
         onSuccess:res => {
             setBanks(res.data.data.map(bank => ({ label:bank.name, value:bank.name })))
+        }
+    })
+
+    const { isLoading:loadingTitles, } = useQuery('title', Auth.ProfessionalTitles, {
+        onSuccess:res => {
+            setTitles(res.data.titles.map(title => ({ label:title.name, value:title.name })))
         }
     })
 
@@ -119,7 +126,7 @@ const StepTwo = ({ next }) => {
                     }
                 </div>
                 <div className="mt-5">
-                    <Select  label={'Professional Title'} options={titleOptions} {...getFieldProps('professional_title')} icon={<CiUser size={22} />}/>
+                    <Select  label={'Professional Title'} options={titles} {...getFieldProps('professional_title')} icon={<CiUser size={22} />}/>
                     {
                         touched.professional_title && errors.professional_title && <CustomValidationError text={errors.professional_title} />
                     }
@@ -158,7 +165,7 @@ const StepTwo = ({ next }) => {
                 }
                 </div>
                 <div className='mt-10' >
-                    <Button type='submit' title='setup Profile' />
+                    <Button type='submit' title='Setup Profile' />
                     {/* <div className="flex items-center gap-2 my-7">
                         <hr className='flex-1' />
                         <span className='font-semibold text-sm' >OR</span>

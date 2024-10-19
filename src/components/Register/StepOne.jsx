@@ -63,7 +63,7 @@ const StepOne = ({ next }) => {
         <form onSubmit={handleSubmit} className="">
             <div className='mt-12' >
                 <h4 className='font-semibold text-xl' >Create your account</h4>
-                <p className='text- text-text_color' >Boost your earnings by 20% with our referral tracking system.</p>
+                <p className='text- text-text_color' >Boost your earnings by 10% with our referral tracking system.</p>
             </div>
             <div className="mt-10">
                 <Input label={'Full Name'} placeholder={'John Doe'} {...getFieldProps('full_name')} icon={<CiUser size={24} />}/>

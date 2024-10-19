@@ -358,7 +358,7 @@ const { resetForm:resetFormPassword, errors:errorsPassword, handleSubmit:handleS
                     touchedPassword.password_confirmation && errorsPassword.password_confirmation && <CustomValidationError text={errorsPassword.password_confirmation} />
                 }
             </div>
-          </div>
+        </div>
         <div className='w-fit mt-10' >
           <Button type='submit' className={'px-14'} title={'Update Password'} />
         </div>

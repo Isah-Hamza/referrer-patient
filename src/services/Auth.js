@@ -45,7 +45,15 @@ const ChangePassword = (data) => {
     .catch((error) => Promise.reject(error));
 };
 
+const ProfessionalTitles = () => {
+  return axiosClient()
+    .get(endpoints.auth.PROFESSIONAL_TITLES)
+    .then((res) => res)
+    .catch((error) => Promise.reject(error));
+};
+
 
 export default {
-  Login, Register, SetupProfile, ForgotPassword, VerifyOTP, ChangePassword
+  Login, Register, SetupProfile, ForgotPassword, VerifyOTP, ChangePassword,
+  ProfessionalTitles,
 };
