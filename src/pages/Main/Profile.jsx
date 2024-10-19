@@ -5,7 +5,7 @@ import { CiLocationOn, CiUser } from 'react-icons/ci';
 import { MdOutlineLockPerson, MdOutlineMarkEmailUnread, MdTitle } from 'react-icons/md';
 import { PiTestTubeFill } from "react-icons/pi";
 import Select from '../../components/Inputs/Select';
-import { BsCaretRight, BsFillTrashFill } from 'react-icons/bs';
+import { BsCaretRight, BsFillTrashFill, BsQuestionSquare } from 'react-icons/bs';
 import Button from '../../components/Button'
 import success from '../../assets/images/success.svg';
 import { IoIosArrowForward } from "react-icons/io";
@@ -26,6 +26,7 @@ import LoadingModal from '../../Loader/LoadingModal';
 import { errorToast, successToast } from '../../utils/Helper';
 import Bank from '../../services/Bank';
 import { CustomValidationError } from '../../components/Register/StepOne';
+import { GiBookshelf } from 'react-icons/gi';
 
 const Profile = ({  }) => {
   const [activeTab, setActiveTab] = useState(0);
@@ -129,14 +130,18 @@ const verifyAccount = (account_number) => {
       title:'Payout Settings',
       icon:<RiBankCardLine size={20} />,
       onClick:() => {
-        console.log('clicked')
         document.querySelector('#test').scrollIntoView()},
     },
     {
       title:'Account & Security',
       icon:<GrSettingsOption size={20} />,
       onClick:() => {
-        console.log('clicked')
+        document.querySelector('#test').scrollIntoView()},
+    },
+    {
+      title:'FAQs',
+      icon:<BsQuestionSquare size={20} />,
+      onClick:() => {
         document.querySelector('#test').scrollIntoView()},
     },
   ]
@@ -209,6 +214,97 @@ const { resetForm:resetFormPassword, errors:errorsPassword, handleSubmit:handleS
   if(loadingProfile){
     return <PageLoading />
   }
+
+  // {
+  //   q:'',
+  //   a:[
+      
+  //   ]
+  // }
+
+  const qa = [
+    {
+      q:'How do I create an account on the Lifebridge platform?',
+      a: [
+        'Visit the Lifebridge website ',
+        'Click on "Sign Up" and fill in your details, including your hospital name, email, phone number, and password.',
+        'Once registered, you will be directed to “Setup your Profile” where you have  to input your hospital name, and bank account details.',
+      ]
+    },
+  {
+    q:'How do I refer a patient for a test?',
+    a:[
+      'After logging in, Click on "Refer" button at the top-right of the dashboard.',
+"Enter the patient’s details, select the type of test, and click 'Submit.'",
+'You will see a page with a link and code to copy and share with the Patient, meanwhile, The patient will receive an email with a referral link and instructions on how to book the test.'
+    ]
+  },
+  
+  {
+    q:'How can I track my referrals?',
+    a:[
+      "Go to the 'Referral' section in the dashboard, when you click on the sidebar menu",
+      'You can view the status of your referrals, including whether the patient has booked the test, completed the test, or made payment.'
+    ]
+  },
+  {
+    q:'When will I receive my rebate?',
+    a:[
+      'Once your patient  payment is confirmed and test is completed, your Life Bridge account will be automatically credited. Although, payout are sent directly into your registered bank account every Friday, on weekly basis. '
+    ]
+  },
+  {
+    q:"What should I do if my patient hasn't booked a test yet?",
+    a:[
+      'Remind the patient to check their email for the referral link or code. Encourage them to book an appointment as soon as possible.',
+      'If there’s any issue with the referral process, you can contact Lifebridge support for assistance.'
+    ]
+  },
+  {
+    q:'What happens if my patient pays offline ?',
+    a:[
+      'To ensure timely rebate processing, patients are encouraged to make payments online via the platform.',
+'Offline payments may cause delays in the rebate process.'
+    ]
+  },
+  {
+    q:'How do I update my hospital or bank account information?',
+    a:[
+      'Navigate to your profile settings and update your hospital name, bank details, or personal information. Remember to save your changes.'
+    ]
+  },
+  {
+    q:'How can I view my earnings and payment history?',
+    a:[
+      "In the 'Rebate' section, you can see a detailed breakdown of your current account balance, and payment history."
+    ]
+  },
+  {
+    q:'What should I do if I have an issue with my rebate?',
+    a:[
+      'If you encounter any discrepancies with your rebate, contact Lifebridge customer support. Ensure you provide details of the referral and the test for faster resolution.'
+    ]
+  },
+  {
+    q:'Can I refer multiple patients at once?',
+    a:[
+      'Yes, you can refer as many patients as needed. Each referral will be tracked individually, and you’ll receive a rebate for each test once completed and paid for.'
+    ]
+  },
+  {
+    q:'How do I contact customer support?',
+    a:[
+      'You can reach customer support at Info@lifebridgediagnostics.com We are available to assist with any issues or inquiries you may have.'
+    ]
+  },
+  {
+    q:'What happens if my patient cancels the test?',
+    a:[
+      'If a patient cancels their test, the referral will not be eligible for a rebate. However, if they reschedule and complete the test, your rebate will still be processed.'
+    ]
+  },
+  ]
+
 
   return (
      <div className='w-full bg-white rounded-xl flex flex-col sm:flex-row' >
@@ -364,6 +460,32 @@ const { resetForm:resetFormPassword, errors:errorsPassword, handleSubmit:handleS
         </div>
         <hr className='w-full my-3 mt-14' />
         <button type='button' onClick={toggleDeleteAccount} className={'text-red-700 font-semibold'}>Delete Account</button>
+        </form>
+        : activeTab == 3 ?
+        <form onSubmit={handleSubmitPassword} className="flex-1 p-5 sm:p-10 py-7  sm:h-[calc(100vh-120px)] overflow-y-auto">
+          <div className="flex justify-between">
+              <div id='patient' className="">
+                <p className='font-semibold mb-1' >FAQs</p>
+                <p className='text-sm' >Frequently Asked Questions.</p>
+              </div>
+          </div>
+          <div className='mt-5'>
+              {
+                qa.map((item, idx) => (
+                  <div className='mb-7 text-sm' key={idx}>
+                    <p className='font-semibold mb-1.5'>{idx+1}{'. '} {item.q}</p>
+                    <ul className='ml-7 grid gap-1'>
+                      {
+                        item.a.map(a => (
+                          <li className='list-disc'>{a}</li>
+                        ))
+                      }
+                    </ul>
+                  </div>
+                ))
+              }
+          </div>
+         
         </form>
         : null
       }
