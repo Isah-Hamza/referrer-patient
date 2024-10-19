@@ -66,7 +66,15 @@ const Dashboard = () => {
     <div className='grid sm:flex gap-5 sm:gap-0 '>
         <div className="w-full sm:w-1/2 md:w-2/6 md:max-h-[calc(100vh-115px)] overflow-y-auto">
             <div className="p-4 rounded-lg border border-custom_gray bg-white">
-                <p className='text-text_color'>Good Afternoon ☀️</p>
+                <p className='text-text_color'> 
+                    {
+                new Date().getHours() < 12 ?
+                 'Good Morning ☀️' :
+                new Date().getHours() < 17 ?
+                 'Good Afternoon ☀️' :
+                 'Good Evening ☀️' 
+}
+                </p>
                 <p className='text-xl font-semibold mt-2' >{dashboardDetails?.data?.name}</p>
                 <div className="mt-16 sm:mt-32">
                     <div className="flex items-center gap-1">
