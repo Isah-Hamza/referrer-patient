@@ -27,6 +27,7 @@ import { errorToast, successToast } from '../../utils/Helper';
 import Bank from '../../services/Bank';
 import { CustomValidationError } from '../../components/Register/StepOne';
 import { GiBookshelf } from 'react-icons/gi';
+import Auth from '../../services/Auth';
 
 const Profile = ({  }) => {
   const [activeTab, setActiveTab] = useState(0);
@@ -34,6 +35,8 @@ const Profile = ({  }) => {
   const [deleteAccount, setDeleteAccount] = useState(false);   
   const user_id = JSON.parse(localStorage.getItem('referrer-data'))?.doctor_id;
   const [banks, setBanks] = useState([]);
+  const [titles, setTitles] = useState([]);
+
 
   const toggleSuccessful = () => setSuccessful(!successful);
   const toggleDeleteAccount = () => setDeleteAccount(!deleteAccount);
@@ -108,6 +111,13 @@ const { mutate:changePassword, isLoading:changingPassword } = useMutation(Profil
     onError:e => {
         errorToast(e.message);
     }
+})
+
+
+const { isLoading:loadingTitles, } = useQuery('title', Auth.ProfessionalTitles, {
+  onSuccess:res => {
+      setTitles(res.data.titles.map(title => ({ label:title.name, value:title.name })))
+  }
 })
 
 const verifyAccount = (account_number) => {
@@ -370,7 +380,7 @@ const { resetForm:resetFormPassword, errors:errorsPassword, handleSubmit:handleS
                 <Input label={'Location'} placeholder={'Wuye, Abuja'} icon={<CiLocationOn size={24} />}/>
             </div>
             <div className="">
-                <Select label={'Professional Title'} {...getFieldProps('professional_title')} options={titleOptions} icon={<MdTitle size={24} />}/>
+                <Select label={'Professional Title'} {...getFieldProps('professional_title')} options={titles} icon={<MdTitle size={24} />}/>
             </div>
           </div>
           <div className='w-fit mt-10' >

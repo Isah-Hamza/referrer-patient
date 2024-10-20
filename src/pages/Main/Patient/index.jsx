@@ -43,7 +43,7 @@ const Patient = () => {
     
     const [paymentAccessCode, setPaymentAccessCode] = useState('');
     const [patient, setPatient] = useState(null);
-    const [paymentSuccessful, setPaymentSuccessful] = useState(false);
+    const [paymentSuccessful, setPaymentSuccessful] = useState(useLocation().search.split('paid=')[1] == 'true'  ? true : false);
 
     const [categories, setCategories] = useState([]);
     const [tests, setTests] = useState([]);
@@ -443,8 +443,8 @@ const Patient = () => {
                         </div>
                         </div>
                     </div>
-                </div> : 
-                activeTab == 1 ?
+                </div> 
+                : activeTab == 1 ?
                 <>
                 {process == 'manual' ?
                     <div className='max-w-[600px] ml-0 md:ml-20 py-14' >
@@ -852,7 +852,12 @@ const Patient = () => {
                             }
                     </div>
                     <div className="mt-10">
-                        <Button className={'!w-fit bg-white !font-semibold !text-light_blue px-3 py-2'} onClick={() => setPaymentSuccessful(false)} title={'Go Back Home'} />
+                        <Button className={'!w-fit bg-white !font-semibold !text-light_blue px-3 py-2'} onClick={() => {
+                            setPaymentSuccessful(false);
+                            setActiveTab(0);
+                            navigate('/patient');
+                        }
+                         } title={'Go Back Home'} />
                     </div>
                 </div>
             </div> 
