@@ -52,26 +52,26 @@ const ConfirmDetails = (data) => {
     .catch((error) => Promise.reject(error));
 }
 
-  const GetTestCategories = () => {
-    return axiosClient()
-      .get(`${endpoints.referrals.TEST_CATEGORIES}`)
-      .then((res) => res)
-      .catch((error) => Promise.reject(error));
-  }
+const GetTestCategories = () => {
+  return axiosClient()
+    .get(`${endpoints.referrals.TEST_CATEGORIES}`)
+    .then((res) => res)
+    .catch((error) => Promise.reject(error));
+}
 
-  const GetTests = (cat_id) => {
-    return axiosClient()
-      .get(`${endpoints.referrals.CATEGORY_TESTS}/${cat_id}`)
-      .then((res) => res)
-      .catch((error) => Promise.reject(error));
-  }
+const GetTests = (cat_id) => {
+  return axiosClient()
+    .get(`${endpoints.referrals.CATEGORY_TESTS}/${cat_id}`)
+    .then((res) => res)
+    .catch((error) => Promise.reject(error));
+}
 
-  const GetTimeSlots = (date) => {
-    return axiosClient()
-      .get(`${endpoints.patient.TIME_SLOTS}?date=${date}`)
-      .then((res) => res)
-      .catch((error) => Promise.reject(error));
-  }
+const GetTimeSlots = (date) => {
+  return axiosClient()
+    .get(`${endpoints.patient.TIME_SLOTS}?date=${date}`)
+    .then((res) => res)
+    .catch((error) => Promise.reject(error));
+}
 
 
   const GetPatientDetails = (ref_code) => {

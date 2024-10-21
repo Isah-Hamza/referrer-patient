@@ -23,8 +23,8 @@ function App() {
 
   const auth_routes = [
     {
-      title:'Login',
-      Component:Login,
+      title:'Patients',
+      Component:Patient,
       path:'/',
     },
     {
