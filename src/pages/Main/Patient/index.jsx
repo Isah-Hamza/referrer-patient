@@ -823,13 +823,13 @@ const Patient = () => {
          paymentSuccessful ?<div className="">
             <div className='fixed inset-0 w-screen h-screen bg-white py-10 pb-5 grid place-content-center overflow-y-auto' >
                 <div className="grid text-center w-full sm:min-w-[600px] md:min-w-[750px]">
-                    <div className="mt-24 mx-auto">
-                    <img className='mt-24 mb-20 w-52' src={logo} alt="logo" />
+                    <div className="mx-auto">
+                    <img className='mb-20 w-52' src={logo} alt="logo" />
                     </div>
                     <img className='w-24 mx-auto' src={success} alt="success" />
                     <p className='font-semibold mb-1' >Payment successful</p>
-                    <p className='text-sm' >Thank You for your time, view your payment details below:</p>
-                    <div className="font-medium border-b mt-8 pb-2 text-sm">TRANSACTION DETAILS</div>
+                    <p className='text-sm sm:max-w-[500px] mx-auto' >Thank you for your payment. Your appointment has been successfully booked. We look forward to seeing you soon!</p>
+                    {/* <div className="font-medium border-b mt-8 pb-2 text-sm">TRANSACTION DETAILS</div>
                     <div className="grid grid-cols-2 gap-10 mt-6 text-center">
                         {
                             paymentTnx?.map((item,idx) => (
@@ -850,12 +850,12 @@ const Patient = () => {
                                     </div>
                                 ))
                             }
-                    </div>
+                    </div> */}
                     <div className="mt-10">
                         <Button className={'!w-fit bg-white !font-semibold !text-light_blue px-3 py-2'} onClick={() => {
                             setPaymentSuccessful(false);
                             setActiveTab(0);
-                            navigate('/patient');
+                            navigate('/');
                         }
                          } title={'Go Back Home'} />
                     </div>
